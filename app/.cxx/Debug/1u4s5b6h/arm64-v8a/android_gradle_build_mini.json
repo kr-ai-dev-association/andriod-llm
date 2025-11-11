@@ -1,0 +1,88 @@
+{
+  "buildFiles": [
+    "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/CMakeLists.txt",
+    "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/CMakeLists.txt",
+    "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/CMakeLists.txt",
+    "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/CMakeLists.txt",
+    "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/CMakeLists.txt",
+    "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "ggml::@ac82e33bde8b2dde67df": {
+      "artifactName": "ggml",
+      "abi": "arm64-v8a",
+      "output": "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml.so",
+      "runtimeFiles": [
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-cpu.so",
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-vulkan.so",
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-base.so"
+      ]
+    },
+    "ggml-vulkan::@267ec222014d544d1118": {
+      "artifactName": "ggml-vulkan",
+      "abi": "arm64-v8a",
+      "output": "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-vulkan.so",
+      "runtimeFiles": [
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-base.so"
+      ]
+    },
+    "vulkan-shaders-gen::@267ec222014d544d1118": {
+      "artifactName": "vulkan-shaders-gen",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "llama::@a28f7d715364b5d9b6c0": {
+      "artifactName": "llama",
+      "abi": "arm64-v8a",
+      "output": "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libllama.so",
+      "runtimeFiles": [
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml.so",
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-cpu.so",
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-vulkan.so",
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-base.so"
+      ]
+    },
+    "ggml-base::@ac82e33bde8b2dde67df": {
+      "artifactName": "ggml-base",
+      "abi": "arm64-v8a",
+      "output": "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-base.so",
+      "runtimeFiles": []
+    },
+    "llama_jni::@6890427a1f51a3e7e1df": {
+      "artifactName": "llama_jni",
+      "abi": "arm64-v8a",
+      "output": "/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/1u4s5b6h/obj/arm64-v8a/libllama_jni.so",
+      "runtimeFiles": [
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libllama.so",
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml.so",
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-cpu.so",
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-vulkan.so",
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-base.so"
+      ]
+    },
+    "ggml-cpu::@ac82e33bde8b2dde67df": {
+      "artifactName": "ggml-cpu",
+      "abi": "arm64-v8a",
+      "output": "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-cpu.so",
+      "runtimeFiles": [
+        "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1u4s5b6h/arm64-v8a/bin/libggml-base.so",
+        "/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/17/lib/linux/aarch64/libomp.so"
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+Checking whether the ASM compiler is GNU using "--version" did not match "(GNU assembler)|(GCC)|(Free Software Foundation)":
+Android (10552028, +pgo, +bolt, +lto, -mlgo, based on r487747d) clang version 17.0.2 (https://android.googlesource.com/toolchain/llvm-project d9f89f4d16663d5012e5c09495f3b30ece3d2362)
+Target: x86_64-apple-darwin24.6.0
+Thread model: posix
+InstalledDir: /Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_3975c && [1/2] Building C object CMakeFiles/cmTC_3975c.dir/src.c.o
+FAILED: CMakeFiles/cmTC_3975c.dir/src.c.o 
+/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang --target=aarch64-none-linux-android26 --sysroot=/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -DCMAKE_HAVE_LIBC_PTHREAD  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -march=armv8.2-a+dotprod+i8mm -mtune=cortex-a78  -fPIE -std=gnu11 -MD -MT CMakeFiles/cmTC_3975c.dir/src.c.o -MF CMakeFiles/cmTC_3975c.dir/src.c.o.d -o CMakeFiles/cmTC_3975c.dir/src.c.o -c /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a/CMakeFiles/CMakeTmp/src.c
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a/CMakeFiles/CMakeTmp/src.c:13:3: error: call to undeclared function 'pthread_cancel'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  pthread_cancel(thread);
+  ^
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a/CMakeFiles/CMakeTmp/src.c:13:3: note: did you mean 'pthread_once'?
+/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include/pthread.h:258:5: note: 'pthread_once' declared here
+int pthread_once(pthread_once_t* _Nonnull __once, void (* _Nonnull __init_routine)(void));
+    ^
+1 error generated.
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Performing C++ SOURCE FILE Test GGML_COMPILER_SUPPORTS_FP16_FORMAT_I3E failed with the following output:
+Change Dir: /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja cmTC_b30b1 && [1/2] Building CXX object CMakeFiles/cmTC_b30b1.dir/src.cxx.o
+FAILED: CMakeFiles/cmTC_b30b1.dir/src.cxx.o 
+/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=aarch64-none-linux-android26 --sysroot=/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -DGGML_COMPILER_SUPPORTS_FP16_FORMAT_I3E  -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -O3 -DNDEBUG -fvisibility=hidden -march=armv8.2-a+dotprod+i8mm -mtune=cortex-a78  -fPIE   -mfp16-format=ieee -std=gnu++17 -MD -MT CMakeFiles/cmTC_b30b1.dir/src.cxx.o -MF CMakeFiles/cmTC_b30b1.dir/src.cxx.o.d -o CMakeFiles/cmTC_b30b1.dir/src.cxx.o -c /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a/CMakeFiles/CMakeTmp/src.cxx
+clang++: error: unknown argument: '-mfp16-format=ieee'
+ninja: build stopped: subcommand failed.
+
+
+Source file was:
+int main() { return 0; }

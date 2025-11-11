@@ -1,0 +1,202 @@
+{
+  "info": {
+    "name": "arm64-v8a",
+    "bitness": 64,
+    "isDefault": true,
+    "isDeprecated": false,
+    "architecture": "arm64",
+    "triple": "aarch64-linux-android",
+    "llvmTriple": "aarch64-none-linux-android"
+  },
+  "cxxBuildFolder": "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a",
+  "soFolder": "/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/12214323/obj/arm64-v8a",
+  "soRepublishFolder": "/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cmake/debug/obj/arm64-v8a",
+  "abiPlatformVersion": 26,
+  "cmake": {
+    "effectiveConfiguration": {
+      "inheritEnvironments": [],
+      "variables": []
+    }
+  },
+  "variant": {
+    "buildSystemArgumentList": [
+      "-DUSE_LLAMA\u003dON",
+      "-DGGML_VULKAN\u003dON",
+      "-DGGML_K_QUANTS\u003dON",
+      "-DCMAKE_MAKE_PROGRAM\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-DCMAKE_PROGRAM_PATH\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin",
+      "-DVulkan_GLSLC_EXECUTABLE\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125/shader-tools/darwin-x86_64/glslc",
+      "-DVulkan_INCLUDE_DIR\u003d/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include",
+      "-DCMAKE_INCLUDE_PATH\u003d/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include"
+    ],
+    "cFlagsList": [],
+    "cppFlagsList": [
+      "-O3",
+      "-DNDEBUG",
+      "-fvisibility\u003dhidden"
+    ],
+    "variantName": "debug",
+    "isDebuggableEnabled": true,
+    "validAbiList": [
+      "arm64-v8a"
+    ],
+    "buildTargetSet": [],
+    "implicitBuildTargetSet": [],
+    "cmakeSettingsConfiguration": "android-gradle-plugin-predetermined-name",
+    "module": {
+      "cxxFolder": "/Volumes/Transcend/Projects/andriod-llm/app/.cxx",
+      "intermediatesBaseFolder": "/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates",
+      "intermediatesFolder": "/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx",
+      "gradleModulePathName": ":app",
+      "moduleRootFolder": "/Volumes/Transcend/Projects/andriod-llm/app",
+      "moduleBuildFile": "/Volumes/Transcend/Projects/andriod-llm/app/build.gradle.kts",
+      "makeFile": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+      "buildSystem": "CMAKE",
+      "ndkFolder": "/Users/tony/Library/Android/sdk/ndk/26.1.10909125",
+      "ndkFolderBeforeSymLinking": "/Users/tony/Library/Android/sdk/ndk/26.1.10909125",
+      "ndkVersion": "26.1.10909125",
+      "ndkSupportedAbiList": [
+        "armeabi-v7a",
+        "arm64-v8a",
+        "x86",
+        "x86_64"
+      ],
+      "ndkDefaultAbiList": [
+        "armeabi-v7a",
+        "arm64-v8a",
+        "x86",
+        "x86_64"
+      ],
+      "ndkDefaultStl": "LIBCXX_STATIC",
+      "ndkMetaPlatforms": {
+        "min": 21,
+        "max": 34,
+        "aliases": {
+          "20": 19,
+          "25": 24,
+          "J": 16,
+          "J-MR1": 17,
+          "J-MR2": 18,
+          "K": 19,
+          "L": 21,
+          "L-MR1": 22,
+          "M": 23,
+          "N": 24,
+          "N-MR1": 24,
+          "O": 26,
+          "O-MR1": 27,
+          "P": 28,
+          "Q": 29,
+          "R": 30,
+          "S": 31,
+          "Sv2": 32,
+          "Tiramisu": 33,
+          "UpsideDownCake": 34
+        }
+      },
+      "ndkMetaAbiList": [
+        {
+          "name": "armeabi-v7a",
+          "bitness": 32,
+          "isDefault": true,
+          "isDeprecated": false,
+          "architecture": "arm",
+          "triple": "arm-linux-androideabi",
+          "llvmTriple": "armv7-none-linux-androideabi"
+        },
+        {
+          "name": "arm64-v8a",
+          "bitness": 64,
+          "isDefault": true,
+          "isDeprecated": false,
+          "architecture": "arm64",
+          "triple": "aarch64-linux-android",
+          "llvmTriple": "aarch64-none-linux-android"
+        },
+        {
+          "name": "x86",
+          "bitness": 32,
+          "isDefault": true,
+          "isDeprecated": false,
+          "architecture": "x86",
+          "triple": "i686-linux-android",
+          "llvmTriple": "i686-none-linux-android"
+        },
+        {
+          "name": "x86_64",
+          "bitness": 64,
+          "isDefault": true,
+          "isDeprecated": false,
+          "architecture": "x86_64",
+          "triple": "x86_64-linux-android",
+          "llvmTriple": "x86_64-none-linux-android"
+        }
+      ],
+      "cmakeToolchainFile": "/Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake",
+      "cmake": {
+        "cmakeExe": "/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/cmake",
+        "cmakeVersionFromDsl": "3.22.1"
+      },
+      "stlSharedObjectMap": {
+        "LIBCXX_SHARED": {
+          "armeabi-v7a": "/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/arm-linux-androideabi/libc++_shared.so",
+          "arm64-v8a": "/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so",
+          "x86": "/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/i686-linux-android/libc++_shared.so",
+          "x86_64": "/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/x86_64-linux-android/libc++_shared.so"
+        },
+        "LIBCXX_STATIC": {},
+        "NONE": {},
+        "SYSTEM": {}
+      },
+      "project": {
+        "rootBuildGradleFolder": "/Volumes/Transcend/Projects/andriod-llm",
+        "sdkFolder": "/Users/tony/Library/Android/sdk",
+        "isBuildOnlyTargetAbiEnabled": true,
+        "isCmakeBuildCohabitationEnabled": false,
+        "isPrefabEnabled": false
+      },
+      "outputOptions": [],
+      "ninjaExe": "/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "hasBuildTimeInformation": true
+    },
+    "prefabClassPaths": [],
+    "prefabPackages": [],
+    "prefabPackageConfigurations": [],
+    "stlType": "c++_static",
+    "optimizationTag": "Debug"
+  },
+  "buildSettings": {
+    "environmentVariables": []
+  },
+  "prefabFolder": "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/prefab/arm64-v8a",
+  "isActiveAbi": true,
+  "fullConfigurationHash": "12214323375b6b1w3t62x662t111u6x5r6i473y1z3a1u2q282l3w2c5vn6t49",
+  "fullConfigurationHashKey": "# Values used to calculate the hash in this folder name.\n# Should not depend on the absolute path of the project itself.\n#   - AGP: 8.6.1.\n#   - $NDK is the path to NDK 26.1.10909125.\n#   - $PROJECT is the path to the parent folder of the root Gradle build file.\n#   - $ABI is the ABI to be built with. The specific value doesn\u0027t contribute to the value of the hash.\n#   - $HASH is the hash value computed from this text.\n#   - $CMAKE is the path to CMake 3.22.1.\n#   - $NINJA is the path to Ninja.\n-H$PROJECT/app/src/main/cpp\n-DCMAKE_SYSTEM_NAME\u003dAndroid\n-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\n-DCMAKE_SYSTEM_VERSION\u003d26\n-DANDROID_PLATFORM\u003dandroid-26\n-DANDROID_ABI\u003d$ABI\n-DCMAKE_ANDROID_ARCH_ABI\u003d$ABI\n-DANDROID_NDK\u003d$NDK\n-DCMAKE_ANDROID_NDK\u003d$NDK\n-DCMAKE_TOOLCHAIN_FILE\u003d$NDK/build/cmake/android.toolchain.cmake\n-DCMAKE_CXX_FLAGS\u003d-O3 -DNDEBUG -fvisibility\u003dhidden\n-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d$PROJECT/app/build/intermediates/cxx/Debug/$HASH/obj/$ABI\n-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d$PROJECT/app/build/intermediates/cxx/Debug/$HASH/obj/$ABI\n-DCMAKE_BUILD_TYPE\u003dDebug\n-B$PROJECT/app/.cxx/Debug/$HASH/$ABI\n-GNinja\n-DUSE_LLAMA\u003dON\n-DGGML_VULKAN\u003dON\n-DGGML_K_QUANTS\u003dON\n-DCMAKE_MAKE_PROGRAM\u003d$NINJA\n-DCMAKE_PROGRAM_PATH\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin\n-DVulkan_GLSLC_EXECUTABLE\u003d$NDK/shader-tools/darwin-x86_64/glslc\n-DVulkan_INCLUDE_DIR\u003d$PROJECT/app/third_party/Vulkan-Headers/include\n-DCMAKE_INCLUDE_PATH\u003d$PROJECT/app/third_party/Vulkan-Headers/include",
+  "configurationArguments": [
+    "-H/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp",
+    "-DCMAKE_SYSTEM_NAME\u003dAndroid",
+    "-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON",
+    "-DCMAKE_SYSTEM_VERSION\u003d26",
+    "-DANDROID_PLATFORM\u003dandroid-26",
+    "-DANDROID_ABI\u003darm64-v8a",
+    "-DCMAKE_ANDROID_ARCH_ABI\u003darm64-v8a",
+    "-DANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125",
+    "-DCMAKE_ANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125",
+    "-DCMAKE_TOOLCHAIN_FILE\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake",
+    "-DCMAKE_CXX_FLAGS\u003d-O3 -DNDEBUG -fvisibility\u003dhidden",
+    "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/12214323/obj/arm64-v8a",
+    "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/12214323/obj/arm64-v8a",
+    "-DCMAKE_BUILD_TYPE\u003dDebug",
+    "-B/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a",
+    "-GNinja",
+    "-DUSE_LLAMA\u003dON",
+    "-DGGML_VULKAN\u003dON",
+    "-DGGML_K_QUANTS\u003dON",
+    "-DCMAKE_MAKE_PROGRAM\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-DCMAKE_PROGRAM_PATH\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin",
+    "-DVulkan_GLSLC_EXECUTABLE\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125/shader-tools/darwin-x86_64/glslc",
+    "-DVulkan_INCLUDE_DIR\u003d/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include",
+    "-DCMAKE_INCLUDE_PATH\u003d/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include"
+  ],
+  "intermediatesParentFolder": "/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/12214323"
+}

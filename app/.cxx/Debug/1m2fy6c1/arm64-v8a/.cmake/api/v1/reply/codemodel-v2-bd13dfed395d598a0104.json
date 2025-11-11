@@ -1,0 +1,211 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "llama_build",
+					"childIndexes" : 
+					[
+						2,
+						5
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-llama_build-Debug-a5ce2f9aa6f629fcdb09.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp"
+				},
+				{
+					"build" : "llama_build/ggml",
+					"childIndexes" : 
+					[
+						3
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-llama_build.ggml-Debug-6dbb3acebba57fbc5c16.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 2,
+					"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml"
+				},
+				{
+					"build" : "llama_build/ggml/src",
+					"childIndexes" : 
+					[
+						4
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-llama_build.ggml.src-Debug-2c3b1051c8f1b47486f1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 2,
+					"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				},
+				{
+					"build" : "llama_build/ggml/src/ggml-cpu",
+					"jsonFile" : "directory-llama_build.ggml.src.ggml-cpu-Debug-54be38574e2c3a83f5b4.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 2,
+					"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu"
+				},
+				{
+					"build" : "llama_build/src",
+					"jsonFile" : "directory-llama_build.src-Debug-d56ab00c502432617d37.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src",
+					"targetIndexes" : 
+					[
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "llama_android",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						2
+					],
+					"directoryIndexes" : 
+					[
+						1,
+						5
+					],
+					"name" : "llama.cpp",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2,
+						3,
+						4
+					],
+					"name" : "ggml",
+					"parentIndex" : 1,
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 3,
+					"id" : "ggml::@ac82e33bde8b2dde67df",
+					"jsonFile" : "target-ggml-Debug-7d0c8261a6ce0dfe631e.json",
+					"name" : "ggml",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "ggml-base::@ac82e33bde8b2dde67df",
+					"jsonFile" : "target-ggml-base-Debug-f63a2d0a13cfc20a913a.json",
+					"name" : "ggml-base",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "ggml-cpu::@ac82e33bde8b2dde67df",
+					"jsonFile" : "target-ggml-cpu-Debug-d248eeac6901ab9d2127.json",
+					"name" : "ggml-cpu",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "llama::@a28f7d715364b5d9b6c0",
+					"jsonFile" : "target-llama-Debug-15f6149f0a74716a5a05.json",
+					"name" : "llama",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "llama_jni::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-llama_jni-Debug-ca9f7172d89c620ac30e.json",
+					"name" : "llama_jni",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1m2fy6c1/arm64-v8a",
+		"source" : "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

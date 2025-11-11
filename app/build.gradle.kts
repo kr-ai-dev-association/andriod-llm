@@ -4,13 +4,23 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+import org.gradle.api.GradleException
+import org.gradle.internal.os.OperatingSystem
+
+val hostTag = when {
+    OperatingSystem.current().isMacOsX -> "darwin-x86_64"
+    OperatingSystem.current().isWindows -> "windows-x86_64"
+    OperatingSystem.current().isLinux -> "linux-x86_64"
+    else -> throw GradleException("Unsupported OS for shader toolchain")
+}
+
 android {
     namespace = "com.example.llama"
     compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.llama"
-        minSdk = 24
+		minSdk = 28
         targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
@@ -20,8 +30,18 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags("-O3", "-DNDEBUG", "-fvisibility=hidden")
-                // Force real llama.cpp integration when submodule is present
-                arguments("-DUSE_LLAMA=ON")
+                // Use GGML_ prefixed flags for subproject options
+                arguments(
+                    "-DUSE_LLAMA=ON",
+                    "-DGGML_VULKAN=ON",
+                    "-DGGML_VULKAN_USE_VOLK=ON",
+                    "-DGGML_K_QUANTS=ON",
+                    "-DCMAKE_MAKE_PROGRAM=${android.sdkDirectory}/cmake/3.22.1/bin/ninja",
+                    "-DCMAKE_PROGRAM_PATH=${android.sdkDirectory}/cmake/3.22.1/bin",
+                    "-DVulkan_GLSLC_EXECUTABLE=${android.ndkDirectory}/shader-tools/$hostTag/glslc",
+                    "-DVulkan_INCLUDE_DIR=${project.projectDir}/third_party/Vulkan-Headers/include",
+                    "-DCMAKE_INCLUDE_PATH=${project.projectDir}/third_party/Vulkan-Headers/include"
+                )
             }
         }
         ndk {

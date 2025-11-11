@@ -1,0 +1,7 @@
+CMAKE_BUILD_TYPE=Debug
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    CMAKE_INCLUDE_PATH
+
+

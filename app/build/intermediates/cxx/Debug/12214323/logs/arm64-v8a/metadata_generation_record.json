@@ -1,0 +1,158 @@
+[
+  {
+    "level_": 0,
+    "message_": "Start JSON generation. Platform version: 26 min SDK version: arm64-v8a",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "rebuilding JSON /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a/android_gradle_build.json due to:",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "- no fingerprint file, will remove stale configuration folder",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "removing stale contents from \u0027/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a\u0027",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "created folder \u0027/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a\u0027",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "executing cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/bin/cmake \\\n  -H/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp \\\n  -DCMAKE_SYSTEM_NAME\u003dAndroid \\\n  -DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON \\\n  -DCMAKE_SYSTEM_VERSION\u003d26 \\\n  -DANDROID_PLATFORM\u003dandroid-26 \\\n  -DANDROID_ABI\u003darm64-v8a \\\n  -DCMAKE_ANDROID_ARCH_ABI\u003darm64-v8a \\\n  -DANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125 \\\n  -DCMAKE_ANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125 \\\n  -DCMAKE_TOOLCHAIN_FILE\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake \\\n  \"-DCMAKE_CXX_FLAGS\u003d-O3 -DNDEBUG -fvisibility\u003dhidden\" \\\n  -DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/12214323/obj/arm64-v8a \\\n  -DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/12214323/obj/arm64-v8a \\\n  -DCMAKE_BUILD_TYPE\u003dDebug \\\n  -B/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a \\\n  -GNinja \\\n  -DUSE_LLAMA\u003dON \\\n  -DGGML_VULKAN\u003dON \\\n  -DGGML_K_QUANTS\u003dON \\\n  -DCMAKE_MAKE_PROGRAM\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja \\\n  -DCMAKE_PROGRAM_PATH\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin \\\n  -DVulkan_GLSLC_EXECUTABLE\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125/shader-tools/darwin-x86_64/glslc \\\n  -DVulkan_INCLUDE_DIR\u003d/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include \\\n  -DCMAKE_INCLUDE_PATH\u003d/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include\n",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/cmake \\\n  -H/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp \\\n  -DCMAKE_SYSTEM_NAME\u003dAndroid \\\n  -DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON \\\n  -DCMAKE_SYSTEM_VERSION\u003d26 \\\n  -DANDROID_PLATFORM\u003dandroid-26 \\\n  -DANDROID_ABI\u003darm64-v8a \\\n  -DCMAKE_ANDROID_ARCH_ABI\u003darm64-v8a \\\n  -DANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125 \\\n  -DCMAKE_ANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125 \\\n  -DCMAKE_TOOLCHAIN_FILE\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake \\\n  \"-DCMAKE_CXX_FLAGS\u003d-O3 -DNDEBUG -fvisibility\u003dhidden\" \\\n  -DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/12214323/obj/arm64-v8a \\\n  -DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/12214323/obj/arm64-v8a \\\n  -DCMAKE_BUILD_TYPE\u003dDebug \\\n  -B/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a \\\n  -GNinja \\\n  -DUSE_LLAMA\u003dON \\\n  -DGGML_VULKAN\u003dON \\\n  -DGGML_K_QUANTS\u003dON \\\n  -DCMAKE_MAKE_PROGRAM\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja \\\n  -DCMAKE_PROGRAM_PATH\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin \\\n  -DVulkan_GLSLC_EXECUTABLE\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125/shader-tools/darwin-x86_64/glslc \\\n  -DVulkan_INCLUDE_DIR\u003d/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include \\\n  -DCMAKE_INCLUDE_PATH\u003d/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include\n",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "Received process result: 0",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "Exiting generation of /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a/compile_commands.json.bin normally",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "done executing cmake",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "hard linked /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a/compile_commands.json to /Volumes/Transcend/Projects/andriod-llm/app/.cxx/tools/debug/arm64-v8a/compile_commands.json",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "JSON generation completed without problems",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  }
+]

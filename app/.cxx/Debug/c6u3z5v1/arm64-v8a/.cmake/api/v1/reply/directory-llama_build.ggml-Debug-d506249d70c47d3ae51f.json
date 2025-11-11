@@ -1,0 +1,104 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 326,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 327,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 395,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"bin/libggml.so"
+			],
+			"targetId" : "ggml::@ac82e33bde8b2dde67df",
+			"targetIndex" : 0,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-cpu.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-alloc.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-backend.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-blas.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-cann.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-cpp.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-cuda.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-opt.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-metal.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-rpc.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-sycl.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-vulkan.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/ggml-webgpu.h",
+				"/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/include/gguf.h"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"bin/libggml-base.so"
+			],
+			"targetId" : "ggml-base::@ac82e33bde8b2dde67df",
+			"targetIndex" : 1,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/ggml",
+			"paths" : 
+			[
+				"/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/c6u3z5v1/arm64-v8a/llama_build/ggml/ggml-config.cmake",
+				"/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/c6u3z5v1/arm64-v8a/llama_build/ggml/ggml-version.cmake"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "llama_build/ggml",
+		"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml"
+	}
+}

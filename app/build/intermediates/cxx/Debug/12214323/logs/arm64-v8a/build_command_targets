@@ -1,0 +1,9 @@
+/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja \
+  -C \
+  /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/12214323/arm64-v8a \
+  ggml \
+  ggml-base \
+  ggml-cpu \
+  ggml-vulkan \
+  llama \
+  llama_jni

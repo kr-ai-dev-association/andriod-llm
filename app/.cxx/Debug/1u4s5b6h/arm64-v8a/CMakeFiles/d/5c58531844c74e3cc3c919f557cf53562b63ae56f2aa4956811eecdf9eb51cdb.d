@@ -1,0 +1,5 @@
+llama_build/ggml/src/ggml-vulkan/swiglu.comp.cpp: \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/swiglu.comp \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/glu_main.glsl \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/rte.glsl \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/glu_head.glsl

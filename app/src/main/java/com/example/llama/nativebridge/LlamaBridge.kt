@@ -14,9 +14,11 @@ object LlamaBridge {
 		nCtx: Int,
 		nThreads: Int,
 		nBatch: Int,
+		nGpuLayers: Int,
 		useMmap: Boolean,
 		useMlock: Boolean,
-		seed: Int
+		seed: Int,
+		callback: TokenCallback
 	): Long
 
 	external fun free(handle: Long)

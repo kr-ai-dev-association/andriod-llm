@@ -1,0 +1,3 @@
+llama_build/ggml/src/ggml-vulkan/sum_rows.comp.cpp: \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/sum_rows.comp \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/types.glsl

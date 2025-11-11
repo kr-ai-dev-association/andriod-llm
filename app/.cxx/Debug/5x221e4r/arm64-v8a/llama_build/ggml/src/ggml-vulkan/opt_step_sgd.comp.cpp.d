@@ -1,0 +1,1 @@
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/5x221e4r/arm64-v8a/llama_build/ggml/src/ggml-vulkan/opt_step_sgd.comp.cpp: /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/opt_step_sgd.comp /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/generic_head.glsl

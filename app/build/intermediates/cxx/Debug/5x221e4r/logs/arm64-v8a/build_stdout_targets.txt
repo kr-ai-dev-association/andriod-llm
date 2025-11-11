@@ -1,0 +1,21 @@
+ninja: Entering directory `/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/5x221e4r/arm64-v8a'
+[0/2] Re-checking globbed directories...
+[1/17] Performing build step for 'vulkan-shaders-gen'
+ninja: no work to do.
+[2/17] Performing install step for 'vulkan-shaders-gen'
+-- Up-to-date: /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/5x221e4r/arm64-v8a/Debug/./vulkan-shaders-gen
+[3/17] Completed 'vulkan-shaders-gen'
+[4/17] Generate vulkan shaders for flash_attn_cm1.comp
+[5/17] Generate vulkan shaders for mul_mat_vecq.comp
+[6/17] Generate vulkan shaders for mul_mmq.comp
+[7/17] Generate vulkan shaders for mul_mm_cm2.comp
+[8/17] Generate vulkan shaders for flash_attn_cm2.comp
+[9/17] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/flash_attn_cm2.comp.cpp.o
+[10/17] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/flash_attn_cm1.comp.cpp.o
+[11/17] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vecq.comp.cpp.o
+[12/17] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mm_cm2.comp.cpp.o
+[13/17] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mmq.comp.cpp.o
+[14/17] Linking CXX shared library bin/libggml-vulkan.so
+[15/17] Linking CXX shared library bin/libggml.so
+[16/17] Linking CXX shared library bin/libllama.so
+[17/17] Linking CXX shared library /Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/5x221e4r/obj/arm64-v8a/libllama_jni.so

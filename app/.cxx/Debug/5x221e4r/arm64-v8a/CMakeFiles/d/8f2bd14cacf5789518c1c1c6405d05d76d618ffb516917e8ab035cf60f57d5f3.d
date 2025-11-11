@@ -1,0 +1,4 @@
+llama_build/ggml/src/ggml-vulkan/flash_attn.comp.cpp: \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn.comp \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/flash_attn_base.glsl \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/types.glsl

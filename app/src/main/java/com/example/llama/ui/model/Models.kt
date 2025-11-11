@@ -5,9 +5,18 @@ data class ChatMessage(
 	val isUser: Boolean
 )
 
+data class ModelMetadata(
+	val name: String,
+	val quantization: String,
+	val contextLength: Int,
+	val sizeLabel: String
+)
+
 data class ChatUiState(
 	val messages: List<ChatMessage> = emptyList(),
-	val isGenerating: Boolean = false
+	val isGenerating: Boolean = false,
+	val loadProgress: Int = 0,
+	val modelMetadata: ModelMetadata? = null
 ) {
 	fun addMessage(message: ChatMessage): ChatUiState {
 		return copy(messages = messages + message)
@@ -22,6 +31,12 @@ data class ChatUiState(
 			this
 		}
 	}
+
+	fun withProgress(progress: Int): ChatUiState =
+		copy(loadProgress = progress.coerceIn(0, 100))
+
+	fun withMetadata(metadata: ModelMetadata): ChatUiState =
+		copy(modelMetadata = metadata, loadProgress = 100)
 }
 
 

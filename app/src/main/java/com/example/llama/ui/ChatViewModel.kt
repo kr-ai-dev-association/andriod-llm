@@ -14,8 +14,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import com.example.llama.ui.model.ChatMessage
 import com.example.llama.ui.model.ChatUiState
+import com.example.llama.ui.model.ModelMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.File
 import java.io.IOException
 
@@ -26,12 +28,29 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 	private val _uiState = MutableStateFlow(ChatUiState())
 	val uiState: StateFlow<ChatUiState> = _uiState
 
+	init {
+		ModelPathStore.getModelMetadata(app)?.let { stored ->
+			runCatching {
+				val obj = JSONObject(stored)
+				ModelMetadata(
+					name = obj.optString("name", "N/A"),
+					quantization = obj.optString("quantization", "N/A"),
+					contextLength = obj.optInt("context_length", 0),
+					sizeLabel = obj.optString("size_label", "N/A")
+				)
+			}.onSuccess { meta ->
+				_uiState.value = _uiState.value.withMetadata(meta)
+			}
+		}
+	}
+
 	fun getModelPathOverride(): String {
 		return ModelPathStore.getOverridePath(getApplication()) ?: ""
 	}
 
 	fun setModelPathOverride(path: String) {
 		ModelPathStore.setOverridePath(getApplication(), path.ifBlank { null })
+		ModelPathStore.setModelMetadata(getApplication(), null)
 		repo.reset()
 	}
 
@@ -67,20 +86,41 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 		// Add user message
 		_uiState.value = _uiState.value.addMessage(ChatMessage(text = userText, isUser = true))
 		// Start generation
-		generate(userText)
+		generate()
 	}
 
-	private fun generate(prompt: String) {
+	private fun generate() {
 		if (_uiState.value.isGenerating) return
 		_uiState.value = _uiState.value.copy(isGenerating = true)
 
 		val builderIndex = _uiState.value.messages.size
 		_uiState.value = _uiState.value.addMessage(ChatMessage(text = "", isUser = false))
 
+		val messages = _uiState.value.messages
+
 		viewModelScope.launch {
 			repo.generateStream(
-				prompt = prompt,
+				messages = messages.dropLast(1), // Don't include the empty assistant message placeholder
 				callback = object : TokenCallback {
+					override fun onLoadProgress(progress: Int) {
+						_uiState.value = _uiState.value.withProgress(progress)
+					}
+
+					override fun onModelMetadata(json: String) {
+						runCatching {
+							val obj = JSONObject(json)
+							ModelMetadata(
+								name = obj.optString("name", "N/A"),
+								quantization = obj.optString("quantization", "N/A"),
+								contextLength = obj.optInt("context_length", 0),
+								sizeLabel = obj.optString("size_label", "N/A")
+							)
+						}.onSuccess { metadata ->
+							ModelPathStore.setModelMetadata(getApplication(), json)
+							_uiState.value = _uiState.value.withMetadata(metadata)
+						}
+					}
+
 					override fun onToken(token: String) {
 						_uiState.value = _uiState.value.appendToLastAssistant(token)
 					}
@@ -94,6 +134,7 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 						_uiState.value = _uiState.value.addMessage(
 							ChatMessage(text = "에러: $message", isUser = false)
 						)
+						_uiState.value = _uiState.value.withProgress(0)
 					}
 				}
 			)

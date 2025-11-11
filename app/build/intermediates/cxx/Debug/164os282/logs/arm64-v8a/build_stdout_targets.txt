@@ -1,0 +1,414 @@
+ninja: Entering directory `/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/164os282/arm64-v8a'
+[0/2] Re-checking globbed directories...
+[1/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/hbm.cpp.o
+[2/402] Building C object llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o
+[3/402] Building C object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/quants.c.o
+[4/402] Building C object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o
+[5/402] Building C object llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o
+[6/402] Building C object llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o
+[7/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o
+[8/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml.cpp.o
+[9/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/traits.cpp.o
+[10/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o
+[11/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o
+[12/402] Creating directories for 'vulkan-shaders-gen'
+[13/402] No download step for 'vulkan-shaders-gen'
+[14/402] No update step for 'vulkan-shaders-gen'
+[15/402] No patch step for 'vulkan-shaders-gen'
+[16/402] Building C object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/arm/quants.c.o
+[17/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o
+[18/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o
+[19/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/arm/repack.cpp.o
+[20/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o
+[21/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o
+[22/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/repack.cpp.o
+[23/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o
+[24/402] Performing configure step for 'vulkan-shaders-gen'
+-- The C compiler identification is AppleClang 17.0.0.17000013
+-- The CXX compiler identification is AppleClang 17.0.0.17000013
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/gcc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/164os282/arm64-v8a/llama_build/ggml/src/ggml-vulkan/vulkan-shaders-gen-prefix/src/vulkan-shaders-gen-build
+[25/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o
+[26/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o
+[27/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o
+[28/402] Linking CXX shared library bin/libggml-base.so
+[29/402] Performing build step for 'vulkan-shaders-gen'
+[1/2] Building CXX object CMakeFiles/vulkan-shaders-gen.dir/vulkan-shaders-gen.cpp.o
+[2/2] Linking CXX executable /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/164os282/arm64-v8a/bin/vulkan-shaders-gen
+[30/402] Performing install step for 'vulkan-shaders-gen'
+-- Installing: /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/164os282/arm64-v8a/Debug/./vulkan-shaders-gen
+[31/402] Completed 'vulkan-shaders-gen'
+[32/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ops.cpp.o
+[33/402] Linking CXX shared library bin/libggml-cpu.so
+[34/402] Generate vulkan shaders header
+[35/402] Generate vulkan shaders for argmax.comp
+[36/402] Generate vulkan shaders for acc.comp
+[37/402] Generate vulkan shaders for argsort.comp
+[38/402] Generate vulkan shaders for add_id.comp
+[39/402] Generate vulkan shaders for clamp.comp
+[40/402] Generate vulkan shaders for conv_transpose_1d.comp
+[41/402] Generate vulkan shaders for concat.comp
+[42/402] Generate vulkan shaders for dequant_iq4_xs.comp
+[43/402] Generate vulkan shaders for dequant_f32.comp
+[44/402] Generate vulkan shaders for contig_copy.comp
+[45/402] Generate vulkan shaders for cos.comp
+[46/402] Generate vulkan shaders for copy.comp
+[47/402] Generate vulkan shaders for conv2d_mm.comp
+[48/402] Generate vulkan shaders for dequant_iq2_s.comp
+[49/402] Generate vulkan shaders for count_equal.comp
+[50/402] Generate vulkan shaders for copy_from_quant.comp
+[51/402] Generate vulkan shaders for dequant_iq2_xxs.comp
+[52/402] Generate vulkan shaders for dequant_iq2_xs.comp
+[53/402] Generate vulkan shaders for conv2d_dw.comp
+[54/402] Generate vulkan shaders for dequant_iq1_m.comp
+[55/402] Generate vulkan shaders for dequant_q2_k.comp
+[56/402] Generate vulkan shaders for dequant_mxfp4.comp
+[57/402] Generate vulkan shaders for dequant_iq1_s.comp
+[58/402] Generate vulkan shaders for dequant_q3_k.comp
+[59/402] Generate vulkan shaders for dequant_q5_1.comp
+[60/402] Generate vulkan shaders for dequant_q5_0.comp
+[61/402] Generate vulkan shaders for im2col_3d.comp
+[62/402] Generate vulkan shaders for dequant_q4_k.comp
+[63/402] Generate vulkan shaders for dequant_iq3_s.comp
+[64/402] Generate vulkan shaders for dequant_q4_0.comp
+[65/402] Generate vulkan shaders for dequant_iq4_nl.comp
+[66/402] Generate vulkan shaders for dequant_iq3_xxs.comp
+[67/402] Generate vulkan shaders for flash_attn_cm2.comp
+[68/402] Generate vulkan shaders for flash_attn_cm1.comp
+[69/402] Generate vulkan shaders for diag_mask_inf.comp
+[70/402] Generate vulkan shaders for dequant_q4_1.comp
+[71/402] Generate vulkan shaders for dequant_q6_k.comp
+[72/402] Generate vulkan shaders for dequant_q8_0.comp
+[73/402] Generate vulkan shaders for exp.comp
+[74/402] Generate vulkan shaders for add.comp
+[75/402] Generate vulkan shaders for dequant_q5_k.comp
+[76/402] Generate vulkan shaders for mul_mat_vec_iq1_m.comp
+[77/402] Generate vulkan shaders for mul_mat_vec_iq2_s.comp
+[78/402] Generate vulkan shaders for flash_attn_split_k_reduce.comp
+[79/402] Generate vulkan shaders for gelu_quick.comp
+[80/402] Generate vulkan shaders for geglu.comp
+[81/402] Generate vulkan shaders for gelu.comp
+[82/402] Generate vulkan shaders for div.comp
+[83/402] Generate vulkan shaders for get_rows.comp
+[84/402] Generate vulkan shaders for hardsigmoid.comp
+[85/402] Generate vulkan shaders for gelu_erf.comp
+[86/402] Generate vulkan shaders for group_norm.comp
+[87/402] Generate vulkan shaders for geglu_quick.comp
+[88/402] Generate vulkan shaders for geglu_erf.comp
+[89/402] Generate vulkan shaders for hardswish.comp
+[90/402] Generate vulkan shaders for l2_norm.comp
+[91/402] Generate vulkan shaders for flash_attn.comp
+[92/402] Generate vulkan shaders for copy_to_quant.comp
+[93/402] Generate vulkan shaders for leaky_relu.comp
+[94/402] Generate vulkan shaders for im2col.comp
+[95/402] Generate vulkan shaders for mul.comp
+[96/402] Generate vulkan shaders for get_rows_quant.comp
+[97/402] Generate vulkan shaders for mul_mat_vec_iq1_s.comp
+[98/402] Generate vulkan shaders for mul_mat_vec_iq2_xs.comp
+[99/402] Generate vulkan shaders for mul_mat_vecq.comp
+[100/402] Generate vulkan shaders for mul_mm_cm2.comp
+[101/402] Generate vulkan shaders for mul_mmq.comp
+[102/402] Generate vulkan shaders for mul_mat_split_k_reduce.comp
+[103/402] Generate vulkan shaders for mul_mat_vec_nc.comp
+[104/402] Generate vulkan shaders for mul_mat_vec_p021.comp
+[105/402] Generate vulkan shaders for mul_mat_vec_iq3_xxs.comp
+[106/402] Generate vulkan shaders for mul_mat_vec_q2_k.comp
+[107/402] Generate vulkan shaders for mul_mat_vec_iq2_xxs.comp
+[108/402] Generate vulkan shaders for mul_mat_vec_q5_k.comp
+[109/402] Generate vulkan shaders for mul_mat_vec_iq3_s.comp
+[110/402] Generate vulkan shaders for mul_mat_vec_q4_k.comp
+[111/402] Generate vulkan shaders for mul_mat_vec_q3_k.comp
+[112/402] Generate vulkan shaders for mul_mat_vec_q6_k.comp
+[113/402] Generate vulkan shaders for opt_step_adamw.comp
+[114/402] Generate vulkan shaders for pool2d.comp
+[115/402] Generate vulkan shaders for pad.comp
+[116/402] Generate vulkan shaders for norm.comp
+[117/402] Generate vulkan shaders for opt_step_sgd.comp
+[118/402] Generate vulkan shaders for quantize_q8_1.comp
+[119/402] Generate vulkan shaders for multi_add.comp
+[120/402] Generate vulkan shaders for rope_multi.comp
+[121/402] Generate vulkan shaders for repeat_back.comp
+[122/402] Generate vulkan shaders for relu.comp
+[123/402] Generate vulkan shaders for repeat.comp
+[124/402] Generate vulkan shaders for rms_norm_partials.comp
+[125/402] Generate vulkan shaders for roll.comp
+[126/402] Generate vulkan shaders for rms_norm_back.comp
+[127/402] Generate vulkan shaders for silu_back.comp
+[128/402] Generate vulkan shaders for sigmoid.comp
+[129/402] Generate vulkan shaders for rope_norm.comp
+[130/402] Generate vulkan shaders for sin.comp
+[131/402] Generate vulkan shaders for reglu.comp
+[132/402] Generate vulkan shaders for rope_vision.comp
+[133/402] Generate vulkan shaders for rope_neox.comp
+[134/402] Generate vulkan shaders for scale.comp
+[135/402] Generate vulkan shaders for silu.comp
+[136/402] Generate vulkan shaders for square.comp
+[137/402] Generate vulkan shaders for soft_max_back.comp
+[138/402] Generate vulkan shaders for sum_rows.comp
+[139/402] Generate vulkan shaders for mul_mat_vec.comp
+[140/402] Generate vulkan shaders for sqrt.comp
+[141/402] Generate vulkan shaders for ssm_conv.comp
+[142/402] Generate vulkan shaders for ssm_scan.comp
+[143/402] Generate vulkan shaders for tanh.comp
+[144/402] Generate vulkan shaders for swiglu.comp
+[145/402] Generate vulkan shaders for upscale.comp
+[146/402] Generate vulkan shaders for swiglu_oai.comp
+[147/402] Generate vulkan shaders for timestep_embedding.comp
+[148/402] Generate vulkan shaders for topk_moe.comp
+[149/402] Generate vulkan shaders for sub.comp
+[150/402] Generate vulkan shaders for soft_max.comp
+[151/402] Generate vulkan shaders for wkv6.comp
+[152/402] Generate vulkan shaders for rms_norm.comp
+[153/402] Generate vulkan shaders for wkv7.comp
+[154/402] Generate vulkan shaders for mul_mm.comp
+[155/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/argmax.comp.cpp.o
+[156/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/clamp.comp.cpp.o
+[157/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/add_id.comp.cpp.o
+[158/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/acc.comp.cpp.o
+[159/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/argsort.comp.cpp.o
+[160/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/concat.comp.cpp.o
+[161/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/contig_copy.comp.cpp.o
+[162/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/conv2d_dw.comp.cpp.o
+[163/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/conv2d_mm.comp.cpp.o
+[164/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/conv_transpose_1d.comp.cpp.o
+[165/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/add.comp.cpp.o
+[166/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/copy.comp.cpp.o
+[167/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/copy_from_quant.comp.cpp.o
+[168/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/cos.comp.cpp.o
+[169/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/count_equal.comp.cpp.o
+[170/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_f32.comp.cpp.o
+[171/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_iq1_m.comp.cpp.o
+[172/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_iq1_s.comp.cpp.o
+[173/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_iq2_s.comp.cpp.o
+[174/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_iq2_xs.comp.cpp.o
+[175/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_iq2_xxs.comp.cpp.o
+[176/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_iq3_s.comp.cpp.o
+[177/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_iq3_xxs.comp.cpp.o
+[178/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_iq4_nl.comp.cpp.o
+[179/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_iq4_xs.comp.cpp.o
+[180/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_mxfp4.comp.cpp.o
+[181/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_q2_k.comp.cpp.o
+[182/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_q3_k.comp.cpp.o
+[183/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_q4_0.comp.cpp.o
+[184/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_q4_1.comp.cpp.o
+[185/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/copy_to_quant.comp.cpp.o
+[186/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_q4_k.comp.cpp.o
+[187/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_q5_0.comp.cpp.o
+[188/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_q5_1.comp.cpp.o
+[189/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_q5_k.comp.cpp.o
+[190/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_q6_k.comp.cpp.o
+[191/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/dequant_q8_0.comp.cpp.o
+[192/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/diag_mask_inf.comp.cpp.o
+[193/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/div.comp.cpp.o
+[194/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/exp.comp.cpp.o
+[195/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/flash_attn.comp.cpp.o
+[196/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/flash_attn_cm1.comp.cpp.o
+[197/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/flash_attn_cm2.comp.cpp.o
+[198/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/flash_attn_split_k_reduce.comp.cpp.o
+[199/402] Building CXX object llama_build/ggml/src/CMakeFiles/ggml.dir/ggml-backend-reg.cpp.o
+[200/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/geglu.comp.cpp.o
+[201/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/geglu_erf.comp.cpp.o
+[202/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/geglu_quick.comp.cpp.o
+[203/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/gelu.comp.cpp.o
+[204/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/gelu_erf.comp.cpp.o
+[205/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/gelu_quick.comp.cpp.o
+[206/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/get_rows.comp.cpp.o
+[207/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/group_norm.comp.cpp.o
+[208/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/hardsigmoid.comp.cpp.o
+[209/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/hardswish.comp.cpp.o
+[210/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/im2col.comp.cpp.o
+[211/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/im2col_3d.comp.cpp.o
+[212/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/l2_norm.comp.cpp.o
+[213/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/leaky_relu.comp.cpp.o
+[214/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_split_k_reduce.comp.cpp.o
+[215/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul.comp.cpp.o
+[216/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/get_rows_quant.comp.cpp.o
+[217/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_iq1_m.comp.cpp.o
+[218/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_iq1_s.comp.cpp.o
+[219/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_nc.comp.cpp.o
+[220/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_p021.comp.cpp.o
+[221/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_iq3_xxs.comp.cpp.o
+[222/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_iq3_s.comp.cpp.o
+[223/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_iq2_xxs.comp.cpp.o
+[224/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vecq.comp.cpp.o
+[225/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_iq2_xs.comp.cpp.o
+[226/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_iq2_s.comp.cpp.o
+[227/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_q4_k.comp.cpp.o
+[228/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mm_cm2.comp.cpp.o
+[229/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mmq.comp.cpp.o
+[230/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/multi_add.comp.cpp.o
+[231/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_q2_k.comp.cpp.o
+[232/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_q3_k.comp.cpp.o
+[233/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_q5_k.comp.cpp.o
+[234/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec_q6_k.comp.cpp.o
+[235/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/norm.comp.cpp.o
+[236/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/opt_step_adamw.comp.cpp.o
+[237/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/opt_step_sgd.comp.cpp.o
+[238/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/pad.comp.cpp.o
+[239/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/pool2d.comp.cpp.o
+[240/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/quantize_q8_1.comp.cpp.o
+[241/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/reglu.comp.cpp.o
+[242/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/relu.comp.cpp.o
+[243/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/repeat.comp.cpp.o
+[244/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/repeat_back.comp.cpp.o
+[245/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/rms_norm_back.comp.cpp.o
+[246/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/rms_norm_partials.comp.cpp.o
+[247/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/roll.comp.cpp.o
+[248/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/rope_neox.comp.cpp.o
+[249/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/rope_multi.comp.cpp.o
+[250/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/rms_norm.comp.cpp.o
+[251/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/rope_norm.comp.cpp.o
+[252/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/rope_vision.comp.cpp.o
+[253/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/scale.comp.cpp.o
+[254/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/sigmoid.comp.cpp.o
+[255/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/silu.comp.cpp.o
+[256/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/silu_back.comp.cpp.o
+[257/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/sin.comp.cpp.o
+[258/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/soft_max.comp.cpp.o
+[259/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/tanh.comp.cpp.o
+[260/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/soft_max_back.comp.cpp.o
+[261/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/sqrt.comp.cpp.o
+[262/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/square.comp.cpp.o
+[263/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/ssm_conv.comp.cpp.o
+[264/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/ssm_scan.comp.cpp.o
+[265/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/sum_rows.comp.cpp.o
+[266/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/swiglu.comp.cpp.o
+[267/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/swiglu_oai.comp.cpp.o
+[268/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/sub.comp.cpp.o
+[269/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/timestep_embedding.comp.cpp.o
+[270/402] Building CXX object CMakeFiles/llama_jni.dir/native/jni_bridge.cpp.o
+[271/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/topk_moe.comp.cpp.o
+[272/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/upscale.comp.cpp.o
+[273/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/wkv6.comp.cpp.o
+[274/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/wkv7.comp.cpp.o
+[275/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-cparams.cpp.o
+[276/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mat_vec.comp.cpp.o
+[277/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-hparams.cpp.o
+[278/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-io.cpp.o
+[279/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-impl.cpp.o
+[280/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/ggml-vulkan.cpp.o
+FAILED: llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/ggml-vulkan.cpp.o 
+/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=aarch64-none-linux-android26 --sysroot=/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_K_QUANTS=1 -DVK_NO_PROTOTYPES -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_vulkan_EXPORTS -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/.. -I/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/164os282/arm64-v8a/llama_build/ggml/src/ggml-vulkan -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include -isystem /Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -O3 -DNDEBUG -fvisibility=hidden -march=armv8.2-a+dotprod+i8mm -mtune=cortex-a78 -fno-limit-debug-info  -fPIC -march=armv8.2-a+dotprod+i8mm -mtune=cortex-a78 -Wmissing-declarations -Wmissing-noreturn -Wall -Wextra -Wpedantic -Wcast-qual -Wno-unused-function -Wunreachable-code-break -Wunreachable-code-return -Wmissing-prototypes -Wextra-semi -std=gnu++17 -MD -MT llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/ggml-vulkan.cpp.o -MF llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/ggml-vulkan.cpp.o.d -o llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/ggml-vulkan.cpp.o -c /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4318:9: error: use of undeclared identifier 'vkGetPhysicalDeviceFeatures2'; did you mean 'vk::PhysicalDeviceFeatures2'?
+        vkGetPhysicalDeviceFeatures2(device->physical_device, &device_features2);
+        ^
+/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include/vulkan/vulkan_structs.hpp:63580:10: note: 'vk::PhysicalDeviceFeatures2' declared here
+  struct PhysicalDeviceFeatures2
+         ^
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4457:72: error: use of undeclared identifier 'vkGetInstanceProcAddr'; did you mean 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr'?
+                (PFN_vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR)vkGetInstanceProcAddr(vk_instance.instance, "vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR");
+                                                                       ^~~~~~~~~~~~~~~~~~~~~
+                                                                       VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr
+/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include/vulkan/vulkan_core.h:17142:41: note: 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr' declared here
+    PFN_vkGetInstanceProcAddrLUNARG     pfnGetInstanceProcAddr;
+                                        ^
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4457:72: error: invalid use of non-static data member 'pfnGetInstanceProcAddr'
+                (PFN_vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR)vkGetInstanceProcAddr(vk_instance.instance, "vkGetPhysicalDeviceCooperativeMatrixPropertiesKHR");
+                                                                       ^~~~~~~~~~~~~~~~~~~~~
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4791:5: error: use of undeclared identifier 'vkGetPhysicalDeviceFeatures2'; did you mean 'vk::PhysicalDeviceFeatures2'?
+    vkGetPhysicalDeviceFeatures2(physical_device, &device_features2);
+    ^
+/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include/vulkan/vulkan_structs.hpp:63580:10: note: 'vk::PhysicalDeviceFeatures2' declared here
+  struct PhysicalDeviceFeatures2
+         ^
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4844:46: error: use of undeclared identifier 'vkGetInstanceProcAddr'
+    ggml_vk_default_dispatcher_instance.init(vkGetInstanceProcAddr);
+                                             ^
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4903:91: error: use of undeclared identifier 'vkGetInstanceProcAddr'; did you mean 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr'?
+        vk_instance.pfn_vkSetDebugUtilsObjectNameEXT = (PFN_vkSetDebugUtilsObjectNameEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkSetDebugUtilsObjectNameEXT");
+                                                                                          ^~~~~~~~~~~~~~~~~~~~~
+                                                                                          VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr
+/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include/vulkan/vulkan_core.h:17142:41: note: 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr' declared here
+    PFN_vkGetInstanceProcAddrLUNARG     pfnGetInstanceProcAddr;
+                                        ^
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4903:91: error: invalid use of non-static data member 'pfnGetInstanceProcAddr'
+        vk_instance.pfn_vkSetDebugUtilsObjectNameEXT = (PFN_vkSetDebugUtilsObjectNameEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkSetDebugUtilsObjectNameEXT");
+                                                                                          ^~~~~~~~~~~~~~~~~~~~~
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4904:95: error: use of undeclared identifier 'vkGetInstanceProcAddr'; did you mean 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr'?
+        vk_instance.pfn_vkQueueBeginDebugUtilsLabelEXT = (PFN_vkQueueBeginDebugUtilsLabelEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkQueueBeginDebugUtilsLabelEXT");
+                                                                                              ^~~~~~~~~~~~~~~~~~~~~
+                                                                                              VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr
+/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include/vulkan/vulkan_core.h:17142:41: note: 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr' declared here
+    PFN_vkGetInstanceProcAddrLUNARG     pfnGetInstanceProcAddr;
+                                        ^
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4904:95: error: invalid use of non-static data member 'pfnGetInstanceProcAddr'
+        vk_instance.pfn_vkQueueBeginDebugUtilsLabelEXT = (PFN_vkQueueBeginDebugUtilsLabelEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkQueueBeginDebugUtilsLabelEXT");
+                                                                                              ^~~~~~~~~~~~~~~~~~~~~
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4905:91: error: use of undeclared identifier 'vkGetInstanceProcAddr'; did you mean 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr'?
+        vk_instance.pfn_vkQueueEndDebugUtilsLabelEXT = (PFN_vkQueueEndDebugUtilsLabelEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkQueueEndDebugUtilsLabelEXT");
+                                                                                          ^~~~~~~~~~~~~~~~~~~~~
+                                                                                          VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr
+/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include/vulkan/vulkan_core.h:17142:41: note: 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr' declared here
+    PFN_vkGetInstanceProcAddrLUNARG     pfnGetInstanceProcAddr;
+                                        ^
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4905:91: error: invalid use of non-static data member 'pfnGetInstanceProcAddr'
+        vk_instance.pfn_vkQueueEndDebugUtilsLabelEXT = (PFN_vkQueueEndDebugUtilsLabelEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkQueueEndDebugUtilsLabelEXT");
+                                                                                          ^~~~~~~~~~~~~~~~~~~~~
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4906:91: error: use of undeclared identifier 'vkGetInstanceProcAddr'; did you mean 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr'?
+        vk_instance.pfn_vkCmdBeginDebugUtilsLabelEXT = (PFN_vkCmdBeginDebugUtilsLabelEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkCmdBeginDebugUtilsLabelEXT");
+                                                                                          ^~~~~~~~~~~~~~~~~~~~~
+                                                                                          VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr
+/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include/vulkan/vulkan_core.h:17142:41: note: 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr' declared here
+    PFN_vkGetInstanceProcAddrLUNARG     pfnGetInstanceProcAddr;
+                                        ^
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4906:91: error: invalid use of non-static data member 'pfnGetInstanceProcAddr'
+        vk_instance.pfn_vkCmdBeginDebugUtilsLabelEXT = (PFN_vkCmdBeginDebugUtilsLabelEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkCmdBeginDebugUtilsLabelEXT");
+                                                                                          ^~~~~~~~~~~~~~~~~~~~~
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4907:89: error: use of undeclared identifier 'vkGetInstanceProcAddr'; did you mean 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr'?
+        vk_instance.pfn_vkCmdEndDebugUtilsLabelEXT =   (PFN_vkCmdEndDebugUtilsLabelEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkCmdEndDebugUtilsLabelEXT");
+                                                                                        ^~~~~~~~~~~~~~~~~~~~~
+                                                                                        VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr
+/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include/vulkan/vulkan_core.h:17142:41: note: 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr' declared here
+    PFN_vkGetInstanceProcAddrLUNARG     pfnGetInstanceProcAddr;
+                                        ^
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4907:89: error: invalid use of non-static data member 'pfnGetInstanceProcAddr'
+        vk_instance.pfn_vkCmdEndDebugUtilsLabelEXT =   (PFN_vkCmdEndDebugUtilsLabelEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkCmdEndDebugUtilsLabelEXT");
+                                                                                        ^~~~~~~~~~~~~~~~~~~~~
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4908:93: error: use of undeclared identifier 'vkGetInstanceProcAddr'; did you mean 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr'?
+        vk_instance.pfn_vkCmdInsertDebugUtilsLabelEXT = (PFN_vkCmdInsertDebugUtilsLabelEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkCmdInsertDebugUtilsLabelEXT");
+                                                                                            ^~~~~~~~~~~~~~~~~~~~~
+                                                                                            VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr
+/Volumes/Transcend/Projects/andriod-llm/app/third_party/Vulkan-Headers/include/vulkan/vulkan_core.h:17142:41: note: 'VkDirectDriverLoadingInfoLUNARG::pfnGetInstanceProcAddr' declared here
+    PFN_vkGetInstanceProcAddrLUNARG     pfnGetInstanceProcAddr;
+                                        ^
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:4908:93: error: invalid use of non-static data member 'pfnGetInstanceProcAddr'
+        vk_instance.pfn_vkCmdInsertDebugUtilsLabelEXT = (PFN_vkCmdInsertDebugUtilsLabelEXT) vkGetInstanceProcAddr(vk_instance.instance, "vkCmdInsertDebugUtilsLabelEXT");
+                                                                                            ^~~~~~~~~~~~~~~~~~~~~
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:5678:5: error: use of undeclared identifier 'vkCmdCopyBuffer'
+    vkCmdCopyBuffer(subctx->s->buffer, (VkBuffer)staging->buffer, (VkBuffer)dst->buffer, 1, &buf_copy);
+    ^
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/ggml-vulkan.cpp:5753:5: error: use of undeclared identifier 'vkCmdCopyBuffer'
+    vkCmdCopyBuffer(subctx->s->buffer, (VkBuffer)staging_buffer->buffer, (VkBuffer)dst->buffer, 1, &buf_copy);
+    ^
+fatal error: too many errors emitted, stopping now [-ferror-limit=]
+20 errors generated.
+[281/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-memory.cpp.o
+[282/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama.cpp.o
+[283/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-chat.cpp.o
+[284/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-arch.cpp.o
+[285/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-kv-cache-iswa.cpp.o
+[286/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-graph.cpp.o
+[287/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-adapter.cpp.o
+[288/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-batch.cpp.o
+[289/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-memory-hybrid.cpp.o
+[290/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-context.cpp.o
+[291/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-kv-cache.cpp.o
+[292/402] Building CXX object llama_build/src/CMakeFiles/llama.dir/llama-grammar.cpp.o
+[293/402] Building CXX object llama_build/ggml/src/ggml-vulkan/CMakeFiles/ggml-vulkan.dir/mul_mm.comp.cpp.o
+ninja: build stopped: subcommand failed.

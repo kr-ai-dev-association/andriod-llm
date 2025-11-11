@@ -1,0 +1,246 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.6.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "llama_build",
+					"childIndexes" : 
+					[
+						2,
+						6
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-llama_build-Debug-d78f5799556cb609f9ab.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp"
+				},
+				{
+					"build" : "llama_build/ggml",
+					"childIndexes" : 
+					[
+						3
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-llama_build.ggml-Debug-13ea0e0c1d9b56aa94ca.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 2,
+					"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml"
+				},
+				{
+					"build" : "llama_build/ggml/src",
+					"childIndexes" : 
+					[
+						4,
+						5
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-llama_build.ggml.src-Debug-2c3b1051c8f1b47486f1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 2,
+					"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				},
+				{
+					"build" : "llama_build/ggml/src/ggml-cpu",
+					"jsonFile" : "directory-llama_build.ggml.src.ggml-cpu-Debug-54be38574e2c3a83f5b4.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 2,
+					"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu"
+				},
+				{
+					"build" : "llama_build/ggml/src/ggml-vulkan",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-llama_build.ggml.src.ggml-vulkan-Debug-b36de275bc4767aa6dec.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.19"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 2,
+					"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan",
+					"targetIndexes" : 
+					[
+						3,
+						6
+					]
+				},
+				{
+					"build" : "llama_build/src",
+					"jsonFile" : "directory-llama_build.src-Debug-d56ab00c502432617d37.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.14"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "llama_android",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"childIndexes" : 
+					[
+						2
+					],
+					"directoryIndexes" : 
+					[
+						1,
+						6
+					],
+					"name" : "llama.cpp",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5
+					],
+					"name" : "ggml",
+					"parentIndex" : 1,
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						6
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 3,
+					"id" : "ggml::@ac82e33bde8b2dde67df",
+					"jsonFile" : "target-ggml-Debug-68c1e4e337abc023f05a.json",
+					"name" : "ggml",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "ggml-base::@ac82e33bde8b2dde67df",
+					"jsonFile" : "target-ggml-base-Debug-f63a2d0a13cfc20a913a.json",
+					"name" : "ggml-base",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "ggml-cpu::@ac82e33bde8b2dde67df",
+					"jsonFile" : "target-ggml-cpu-Debug-d248eeac6901ab9d2127.json",
+					"name" : "ggml-cpu",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "ggml-vulkan::@267ec222014d544d1118",
+					"jsonFile" : "target-ggml-vulkan-Debug-cccc9b92d5e072849c11.json",
+					"name" : "ggml-vulkan",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "llama::@a28f7d715364b5d9b6c0",
+					"jsonFile" : "target-llama-Debug-d48ffb207148c5a20f03.json",
+					"name" : "llama",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "llama_jni::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-llama_jni-Debug-29227de838a900afca47.json",
+					"name" : "llama_jni",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "vulkan-shaders-gen::@267ec222014d544d1118",
+					"jsonFile" : "target-vulkan-shaders-gen-Debug-aa1e66123b363296d9cb.json",
+					"name" : "vulkan-shaders-gen",
+					"projectIndex" : 2
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/6x4u4s3j/arm64-v8a",
+		"source" : "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

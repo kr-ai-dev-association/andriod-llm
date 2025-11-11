@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -27,6 +30,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,6 +45,8 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 	val uiState by vm.uiState.collectAsState()
 	val showPathDialog = remember { mutableStateOf(false) }
 	val modelPathState = remember { mutableStateOf("") }
+	val keyboardController = LocalSoftwareKeyboardController.current
+
 	val filePicker = rememberLauncherForActivityResult(
 		contract = ActivityResultContracts.OpenDocument()
 	) { uri ->
@@ -78,6 +85,25 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 
 		Spacer(modifier = Modifier.height(8.dp))
 
+		uiState.modelMetadata?.let { meta ->
+			Text(
+				text = "${meta.name} · ${meta.quantization} · ctx ${meta.contextLength} · ${meta.sizeLabel}",
+				style = MaterialTheme.typography.bodySmall,
+				modifier = Modifier.fillMaxWidth(),
+				textAlign = TextAlign.Start
+			)
+			Spacer(modifier = Modifier.height(4.dp))
+		}
+		if (uiState.loadProgress in 0..99) {
+			LinearProgressIndicator(
+				progress = uiState.loadProgress / 100f,
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(vertical = 4.dp)
+			)
+			Spacer(modifier = Modifier.height(4.dp))
+		}
+
 		LazyColumn(
 			modifier = Modifier
 				.weight(1f)
@@ -93,30 +119,39 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 
 		Spacer(modifier = Modifier.height(8.dp))
 
-		val inputState = remember { mutableStateOf("") }
+		val text = remember { mutableStateOf("") }
 
 		Row(
 			verticalAlignment = Alignment.CenterVertically,
 			modifier = Modifier.fillMaxWidth()
 		) {
 			OutlinedTextField(
-				value = inputState.value,
-				onValueChange = { inputState.value = it },
+				value = text.value,
+				onValueChange = { text.value = it },
 				modifier = Modifier
 					.weight(1f)
 					.padding(end = 8.dp),
 				placeholder = { Text("메시지를 입력하세요") },
-				singleLine = true
+				singleLine = true,
+				keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+				keyboardActions = KeyboardActions(onSend = {
+					if (!uiState.isGenerating && text.value.isNotBlank()) {
+						vm.send(text.value)
+						text.value = ""
+						keyboardController?.hide()
+					}
+				})
 			)
 			Button(
 				onClick = {
 					if (uiState.isGenerating) {
 						vm.stop()
 					} else {
-						val text = inputState.value.trim()
-						if (text.isNotEmpty()) {
-							vm.send(text)
-							inputState.value = ""
+						val content = text.value.trim()
+						if (content.isNotEmpty()) {
+							vm.send(content)
+							text.value = ""
+							keyboardController?.hide()
 						}
 					}
 				},

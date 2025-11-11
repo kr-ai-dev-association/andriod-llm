@@ -296,8 +296,8 @@ CMAKE_SYSTEM_NAME:UNINITIALIZED=Android
 //No help, variable specified on the command line.
 CMAKE_SYSTEM_VERSION:UNINITIALIZED=24
 
-//The CMake toolchain file
-CMAKE_TOOLCHAIN_FILE:FILEPATH=/Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake
+//No help, variable specified on the command line.
+CMAKE_TOOLCHAIN_FILE:UNINITIALIZED=/Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake
 
 //If this value is on, makefiles will be generated without the
 // .SILENT directive, and all commands will be echoed to the console
@@ -656,6 +656,9 @@ LLAMA_FATAL_WARNINGS:BOOL=OFF
 //Location of header  files
 LLAMA_INCLUDE_INSTALL_DIR:PATH=include
 
+//Enable K-quants support
+LLAMA_K_QUANTS:BOOL=ON
+
 //Location of library files
 LLAMA_LIB_INSTALL_DIR:PATH=lib
 
@@ -681,6 +684,9 @@ LLAMA_TOOLS_INSTALL:BOOL=OFF
 //Use system libggml
 LLAMA_USE_SYSTEM_GGML:BOOL=OFF
 
+//Enable Vulkan for GPU acceleration
+LLAMA_VULKAN:BOOL=ON
+
 //Path to a library.
 MATH_LIBRARY:FILEPATH=/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/24/libm.so
 
@@ -701,6 +707,18 @@ OpenMP_omp_LIBRARY:FILEPATH=/Users/tony/Library/Android/sdk/ndk/26.1.10909125/to
 
 //Build with third_party/llama.cpp
 USE_LLAMA:BOOL=ON
+
+//Path to a program.
+Vulkan_GLSLANG_VALIDATOR_EXECUTABLE:FILEPATH=Vulkan_GLSLANG_VALIDATOR_EXECUTABLE-NOTFOUND
+
+//Path to a program.
+Vulkan_GLSLC_EXECUTABLE:FILEPATH=Vulkan_GLSLC_EXECUTABLE-NOTFOUND
+
+//Path to a file.
+Vulkan_INCLUDE_DIR:PATH=/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include
+
+//Path to a library.
+Vulkan_LIBRARY:FILEPATH=/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/24/libvulkan.so
 
 //Value Computed by CMake
 ggml_BINARY_DIR:STATIC=/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/1m2fy6c1/arm64-v8a/llama_build/ggml
@@ -936,6 +954,8 @@ FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_C:INTERNAL=[-fopenmp=libomp][/Users/tony/Lib
 FIND_PACKAGE_MESSAGE_DETAILS_OpenMP_CXX:INTERNAL=[-fopenmp=libomp][/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/lib/clang/17/lib/linux/aarch64/libomp.so][v5.0()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+//Details about finding Vulkan
+FIND_PACKAGE_MESSAGE_DETAILS_Vulkan:INTERNAL=[/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/24/libvulkan.so][/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/include][v()]
 //List of backends for cmake package
 GGML_AVAILABLE_BACKENDS:INTERNAL=ggml-cpu
 //Test GGML_COMPILER_SUPPORTS_FP16_FORMAT_I3E
@@ -969,6 +989,14 @@ OpenMP_SPECTEST_C_:INTERNAL=TRUE
 OpenMP_omp_LIBRARY-ADVANCED:INTERNAL=1
 //Result of TRY_COMPILE
 THREADS_HAVE_PTHREAD_ARG:INTERNAL=TRUE
+//ADVANCED property for variable: Vulkan_GLSLANG_VALIDATOR_EXECUTABLE
+Vulkan_GLSLANG_VALIDATOR_EXECUTABLE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Vulkan_GLSLC_EXECUTABLE
+Vulkan_GLSLC_EXECUTABLE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Vulkan_INCLUDE_DIR
+Vulkan_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Vulkan_LIBRARY
+Vulkan_LIBRARY-ADVANCED:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
 

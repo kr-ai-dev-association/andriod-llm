@@ -56,8 +56,6 @@ build CMakeFiles/llama_jni.dir/native/jni_bridge.cpp.o: CXX_COMPILER__llama_jni_
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp -I/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/../../../../third_party/llama.cpp -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = CMakeFiles/llama_jni.dir
   OBJECT_FILE_DIR = CMakeFiles/llama_jni.dir/native
-  TARGET_COMPILE_PDB = CMakeFiles/llama_jni.dir/
-  TARGET_PDB = /Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/1m2fy6c1/obj/arm64-v8a/libllama_jni.pdb
 
 
 # =============================================================================
@@ -76,9 +74,8 @@ build /Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/
   PRE_LINK = :
   SONAME = libllama_jni.so
   SONAME_FLAG = -Wl,-soname,
-  TARGET_COMPILE_PDB = CMakeFiles/llama_jni.dir/
   TARGET_FILE = /Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/1m2fy6c1/obj/arm64-v8a/libllama_jni.so
-  TARGET_PDB = /Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/1m2fy6c1/obj/arm64-v8a/libllama_jni.pdb
+  TARGET_PDB = llama_jni.so.dbg
 
 
 #############################################
@@ -309,8 +306,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml.c.o: C_COMPILER__ggml-b
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-base.dir/
-  TARGET_PDB = bin/libggml-base.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml.cpp.o: CXX_COMPILER__ggml-base_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml.cpp || cmake_object_order_depends_target_ggml-base
   DEFINES = -DGGML_BUILD -DGGML_COMMIT=\"d2d626938\" -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_K_QUANTS=1 -DGGML_VERSION=\"0.9.4\" -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS
@@ -319,8 +314,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml.cpp.o: CXX_COMPILER__gg
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-base.dir/
-  TARGET_PDB = bin/libggml-base.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o: C_COMPILER__ggml-base_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-alloc.c || cmake_object_order_depends_target_ggml-base
   DEFINES = -DGGML_BUILD -DGGML_COMMIT=\"d2d626938\" -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_K_QUANTS=1 -DGGML_VERSION=\"0.9.4\" -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS
@@ -329,8 +322,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-alloc.c.o: C_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-base.dir/
-  TARGET_PDB = bin/libggml-base.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o: CXX_COMPILER__ggml-base_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-backend.cpp || cmake_object_order_depends_target_ggml-base
   DEFINES = -DGGML_BUILD -DGGML_COMMIT=\"d2d626938\" -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_K_QUANTS=1 -DGGML_VERSION=\"0.9.4\" -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS
@@ -339,8 +330,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-backend.cpp.o: CXX_COMP
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-base.dir/
-  TARGET_PDB = bin/libggml-base.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o: CXX_COMPILER__ggml-base_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-opt.cpp || cmake_object_order_depends_target_ggml-base
   DEFINES = -DGGML_BUILD -DGGML_COMMIT=\"d2d626938\" -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_K_QUANTS=1 -DGGML_VERSION=\"0.9.4\" -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS
@@ -349,8 +338,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-opt.cpp.o: CXX_COMPILER
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-base.dir/
-  TARGET_PDB = bin/libggml-base.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o: CXX_COMPILER__ggml-base_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-threading.cpp || cmake_object_order_depends_target_ggml-base
   DEFINES = -DGGML_BUILD -DGGML_COMMIT=\"d2d626938\" -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_K_QUANTS=1 -DGGML_VERSION=\"0.9.4\" -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS
@@ -359,8 +346,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-threading.cpp.o: CXX_CO
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-base.dir/
-  TARGET_PDB = bin/libggml-base.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o: C_COMPILER__ggml-base_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-quants.c || cmake_object_order_depends_target_ggml-base
   DEFINES = -DGGML_BUILD -DGGML_COMMIT=\"d2d626938\" -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_K_QUANTS=1 -DGGML_VERSION=\"0.9.4\" -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS
@@ -369,8 +354,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-base.dir/ggml-quants.c.o: C_COMPILER_
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-base.dir/
-  TARGET_PDB = bin/libggml-base.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o: CXX_COMPILER__ggml-base_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/gguf.cpp || cmake_object_order_depends_target_ggml-base
   DEFINES = -DGGML_BUILD -DGGML_COMMIT=\"d2d626938\" -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_K_QUANTS=1 -DGGML_VERSION=\"0.9.4\" -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_base_EXPORTS
@@ -379,8 +362,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-base.dir/gguf.cpp.o: CXX_COMPILER__gg
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-base.dir
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-base.dir/
-  TARGET_PDB = bin/libggml-base.pdb
 
 
 # =============================================================================
@@ -399,9 +380,8 @@ build bin/libggml-base.so: CXX_SHARED_LIBRARY_LINKER__ggml-base_Debug llama_buil
   PRE_LINK = :
   SONAME = libggml-base.so
   SONAME_FLAG = -Wl,-soname,
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-base.dir/
   TARGET_FILE = bin/libggml-base.so
-  TARGET_PDB = bin/libggml-base.pdb
+  TARGET_PDB = ggml-base.so.dbg
 
 # =============================================================================
 # Object build statements for SHARED_LIBRARY target ggml
@@ -419,8 +399,6 @@ build llama_build/ggml/src/CMakeFiles/ggml.dir/ggml-backend-reg.cpp.o: CXX_COMPI
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml.dir
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml.dir/
-  TARGET_PDB = bin/libggml.pdb
 
 
 # =============================================================================
@@ -439,9 +417,8 @@ build bin/libggml.so: CXX_SHARED_LIBRARY_LINKER__ggml_Debug llama_build/ggml/src
   PRE_LINK = :
   SONAME = libggml.so
   SONAME_FLAG = -Wl,-soname,
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml.dir/
   TARGET_FILE = bin/libggml.so
-  TARGET_PDB = bin/libggml.pdb
+  TARGET_PDB = ggml.so.dbg
 
 # =============================================================================
 # Object build statements for SHARED_LIBRARY target ggml-cpu
@@ -459,8 +436,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.c.o: C_COMP
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/ggml-cpu.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -469,8 +444,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ggml-cpu.cpp.o: CXX_
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/repack.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/repack.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -479,8 +452,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/repack.cpp.o: CXX_CO
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/hbm.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/hbm.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -489,8 +460,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/hbm.cpp.o: CXX_COMPI
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/quants.c.o: C_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/quants.c || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -499,8 +468,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/quants.c.o: C_COMPIL
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/traits.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/traits.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -509,8 +476,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/traits.cpp.o: CXX_CO
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/amx/amx.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -519,8 +484,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/amx.cpp.o: CXX_C
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/amx/mmq.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -529,8 +492,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx/mmq.cpp.o: CXX_C
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/amx
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/binary-ops.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -539,8 +500,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/binary-ops.cpp.o: CX
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/unary-ops.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -549,8 +508,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/unary-ops.cpp.o: CXX
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/vec.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -559,8 +516,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/vec.cpp.o: CXX_COMPI
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ops.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/ops.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -569,8 +524,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/ops.cpp.o: CXX_COMPI
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/llamafile/sgemm.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -579,8 +532,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile/sgemm.cpp.
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/llamafile
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/arm/quants.c.o: C_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/arch/arm/quants.c || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -589,8 +540,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/arm/quants.c.o:
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/arm
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/arm/repack.cpp.o: CXX_COMPILER__ggml-cpu_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/arch/arm/repack.cpp || cmake_object_order_depends_target_ggml-cpu
   DEFINES = -DGGML_BACKEND_BUILD -DGGML_BACKEND_SHARED -DGGML_SCHED_MAX_COPIES=4 -DGGML_SHARED -DGGML_USE_CPU_REPACK -DGGML_USE_K_QUANTS=1 -DGGML_USE_LLAMAFILE -DGGML_USE_OPENMP -D_GNU_SOURCE -D_XOPEN_SOURCE=600 -Dggml_cpu_EXPORTS
@@ -599,8 +548,6 @@ build llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/arm/repack.cpp.
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/.. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir
   OBJECT_FILE_DIR = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/ggml-cpu/arch/arm
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
-  TARGET_PDB = bin/libggml-cpu.pdb
 
 
 # =============================================================================
@@ -619,9 +566,8 @@ build bin/libggml-cpu.so: CXX_SHARED_LIBRARY_LINKER__ggml-cpu_Debug llama_build/
   PRE_LINK = :
   SONAME = libggml-cpu.so
   SONAME_FLAG = -Wl,-soname,
-  TARGET_COMPILE_PDB = llama_build/ggml/src/CMakeFiles/ggml-cpu.dir/
   TARGET_FILE = bin/libggml-cpu.so
-  TARGET_PDB = bin/libggml-cpu.pdb
+  TARGET_PDB = ggml-cpu.so.dbg
 
 
 #############################################
@@ -781,8 +727,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama.cpp.o: CXX_COMPILER__llama_Debu
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-adapter.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-adapter.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -791,8 +735,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-adapter.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-arch.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-arch.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -801,8 +743,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-arch.cpp.o: CXX_COMPILER__llama
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-batch.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-batch.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -811,8 +751,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-batch.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-chat.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-chat.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -821,8 +759,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-chat.cpp.o: CXX_COMPILER__llama
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-context.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-context.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -831,8 +767,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-context.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-cparams.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-cparams.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -841,8 +775,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-cparams.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-grammar.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-grammar.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -851,8 +783,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-grammar.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-graph.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-graph.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -861,8 +791,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-graph.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-hparams.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-hparams.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -871,8 +799,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-hparams.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-impl.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-impl.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -881,8 +807,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-impl.cpp.o: CXX_COMPILER__llama
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-io.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-io.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -891,8 +815,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-io.cpp.o: CXX_COMPILER__llama_D
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-kv-cache.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-kv-cache.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -901,8 +823,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-kv-cache.cpp.o: CXX_COMPILER__l
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-kv-cache-iswa.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-kv-cache-iswa.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -911,8 +831,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-kv-cache-iswa.cpp.o: CXX_COMPIL
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-memory.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-memory.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -921,8 +839,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-memory.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-memory-hybrid.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-memory-hybrid.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -931,8 +847,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-memory-hybrid.cpp.o: CXX_COMPIL
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-memory-recurrent.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-memory-recurrent.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -941,8 +855,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-memory-recurrent.cpp.o: CXX_COM
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-mmap.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-mmap.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -951,8 +863,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-mmap.cpp.o: CXX_COMPILER__llama
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-model-loader.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-model-loader.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -961,8 +871,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-model-loader.cpp.o: CXX_COMPILE
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-model-saver.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-model-saver.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -971,8 +879,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-model-saver.cpp.o: CXX_COMPILER
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-model.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-model.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -981,8 +887,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-model.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-quant.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-quant.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -991,8 +895,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-quant.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-sampling.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-sampling.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1001,8 +903,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-sampling.cpp.o: CXX_COMPILER__l
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/llama-vocab.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/llama-vocab.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1011,8 +911,6 @@ build llama_build/src/CMakeFiles/llama.dir/llama-vocab.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/unicode-data.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/unicode-data.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1021,8 +919,6 @@ build llama_build/src/CMakeFiles/llama.dir/unicode-data.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/unicode.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/unicode.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1031,8 +927,6 @@ build llama_build/src/CMakeFiles/llama.dir/unicode.cpp.o: CXX_COMPILER__llama_De
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/apertus.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/apertus.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1041,8 +935,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/apertus.cpp.o: CXX_COMPILER__l
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/arcee.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/arcee.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1051,8 +943,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/arcee.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/arctic.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/arctic.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1061,8 +951,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/arctic.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/arwkv7.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/arwkv7.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1071,8 +959,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/arwkv7.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/baichuan.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/baichuan.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1081,8 +967,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/baichuan.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/bailingmoe.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/bailingmoe.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1091,8 +975,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/bailingmoe.cpp.o: CXX_COMPILER
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/bailingmoe2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/bailingmoe2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1101,8 +983,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/bailingmoe2.cpp.o: CXX_COMPILE
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/bert.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/bert.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1111,8 +991,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/bert.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/bitnet.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/bitnet.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1121,8 +999,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/bitnet.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/bloom.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/bloom.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1131,8 +1007,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/bloom.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/chameleon.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/chameleon.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1141,8 +1015,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/chameleon.cpp.o: CXX_COMPILER_
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/chatglm.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/chatglm.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1151,8 +1023,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/chatglm.cpp.o: CXX_COMPILER__l
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/codeshell.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/codeshell.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1161,8 +1031,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/codeshell.cpp.o: CXX_COMPILER_
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/cogvlm.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/cogvlm.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1171,8 +1039,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/cogvlm.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/cohere2-iswa.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/cohere2-iswa.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1181,8 +1047,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/cohere2-iswa.cpp.o: CXX_COMPIL
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/command-r.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/command-r.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1191,8 +1055,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/command-r.cpp.o: CXX_COMPILER_
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/dbrx.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/dbrx.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1201,8 +1063,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/dbrx.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/deci.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/deci.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1211,8 +1071,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/deci.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/deepseek.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/deepseek.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1221,8 +1079,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/deepseek.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/deepseek2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/deepseek2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1231,8 +1087,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/deepseek2.cpp.o: CXX_COMPILER_
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/dots1.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/dots1.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1241,8 +1095,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/dots1.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/dream.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/dream.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1251,8 +1103,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/dream.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/ernie4-5-moe.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/ernie4-5-moe.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1261,8 +1111,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/ernie4-5-moe.cpp.o: CXX_COMPIL
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/ernie4-5.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/ernie4-5.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1271,8 +1119,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/ernie4-5.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/exaone.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/exaone.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1281,8 +1127,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/exaone.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/exaone4.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/exaone4.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1291,8 +1135,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/exaone4.cpp.o: CXX_COMPILER__l
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/falcon-h1.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/falcon-h1.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1301,8 +1143,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/falcon-h1.cpp.o: CXX_COMPILER_
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/falcon.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/falcon.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1311,8 +1151,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/falcon.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/gemma-embedding.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/gemma-embedding.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1321,8 +1159,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/gemma-embedding.cpp.o: CXX_COM
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/gemma.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/gemma.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1331,8 +1167,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/gemma.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/gemma2-iswa.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/gemma2-iswa.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1341,8 +1175,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/gemma2-iswa.cpp.o: CXX_COMPILE
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/gemma3-iswa.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/gemma3-iswa.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1351,8 +1183,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/gemma3-iswa.cpp.o: CXX_COMPILE
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/gemma3n-iswa.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/gemma3n-iswa.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1361,8 +1191,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/gemma3n-iswa.cpp.o: CXX_COMPIL
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/glm4-moe.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/glm4-moe.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1371,8 +1199,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/glm4-moe.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/glm4.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/glm4.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1381,8 +1207,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/glm4.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/gpt2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/gpt2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1391,8 +1215,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/gpt2.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/gptneox.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/gptneox.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1401,8 +1223,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/gptneox.cpp.o: CXX_COMPILER__l
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/granite-hybrid.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/granite-hybrid.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1411,8 +1231,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/granite-hybrid.cpp.o: CXX_COMP
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/granite.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/granite.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1421,8 +1239,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/granite.cpp.o: CXX_COMPILER__l
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/grok.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/grok.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1431,8 +1247,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/grok.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/grovemoe.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/grovemoe.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1441,8 +1255,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/grovemoe.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/hunyuan-dense.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/hunyuan-dense.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1451,8 +1263,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/hunyuan-dense.cpp.o: CXX_COMPI
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/hunyuan-moe.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/hunyuan-moe.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1461,8 +1271,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/hunyuan-moe.cpp.o: CXX_COMPILE
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/internlm2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/internlm2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1471,8 +1279,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/internlm2.cpp.o: CXX_COMPILER_
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/jais.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/jais.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1481,8 +1287,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/jais.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/jamba.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/jamba.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1491,8 +1295,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/jamba.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/lfm2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/lfm2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1501,8 +1303,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/lfm2.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/llada-moe.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/llada-moe.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1511,8 +1311,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/llada-moe.cpp.o: CXX_COMPILER_
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/llada.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/llada.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1521,8 +1319,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/llada.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/llama-iswa.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/llama-iswa.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1531,8 +1327,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/llama-iswa.cpp.o: CXX_COMPILER
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/llama.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/llama.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1541,8 +1335,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/llama.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/mamba.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/mamba.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1551,8 +1343,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/mamba.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/minicpm3.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/minicpm3.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1561,8 +1351,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/minicpm3.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/minimax-m2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/minimax-m2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1571,8 +1359,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/minimax-m2.cpp.o: CXX_COMPILER
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/mpt.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/mpt.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1581,8 +1367,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/mpt.cpp.o: CXX_COMPILER__llama
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/nemotron-h.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/nemotron-h.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1591,8 +1375,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/nemotron-h.cpp.o: CXX_COMPILER
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/nemotron.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/nemotron.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1601,8 +1383,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/nemotron.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/neo-bert.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/neo-bert.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1611,8 +1391,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/neo-bert.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/olmo.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/olmo.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1621,8 +1399,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/olmo.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/olmo2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/olmo2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1631,8 +1407,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/olmo2.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/olmoe.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/olmoe.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1641,8 +1415,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/olmoe.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/openai-moe-iswa.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/openai-moe-iswa.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1651,8 +1423,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/openai-moe-iswa.cpp.o: CXX_COM
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/openelm.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/openelm.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1661,8 +1431,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/openelm.cpp.o: CXX_COMPILER__l
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/orion.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/orion.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1671,8 +1439,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/orion.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/pangu-embedded.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/pangu-embedded.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1681,8 +1447,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/pangu-embedded.cpp.o: CXX_COMP
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/phi2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/phi2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1691,8 +1455,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/phi2.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/phi3.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/phi3.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1701,8 +1463,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/phi3.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/plamo.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/plamo.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1711,8 +1471,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/plamo.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/plamo2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/plamo2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1721,8 +1479,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/plamo2.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/plm.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/plm.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1731,8 +1487,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/plm.cpp.o: CXX_COMPILER__llama
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/qwen.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/qwen.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1741,8 +1495,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/qwen.cpp.o: CXX_COMPILER__llam
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/qwen2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/qwen2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1751,8 +1503,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/qwen2.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/qwen2moe.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/qwen2moe.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1761,8 +1511,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/qwen2moe.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/qwen2vl.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/qwen2vl.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1771,8 +1519,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/qwen2vl.cpp.o: CXX_COMPILER__l
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/qwen3.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/qwen3.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1781,8 +1527,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/qwen3.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/qwen3vl.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/qwen3vl.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1791,8 +1535,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/qwen3vl.cpp.o: CXX_COMPILER__l
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/qwen3vl-moe.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/qwen3vl-moe.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1801,8 +1543,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/qwen3vl-moe.cpp.o: CXX_COMPILE
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/qwen3moe.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/qwen3moe.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1811,8 +1551,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/qwen3moe.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/refact.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/refact.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1821,8 +1559,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/refact.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/rwkv6-base.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/rwkv6-base.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1831,8 +1567,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/rwkv6-base.cpp.o: CXX_COMPILER
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/rwkv6.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/rwkv6.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1841,8 +1575,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/rwkv6.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/rwkv6qwen2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/rwkv6qwen2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1851,8 +1583,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/rwkv6qwen2.cpp.o: CXX_COMPILER
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/rwkv7-base.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/rwkv7-base.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1861,8 +1591,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/rwkv7-base.cpp.o: CXX_COMPILER
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/rwkv7.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/rwkv7.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1871,8 +1599,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/rwkv7.cpp.o: CXX_COMPILER__lla
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/seed-oss.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/seed-oss.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1881,8 +1607,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/seed-oss.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/smallthinker.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/smallthinker.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1891,8 +1615,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/smallthinker.cpp.o: CXX_COMPIL
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/smollm3.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/smollm3.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1901,8 +1623,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/smollm3.cpp.o: CXX_COMPILER__l
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/stablelm.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/stablelm.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1911,8 +1631,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/stablelm.cpp.o: CXX_COMPILER__
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/starcoder.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/starcoder.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1921,8 +1639,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/starcoder.cpp.o: CXX_COMPILER_
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/starcoder2.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/starcoder2.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1931,8 +1647,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/starcoder2.cpp.o: CXX_COMPILER
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/t5-dec.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/t5-dec.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1941,8 +1655,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/t5-dec.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/t5-enc.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/t5-enc.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1951,8 +1663,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/t5-enc.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/wavtokenizer-dec.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/wavtokenizer-dec.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1961,8 +1671,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/wavtokenizer-dec.cpp.o: CXX_CO
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/xverse.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/xverse.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1971,8 +1679,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/xverse.cpp.o: CXX_COMPILER__ll
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 build llama_build/src/CMakeFiles/llama.dir/models/graph-context-mamba.cpp.o: CXX_COMPILER__llama_Debug /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/models/graph-context-mamba.cpp || cmake_object_order_depends_target_llama
   DEFINES = -DGGML_BACKEND_SHARED -DGGML_SHARED -DGGML_USE_CPU -DGGML_USE_K_QUANTS=1 -DLLAMA_BUILD -DLLAMA_SHARED -Dllama_EXPORTS
@@ -1981,8 +1687,6 @@ build llama_build/src/CMakeFiles/llama.dir/models/graph-context-mamba.cpp.o: CXX
   INCLUDES = -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/. -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/../include -I/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/../include
   OBJECT_DIR = llama_build/src/CMakeFiles/llama.dir
   OBJECT_FILE_DIR = llama_build/src/CMakeFiles/llama.dir/models
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
-  TARGET_PDB = bin/libllama.pdb
 
 
 # =============================================================================
@@ -2001,9 +1705,8 @@ build bin/libllama.so: CXX_SHARED_LIBRARY_LINKER__llama_Debug llama_build/src/CM
   PRE_LINK = :
   SONAME = libllama.so
   SONAME_FLAG = -Wl,-soname,
-  TARGET_COMPILE_PDB = llama_build/src/CMakeFiles/llama.dir/
   TARGET_FILE = bin/libllama.so
-  TARGET_PDB = bin/libllama.pdb
+  TARGET_PDB = llama.so.dbg
 
 
 #############################################
@@ -2146,14 +1849,14 @@ build llama_build/src/all: phony bin/libllama.so
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/BasicConfigVersion-SameMajorVersion.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeASMCompiler.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeASMInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCCompiler.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCCompilerABI.c /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCXXCompiler.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCXXInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCompilerIdDetection.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineASMCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCXXCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCompileFeatures.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCompilerABI.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCompilerId.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeGenericSystem.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakePackageConfigHelpers.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeParseImplicitIncludeInfo.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeParseImplicitLinkInfo.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeParseLibraryArchitecture.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystem.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeTestASMCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeTestCCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeTestCompilerCommon.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCXXCompilerFlag.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCXXSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckForPthreads.c /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFile.c.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFile.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFileCXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckLibraryExists.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/ADSP-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/ARMCC-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/ARMClang-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/AppleClang-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Borland-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Bruce-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-ASM.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-C.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-CXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-FindBinUtils.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Compaq-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Cray-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/GHS-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/GNU-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/GNU.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/HP-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/IAR-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Intel-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/MSVC-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/NVHPC-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/PGI-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/PathScale-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/SCO-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/SDCC-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/SunPro-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/TI-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Watcom-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/XL-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/XLClang-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/zOS-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindGit.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindOpenMP.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageMessage.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindThreads.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/GNUInstallDirs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/CheckCompilerFlag.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/CheckSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/FeatureTesting.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-ASM.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-C.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-CXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Determine-C.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Determine-CXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Determine.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Initialize.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android/Determine-Compiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Linux.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/UnixPaths.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/WriteBasicConfigVersionFile.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android-legacy.toolchain.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/flags.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android-Clang.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android-Determine.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android-Initialize.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Determine-Compiler.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/platforms.cmake /Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/build-info.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/common.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/llama-config.cmake.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/llama.pc.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/cmake/common.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/cmake/ggml-config.cmake.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/CMakeLists.txt CMakeCache.txt CMakeFiles/3.22.1-g37088a8/CMakeASMCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeCCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeCXXCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeSystem.cmake CMakeFiles/FindOpenMP/OpenMPCheckVersion.c CMakeFiles/FindOpenMP/OpenMPCheckVersion.cpp CMakeFiles/FindOpenMP/OpenMPTryFlag.c CMakeFiles/FindOpenMP/OpenMPTryFlag.cpp
+build build.ninja: RERUN_CMAKE | /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/BasicConfigVersion-SameMajorVersion.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeASMInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCXXInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeGenericSystem.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakePackageConfigHelpers.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeParseImplicitLinkInfo.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCXXCompilerFlag.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCXXSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFile.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFileCXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckLibraryExists.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-ASM.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-C.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-CXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/GNU.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindGit.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindOpenMP.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageMessage.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindThreads.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/GNUInstallDirs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/CheckCompilerFlag.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/CheckSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-ASM.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-C.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-CXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Initialize.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Linux.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/UnixPaths.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/WriteBasicConfigVersionFile.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android-legacy.toolchain.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/flags.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android-Clang.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android-Initialize.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/platforms.cmake /Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/build-info.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/common.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/llama-config.cmake.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/llama.pc.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/cmake/common.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/cmake/ggml-config.cmake.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/CMakeLists.txt CMakeCache.txt CMakeFiles/3.22.1-g37088a8/CMakeASMCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeCCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeCXXCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/BasicConfigVersion-SameMajorVersion.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeASMCompiler.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeASMInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCCompiler.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCCompilerABI.c /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCXXCompiler.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCXXCompilerABI.cpp /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCXXInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCompilerIdDetection.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineASMCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCXXCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCompileFeatures.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCompilerABI.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineCompilerId.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeDetermineSystem.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeFindBinUtils.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeGenericSystem.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakePackageConfigHelpers.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeParseImplicitIncludeInfo.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeParseImplicitLinkInfo.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeParseLibraryArchitecture.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystem.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeTestASMCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeTestCCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeTestCXXCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeTestCompilerCommon.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCXXCompilerFlag.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCXXSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckForPthreads.c /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFile.c.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFile.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFileCXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckLibraryExists.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/ADSP-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/ARMCC-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/ARMClang-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/AppleClang-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Borland-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Bruce-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-ASM.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-C.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-CXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-DetermineCompilerInternal.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-FindBinUtils.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Comeau-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Compaq-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Cray-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Embarcadero-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Fujitsu-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/GHS-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/GNU-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/GNU.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/HP-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/HP-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/IAR-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/IBMCPP-C-DetermineVersionInternal.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Intel-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/MSVC-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/NVHPC-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/NVIDIA-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/PGI-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/PathScale-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/SCO-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/SDCC-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/SunPro-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/TI-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/TinyCC-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/VisualAge-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Watcom-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/XL-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/XL-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/XLClang-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/zOS-C-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindGit.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindOpenMP.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageMessage.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindThreads.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/GNUInstallDirs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/CheckCompilerFlag.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/CheckSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/FeatureTesting.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-ASM.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-C.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-CXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Determine-C.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Determine-CXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Determine.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Initialize.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android/Determine-Compiler.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Linux.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/UnixPaths.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/WriteBasicConfigVersionFile.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android-legacy.toolchain.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/flags.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android-Clang.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android-Determine.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android-Initialize.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Determine-Compiler.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/platforms.cmake /Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/build-info.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/common.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/llama-config.cmake.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/llama.pc.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/cmake/common.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/cmake/ggml-config.cmake.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/CMakeLists.txt CMakeCache.txt CMakeFiles/3.22.1-g37088a8/CMakeASMCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeCCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeCXXCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeSystem.cmake CMakeFiles/FindOpenMP/OpenMPCheckVersion.c CMakeFiles/FindOpenMP/OpenMPCheckVersion.cpp CMakeFiles/FindOpenMP/OpenMPTryFlag.c CMakeFiles/FindOpenMP/OpenMPTryFlag.cpp: phony
+build /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/BasicConfigVersion-SameMajorVersion.cmake.in /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeASMInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCXXInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeCommonLanguageInclude.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeGenericSystem.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeInitializeConfigs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeLanguageInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakePackageConfigHelpers.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeParseImplicitLinkInfo.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystemSpecificInformation.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CMakeSystemSpecificInitialize.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCXXCompilerFlag.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckCXXSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFile.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckIncludeFileCXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/CheckLibraryExists.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/CMakeCommonCompilerMacros.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-ASM.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-C.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang-CXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/Clang.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Compiler/GNU.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindGit.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindOpenMP.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageMessage.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindThreads.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/GNUInstallDirs.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/CheckCompilerFlag.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Internal/CheckSourceCompiles.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-ASM.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-C.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang-CXX.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Clang.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android-Initialize.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Android.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/Linux.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/Platform/UnixPaths.cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/WriteBasicConfigVersionFile.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android-legacy.toolchain.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/flags.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android-Clang.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android-Initialize.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/hooks/pre/Android.cmake /Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/platforms.cmake /Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/build-info.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/common.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/llama-config.cmake.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/cmake/llama.pc.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/cmake/common.cmake /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/cmake/ggml-config.cmake.in /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/CMakeLists.txt /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/CMakeLists.txt CMakeCache.txt CMakeFiles/3.22.1-g37088a8/CMakeASMCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeCCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeCXXCompiler.cmake CMakeFiles/3.22.1-g37088a8/CMakeSystem.cmake: phony
 
 
 #############################################

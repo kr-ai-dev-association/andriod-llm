@@ -1,0 +1,5 @@
+llama_build/ggml/src/ggml-vulkan/mul_mat_vec_q5_k.comp.cpp: \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/mul_mat_vec_q5_k.comp \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/dequant_funcs.glsl \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/types.glsl \
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-vulkan/vulkan-shaders/mul_mat_vec_base.glsl
