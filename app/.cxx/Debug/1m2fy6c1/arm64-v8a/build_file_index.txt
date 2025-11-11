@@ -1,0 +1,6 @@
+/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/CMakeLists.txt
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/CMakeLists.txt
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/CMakeLists.txt
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-cpu/CMakeLists.txt
+/Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/src/CMakeLists.txt
