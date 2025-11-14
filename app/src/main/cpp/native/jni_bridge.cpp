@@ -84,6 +84,7 @@ struct LlamaCtx {
 
 struct LoadProgressContext {
     jobject callback = nullptr;
+    std::atomic<bool> completed = false;  // Track if loading is completed
 };
 
 // Forward declarations
@@ -123,7 +124,15 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
 
     auto progressFn = [](float progress, void * user) -> bool {
         auto* ctx = static_cast<LoadProgressContext*>(user);
-        if (!ctx || !ctx->callback || !g_OnLoadProgress) {
+        if (!ctx || !g_OnLoadProgress) {
+            return true;
+        }
+        // If loading is already completed, don't call callback anymore
+        if (ctx->completed.load()) {
+            return true;
+        }
+        // If callback is null, skip
+        if (!ctx->callback) {
             return true;
         }
         // Attach current thread to JVM (progress callback may run on different thread)
@@ -132,20 +141,40 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
             ALOGE("progressFn(): Failed to attach thread");
             return true;
         }
-        // Check if callback object is still valid before calling
+        jint percent = static_cast<jint>(std::lround(progress * 100.0f));
+        if (percent < 0) percent = 0;
+        if (percent > 100) percent = 100;
+        
+        // Mark as completed when reaching 100%
+        if (percent >= 100) {
+            ctx->completed.store(true);
+        }
+        
+        // Check if callback object is still valid and of correct type before calling
         // This prevents JNI errors when callback object has been replaced or GC'd
-        if (!threadEnv->IsSameObject(ctx->callback, nullptr)) {
-            jint percent = static_cast<jint>(std::lround(progress * 100.0f));
-            if (percent < 0) percent = 0;
-            if (percent > 100) percent = 100;
-            ALOGD("progressFn(): progress=%d%%", (int)percent);
-            threadEnv->CallVoidMethod(ctx->callback, g_OnLoadProgress, percent);
-            if (threadEnv->ExceptionCheck()) {
-                ALOGE("progressFn(): Exception in callback - clearing and ignoring");
-                threadEnv->ExceptionClear();
-            }
-        } else {
+        if (threadEnv->IsSameObject(ctx->callback, nullptr)) {
             ALOGD("progressFn(): callback object is null, skipping");
+            ctx->completed.store(true);
+            return true;
+        }
+        
+        // Verify that the callback object is an instance of the correct class
+        // This prevents calling methods on wrong object types (e.g., ChatViewModel$generate$1$1 vs ChatViewModel$2$1)
+        if (g_CallbackClass && !threadEnv->IsInstanceOf(ctx->callback, g_CallbackClass)) {
+            ALOGE("progressFn(): callback object is not an instance of TokenCallback - disabling");
+            ctx->callback = nullptr;
+            ctx->completed.store(true);
+            return true;
+        }
+        
+        ALOGD("progressFn(): progress=%d%%", (int)percent);
+        threadEnv->CallVoidMethod(ctx->callback, g_OnLoadProgress, percent);
+        if (threadEnv->ExceptionCheck()) {
+            ALOGE("progressFn(): Exception in callback - disabling callback and clearing exception");
+            threadEnv->ExceptionClear();
+            // Disable callback to prevent future calls
+            ctx->callback = nullptr;
+            ctx->completed.store(true);
         }
         // Note: We don't detach here as the thread may be reused
         return true;
@@ -221,6 +250,10 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
         return 0;
     }
 
+    // Mark progress as completed before calling final callback
+    if (progressCtx) {
+        progressCtx->completed.store(true);
+    }
     if (callbackGlobal && g_OnLoadProgress) {
         env->CallVoidMethod(callbackGlobal, g_OnLoadProgress, 100);
     }
