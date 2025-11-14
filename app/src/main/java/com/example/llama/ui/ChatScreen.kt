@@ -85,21 +85,53 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 
 		Spacer(modifier = Modifier.height(8.dp))
 
+		// Model loading progress indicator - show prominently when loading
+		if (uiState.loadProgress in 0..99) {
+			Column(
+				modifier = Modifier
+					.fillMaxWidth()
+					.background(
+						MaterialTheme.colorScheme.surfaceVariant,
+						MaterialTheme.shapes.medium
+					)
+					.padding(12.dp)
+			) {
+				Row(
+					modifier = Modifier.fillMaxWidth(),
+					horizontalArrangement = Arrangement.SpaceBetween,
+					verticalAlignment = Alignment.CenterVertically
+				) {
+					Text(
+						text = "모델 로딩 중...",
+						style = MaterialTheme.typography.bodyMedium,
+						color = MaterialTheme.colorScheme.onSurfaceVariant
+					)
+					Text(
+						text = "${uiState.loadProgress}%",
+						style = MaterialTheme.typography.bodyMedium,
+						color = MaterialTheme.colorScheme.primary
+					)
+				}
+				Spacer(modifier = Modifier.height(8.dp))
+				LinearProgressIndicator(
+					progress = uiState.loadProgress / 100f,
+					modifier = Modifier
+						.fillMaxWidth()
+						.height(8.dp),
+					trackColor = MaterialTheme.colorScheme.surfaceVariant,
+					color = MaterialTheme.colorScheme.primary
+				)
+			}
+			Spacer(modifier = Modifier.height(8.dp))
+		}
+		
+		// Model metadata - show after loading completes
 		uiState.modelMetadata?.let { meta ->
 			Text(
 				text = "${meta.name} · ${meta.quantization} · ctx ${meta.contextLength} · ${meta.sizeLabel}",
 				style = MaterialTheme.typography.bodySmall,
 				modifier = Modifier.fillMaxWidth(),
 				textAlign = TextAlign.Start
-			)
-			Spacer(modifier = Modifier.height(4.dp))
-		}
-		if (uiState.loadProgress in 0..99) {
-			LinearProgressIndicator(
-				progress = uiState.loadProgress / 100f,
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(vertical = 4.dp)
 			)
 			Spacer(modifier = Modifier.height(4.dp))
 		}
@@ -133,9 +165,10 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 					.padding(end = 8.dp),
 				placeholder = { Text("메시지를 입력하세요") },
 				singleLine = true,
+				enabled = uiState.loadProgress == 100 && !uiState.isGenerating,
 				keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
 				keyboardActions = KeyboardActions(onSend = {
-					if (!uiState.isGenerating && text.value.isNotBlank()) {
+					if (uiState.loadProgress == 100 && !uiState.isGenerating && text.value.isNotBlank()) {
 						vm.send(text.value)
 						text.value = ""
 						keyboardController?.hide()
@@ -148,14 +181,14 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 						vm.stop()
 					} else {
 						val content = text.value.trim()
-						if (content.isNotEmpty()) {
+						if (uiState.loadProgress == 100 && content.isNotEmpty()) {
 							vm.send(content)
 							text.value = ""
 							keyboardController?.hide()
 						}
 					}
 				},
-				enabled = true
+				enabled = uiState.loadProgress == 100 || uiState.isGenerating
 			) {
 				Text(if (uiState.isGenerating) "중지" else "전송")
 			}

@@ -16,6 +16,12 @@ class ChatRepository(private val app: Application) {
 	@Volatile
 	private var handle: Long = 0L
 
+	suspend fun preload(callback: TokenCallback) = withContext(Dispatchers.Default) {
+		// Explicit init without sending any prompt, so UI can wait until load completes
+		// Run on background thread to avoid blocking UI
+		ensureInit(callback)
+	}
+
 	fun reset() {
 		Log.d("BanyaChat", "ChatRepository.reset(): resetting handle from $handle to 0")
 		handle = 0L
@@ -33,17 +39,25 @@ class ChatRepository(private val app: Application) {
 	private fun ensureInit(callback: TokenCallback) {
 		if (handle != 0L) return
 		Log.d("BanyaChat", "ensureInit(): start")
+		// Notify UI that model loading is starting
+		callback.onLoadProgress(0)
 		// Resolve model path: prefer internal, else external app-specific storage
-		val internal = File(app.filesDir, "models/llama31-banyaa-q4_k_m.gguf")
+		// Updated to use Q4_0 model instead of Q4_K_M (Q4_0 has better Vulkan compatibility on Adreno 830)
+		val internal = File(app.filesDir, "models/llama31-banyaa-q4_0.gguf")
 		val externalBase = app.getExternalFilesDir(null)
-		val external = if (externalBase != null) File(externalBase, "models/llama31-banyaa-q4_k_m.gguf") else null
+		val external = if (externalBase != null) File(externalBase, "models/llama31-banyaa-q4_0.gguf") else null
 
 		// User override path (absolute). Must be a real file path the app can read.
 		val overridePath = ModelPathStore.getOverridePath(app).takeIf { !it.isNullOrBlank() }
 		val overrideFile = overridePath?.let { File(it) }
+		
+		// Also check Download directory as fallback
+		val downloadDir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS)
+		val downloadFile = File(downloadDir, "llama31-banyaa-q4_0.gguf")
+		
 		Log.d(
 			"BanyaChat",
-			"ensureInit(): override=$overridePath exists=${overrideFile?.exists()} size=${overrideFile?.length()} internalExists=${internal.exists()} internalSize=${internal.length()} external=${external?.absolutePath} externalExists=${external?.exists()} externalSize=${external?.length()}"
+			"ensureInit(): override=$overridePath exists=${overrideFile?.exists()} size=${overrideFile?.length()} internalExists=${internal.exists()} internalSize=${internal.length()} external=${external?.absolutePath} externalExists=${external?.exists()} externalSize=${external?.length()} downloadExists=${downloadFile.exists()} downloadSize=${downloadFile.length()}"
 		)
 
 		// Ensure internal dir and attempt asset copy if present (may fail due to space)
@@ -52,8 +66,8 @@ class ChatRepository(private val app: Application) {
 			try {
 				ModelFiles.copyAssetIfPresent(
 					context = app,
-					assetName = "llama31-banyaa-q4_k_m.gguf",
-					outName = "llama31-banyaa-q4_k_m.gguf"
+					assetName = "llama31-banyaa-q4_0.gguf",
+					outName = "llama31-banyaa-q4_0.gguf"
 				)
 			} catch (_: IOException) {
 			}
@@ -63,17 +77,22 @@ class ChatRepository(private val app: Application) {
 			overrideFile != null && overrideFile.exists() -> overrideFile
 			internal.exists() -> internal
 			external != null && external.exists() -> external
+			downloadFile.exists() -> downloadFile  // Check Download directory as fallback
 			else -> internal // fall back; init will fail and stub will be used
 		}
 		val modelPath = modelFile.absolutePath
 		Log.d("BanyaChat", "ensureInit(): chosen modelPath=$modelPath size=${modelFile.length()}")
-		// Defaults aligned with android.md
+		// Using Vulkan backend with Q4_0 model
+		// Optimized Vulkan settings for Adreno 830 stability:
+		// - Reduced GPU layers to 5 to minimize shader operations
+		// - Reduced batch size to 32 to reduce memory pressure
+		// - no_host=true to use DEVICE_LOCAL memory for better GPU performance
 		handle = LlamaBridge.init(
 			modelPath = modelPath,
-			nCtx = 2048,
-			nThreads = 6,
-			nBatch = 128,
-			nGpuLayers = 99, // Offload all possible layers to GPU
+			nCtx = 768,
+			nThreads = 8,
+			nBatch = 32, // Reduced from 64 to 32 to reduce memory pressure and avoid crashes
+			nGpuLayers = 5, // Reduced to 5 layers to minimize Vulkan shader operations
 			useMmap = true,
 			useMlock = false,
 			seed = 0,
@@ -88,7 +107,21 @@ class ChatRepository(private val app: Application) {
 	) = withContext(Dispatchers.Default) {
 		val prompt = formatPrompt(messages)
 		Log.d("BanyaChat", "generateStream(): called with promptLen=${prompt.length}")
-		ensureInit(callback)
+		// Ensure model is initialized, but don't pass callback if already initialized
+		// to avoid JNI callback conflicts between preload and generateStream
+		if (handle == 0L) {
+			// Only pass callback if model is not yet initialized
+			ensureInit(callback)
+		} else {
+			// Model already initialized, just ensure it's ready
+			ensureInit(object : TokenCallback {
+				override fun onLoadProgress(progress: Int) {}
+				override fun onModelMetadata(json: String) {}
+				override fun onToken(token: String) {}
+				override fun onCompleted() {}
+				override fun onError(message: String) {}
+			})
+		}
 		if (handle == 0L) {
 			Log.w("BanyaChat", "generateStream(): handle=0 -> using STUB fallback")
 			// Stub fallback for first run without native init success
@@ -100,11 +133,11 @@ class ChatRepository(private val app: Application) {
 				handle = handle,
 				prompt = prompt,
 				numPredict = 100,
-				temperature = 0.3f,
-				topP = 0.85f,
-				topK = 50,
-				repeatPenalty = 1.2f,
-				repeatLastN = 256,
+				temperature = 0.6f,  // iOS와 동일: 0.6
+				topP = 0.9f,        // iOS와 동일: 0.9
+				topK = 0,           // iOS와 동일: 0 (비활성화)
+				repeatPenalty = 1.15f,  // iOS와 동일: 1.15
+				repeatLastN = 64,   // iOS와 동일: 64
 				stopSequences = emptyArray(),
 				callback = callback
 			)

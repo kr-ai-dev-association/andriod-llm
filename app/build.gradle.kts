@@ -33,7 +33,7 @@ android {
                 // Use GGML_ prefixed flags for subproject options
                 arguments(
                     "-DUSE_LLAMA=ON",
-                    "-DGGML_VULKAN=ON",
+                    "-DGGML_VULKAN=ON",  // Re-enable Vulkan for Q4_0 model (Q4_K had shader issues)
                     "-DGGML_VULKAN_USE_VOLK=ON",
                     "-DGGML_K_QUANTS=ON",
                     "-DCMAKE_MAKE_PROGRAM=${android.sdkDirectory}/cmake/3.22.1/bin/ninja",

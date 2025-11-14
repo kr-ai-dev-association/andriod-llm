@@ -2,6 +2,8 @@ package com.example.llama.ui
 
 import android.app.Application
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.provider.OpenableColumns
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,6 +26,7 @@ import java.io.IOException
 class ChatViewModel(app: Application) : AndroidViewModel(app) {
 
 	private val repo = ChatRepository(app)
+	private val mainHandler = Handler(Looper.getMainLooper())
 
 	private val _uiState = MutableStateFlow(ChatUiState())
 	val uiState: StateFlow<ChatUiState> = _uiState
@@ -41,6 +44,43 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 			}.onSuccess { meta ->
 				_uiState.value = _uiState.value.withMetadata(meta)
 			}
+		}
+
+		// Preload model at startup so users don't type before load completes
+		viewModelScope.launch(Dispatchers.Default) {
+			repo.preload(object : TokenCallback {
+				override fun onLoadProgress(progress: Int) {
+					// Dispatch to main thread for UI updates
+					mainHandler.post {
+						_uiState.value = _uiState.value.withProgress(progress)
+					}
+				}
+				override fun onModelMetadata(json: String) {
+					runCatching {
+						val obj = JSONObject(json)
+						ModelMetadata(
+							name = obj.optString("name", "N/A"),
+							quantization = obj.optString("quantization", "N/A"),
+							contextLength = obj.optInt("context_length", 0),
+							sizeLabel = obj.optString("size_label", "N/A")
+						)
+					}.onSuccess { metadata ->
+						ModelPathStore.setModelMetadata(getApplication(), json)
+						mainHandler.post {
+							_uiState.value = _uiState.value.withMetadata(metadata)
+						}
+					}
+				}
+				override fun onToken(token: String) {}
+				override fun onCompleted() {}
+				override fun onError(message: String) {
+					// Surface load error in chat for visibility
+					mainHandler.post {
+						_uiState.value = _uiState.value.addMessage(ChatMessage(text = "로딩 실패: $message", isUser = false))
+						_uiState.value = _uiState.value.withProgress(0)
+					}
+				}
+			})
 		}
 	}
 
@@ -91,6 +131,11 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 
 	private fun generate() {
 		if (_uiState.value.isGenerating) return
+		// Block generation until model load has reached 100
+		if (_uiState.value.loadProgress in 0..99) {
+			_uiState.value = _uiState.value.addMessage(ChatMessage(text = "모델 로딩 중입니다. 잠시만 기다려 주세요.", isUser = false))
+			return
+		}
 		_uiState.value = _uiState.value.copy(isGenerating = true)
 
 		val builderIndex = _uiState.value.messages.size
@@ -103,7 +148,10 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 				messages = messages.dropLast(1), // Don't include the empty assistant message placeholder
 				callback = object : TokenCallback {
 					override fun onLoadProgress(progress: Int) {
-						_uiState.value = _uiState.value.withProgress(progress)
+						// Dispatch to main thread for UI updates
+						mainHandler.post {
+							_uiState.value = _uiState.value.withProgress(progress)
+						}
 					}
 
 					override fun onModelMetadata(json: String) {
@@ -117,24 +165,32 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 							)
 						}.onSuccess { metadata ->
 							ModelPathStore.setModelMetadata(getApplication(), json)
-							_uiState.value = _uiState.value.withMetadata(metadata)
+							mainHandler.post {
+								_uiState.value = _uiState.value.withMetadata(metadata)
+							}
 						}
 					}
 
 					override fun onToken(token: String) {
-						_uiState.value = _uiState.value.appendToLastAssistant(token)
+						mainHandler.post {
+							_uiState.value = _uiState.value.appendToLastAssistant(token)
+						}
 					}
 
 					override fun onCompleted() {
-						_uiState.value = _uiState.value.copy(isGenerating = false)
+						mainHandler.post {
+							_uiState.value = _uiState.value.copy(isGenerating = false)
+						}
 					}
 
 					override fun onError(message: String) {
-						_uiState.value = _uiState.value.copy(isGenerating = false)
-						_uiState.value = _uiState.value.addMessage(
-							ChatMessage(text = "에러: $message", isUser = false)
-						)
-						_uiState.value = _uiState.value.withProgress(0)
+						mainHandler.post {
+							_uiState.value = _uiState.value.copy(isGenerating = false)
+							_uiState.value = _uiState.value.addMessage(
+								ChatMessage(text = "에러: $message", isUser = false)
+							)
+							_uiState.value = _uiState.value.withProgress(0)
+						}
 					}
 				}
 			)
