@@ -93,10 +93,10 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 			mainHandler.post {
 				_uiState.value = _uiState.value.withProgress(100)
 				
-				// Automatically send "안녕" when model load completes successfully
+				// Automatically send initial query when model load completes successfully
 				if (modelLoadSuccess && _uiState.value.messages.isEmpty()) {
 					// Only send if no messages exist yet (first load)
-					send("안녕")
+					send("우울할땐 뭘 하는 게 좋을까?")
 				}
 			}
 		}

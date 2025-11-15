@@ -138,13 +138,13 @@ class ChatRepository(private val app: Application) {
 		LlamaBridge.completionStart(
 			handle = handle,
 			prompt = prompt,
-			numPredict = 100,
+			numPredict = 512,  // 최대 생성 토큰 수를 512로 설정 (EOT 토큰으로 자연스럽게 중단)
 			temperature = 0.7f,  // 반복 감소를 위해 다양성 증가 (0.6 → 0.7)
 			topP = 0.9f,         // Llama 3.1 권장값: 0.9 (Top-P + Min-P 조합)
 			topK = 0,            // Llama 3.1 권장: Top-K 비활성화 (Top-P + Min-P 사용)
-			repeatPenalty = 1.25f,  // 반복 방지 강화 (1.15 → 1.25)
+			repeatPenalty = 1.2f,  // 반복 방지 (1.2로 설정하여 반복 감소와 대화 품질의 균형 유지)
 			repeatLastN = 128,   // 더 긴 범위에서 반복 체크 (64 → 128)
-			stopSequences = emptyArray(),
+			stopSequences = arrayOf("사용자:", "질문:", "<|eot_id|>"),  // 추가 정지 시퀀스로 불필요한 생성 방지 (두 줄 바꿈 제외: 줄바꿈 이후에도 더 출력될 내용이 있을 수 있음)
 			callback = callback
 		)
 			Log.d("BanyaChat", "generateStream(): completionStart dispatched")

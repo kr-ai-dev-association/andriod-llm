@@ -120,6 +120,20 @@ static std::string filterSpecialTokensTokenLevel(const std::string& tokenText) {
         cleaned = "";
     }
     
+    // 단일 문자 'e'가 생성될 때, 이전 텍스트와 합쳐져 "eot>" 패턴이 될 수 있으므로 제거
+    // 하지만 여기서는 단독으로는 제거하지 않고, 텍스트 레벨 필터링에서 처리
+    // 단, "e" 다음에 "ot>"가 올 가능성이 높으므로 경고만 남김
+    if (cleaned == "e") {
+        // 단독 "e"는 제거하지 않지만, 텍스트 레벨 필터링에서 "eot>" 패턴을 제거함
+        // 여기서는 그대로 통과시킴
+    }
+    
+    // "ot"가 생성될 때, 이전 텍스트의 마지막이 "e"인 경우 "eot" 패턴이 될 수 있으므로 제거
+    if (cleaned == "ot") {
+        // 단독 "ot"는 제거하지 않지만, 텍스트 레벨 필터링에서 "eot>" 패턴을 제거함
+        // 여기서는 그대로 통과시킴
+    }
+    
     // 특수 토큰 일부 패턴 제거 (eot, eom, _id 등)
     const std::vector<std::string> partialTokenPatterns = {
         "_id",
@@ -134,7 +148,7 @@ static std::string filterSpecialTokensTokenLevel(const std::string& tokenText) {
     };
     
     for (const auto& pattern : partialTokenPatterns) {
-        // 단독으로 나타나는 경우만 제거 (다른 단어의 일부가 아닌 경우)
+        // 단독으로 나타나는 경우 제거
         if (cleaned == pattern) {
             cleaned = "";
             break;
@@ -147,6 +161,44 @@ static std::string filterSpecialTokensTokenLevel(const std::string& tokenText) {
         pos = 0;
         while ((pos = cleaned.find(pattern + " ", pos)) != std::string::npos) {
             cleaned.erase(pos, pattern.length() + 1);
+        }
+        // 패턴으로 시작하고 다음 문자가 '>' 또는 '|'인 경우 제거 (예: "eot>", "eom>")
+        if (cleaned.length() >= pattern.length() + 1 && 
+            cleaned.substr(0, pattern.length()) == pattern) {
+            char nextChar = cleaned[pattern.length()];
+            if (nextChar == '>' || nextChar == '|' || nextChar == '_') {
+                cleaned.erase(0, pattern.length() + 1);
+            }
+        }
+        // 패턴으로 끝나고 이전 문자가 '>' 또는 '|'인 경우 제거 (예: ">eot", "|eot")
+        if (cleaned.length() >= pattern.length() + 1 && 
+            cleaned.substr(cleaned.length() - pattern.length()) == pattern) {
+            char prevChar = cleaned[cleaned.length() - pattern.length() - 1];
+            if (prevChar == '>' || prevChar == '|' || prevChar == '_') {
+                cleaned.erase(cleaned.length() - pattern.length() - 1);
+            }
+        }
+    }
+    // "eot>", "eom>", "_id>" 등의 패턴 직접 제거
+    if (cleaned == "eot>" || cleaned == "eom>" || cleaned == "_id>") {
+        cleaned = "";
+    }
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("eot>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 4);
+        }
+    }
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("eom>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 4);
+        }
+    }
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("_id>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 4);
         }
     }
     
@@ -296,10 +348,11 @@ static std::string filterSpecialTokensTextLevel(const std::string& text) {
         }
         
         // 방법 5: 단독 '<' 또는 '>' 제거 (특수 토큰의 일부로 생성되는 경우)
+        // 줄바꿈은 제외: 줄바꿈 다음에 '<' 또는 '>'가 오는 경우는 제거하지 않음
         pos = 0;
         while ((pos = cleaned.find(" <", pos)) != std::string::npos) {
-            // 다음 문자가 '|'가 아니고 공백이나 끝이면 제거
-            if (pos + 2 >= cleaned.length() || cleaned[pos + 2] == ' ' || cleaned[pos + 2] == '\n' || cleaned[pos + 2] == '\t') {
+            // 다음 문자가 '|'가 아니고 공백이나 탭이면 제거 (줄바꿈은 제외)
+            if (pos + 2 >= cleaned.length() || cleaned[pos + 2] == ' ' || cleaned[pos + 2] == '\t') {
                 cleaned.erase(pos, 2);
                 foundPattern = true;
             } else {
@@ -344,10 +397,9 @@ static std::string filterSpecialTokensTextLevel(const std::string& text) {
             }
             pos = 0;
             while ((pos = cleaned.find(" " + pattern, pos)) != std::string::npos) {
-                // 다음 문자가 공백, 끝, 또는 특수문자면 제거
+                // 다음 문자가 공백, 끝, 또는 특수문자면 제거 (줄바꿈은 제외)
                 if (pos + pattern.length() + 1 >= cleaned.length() || 
                     cleaned[pos + pattern.length() + 1] == ' ' || 
-                    cleaned[pos + pattern.length() + 1] == '\n' ||
                     cleaned[pos + pattern.length() + 1] == '\t' ||
                     cleaned[pos + pattern.length() + 1] == '>' ||
                     cleaned[pos + pattern.length() + 1] == '|') {
@@ -369,14 +421,67 @@ static std::string filterSpecialTokensTextLevel(const std::string& text) {
     }
     
     // 2.5 특수 문자 조합 제거 (^^, ^^^)
-    size_t pos = 0;
-    while ((pos = cleaned.find("^^^", pos)) != std::string::npos) {
-        cleaned.erase(pos, 3);
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("^^^", pos)) != std::string::npos) {
+            cleaned.erase(pos, 3);
+        }
     }
-    pos = 0;
-    while ((pos = cleaned.find("^^", pos)) != std::string::npos) {
-        cleaned.erase(pos, 2);
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("^^", pos)) != std::string::npos) {
+            cleaned.erase(pos, 2);
+        }
     }
+    
+    // 2.6 "eot>", "eom>", "_id>" 패턴 강력 제거 (텍스트 어디에 있든)
+    // 여러 토큰으로 분리되어 생성된 경우를 처리
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("eot>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 4);
+            // pos를 증가시키지 않아서 연속된 패턴도 제거
+        }
+    }
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("eom>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 4);
+        }
+    }
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("_id>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 4);
+        }
+    }
+    // 텍스트 끝에서 "eot", "eom" 패턴 제거 (다음 토큰에서 ">"가 올 수 있음)
+    // 단, 줄바꿈(단일 또는 두 줄 바꿈) 다음에 오는 경우는 제외 (줄바꿈은 유지)
+    if (cleaned.length() >= 3) {
+        std::string suffix = cleaned.substr(cleaned.length() - 3);
+        if (suffix == "eot" || suffix == "eom") {
+            // 줄바꿈(단일 또는 두 줄 바꿈) 다음에 오는 경우는 제외
+            bool shouldRemove = true;
+            if (cleaned.length() > 3) {
+                char prevChar = cleaned[cleaned.length() - 4];
+                // 단일 줄바꿈 또는 두 줄 바꿈 다음에 오는 경우는 제외
+                if (prevChar == '\n') {
+                    // 두 줄 바꿈인지 확인
+                    if (cleaned.length() > 4 && cleaned[cleaned.length() - 5] == '\n') {
+                        shouldRemove = false; // 두 줄 바꿈 다음
+                    } else {
+                        shouldRemove = false; // 단일 줄바꿈 다음
+                    }
+                }
+            }
+            if (shouldRemove) {
+                cleaned.erase(cleaned.length() - 3);
+            }
+        }
+    }
+    // 텍스트 끝에서 단일 문자 "e" 확인 (다음 토큰에서 "ot>"가 올 수 있음)
+    // 하지만 여기서는 제거하지 않고, 다음 토큰이 추가될 때 텍스트 레벨 필터링에서 처리
+    // 단, 줄바꿈(단일 또는 두 줄 바꿈) 다음에 오는 경우는 제외
     
     return cleaned;
 }
@@ -692,11 +797,14 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
     env->ReleaseStringUTFChars(jPrompt, prompt);
 
     // Defaults if invalid values are passed
-    int n_predict = (numPredict > 0) ? numPredict : 100;
+    // n_predict를 512로 설정하여 대부분의 답변을 커버하면서도 무한 생성을 방지
+    // EOT 토큰이 생성되면 즉시 중단되므로, n_predict는 안전망 역할만 수행
+    int n_predict = (numPredict > 0) ? numPredict : 512;
     float temp = (temperature > 0.0f) ? temperature : 0.7f;  // Llama 3.1 기본값에 가까운 값
     float top_p = (topP > 0.0f) ? topP : 0.9f;  // Llama 3.1 권장값
     int top_k = (topK > 0) ? topK : 40;  // Llama 3.1 기본값
-    float rep_penalty = (repeatPenalty > 0.0f) ? repeatPenalty : 1.1f;  // 한국어 튜닝 모델에 적합한 값
+    // Repeat Penalty를 1.2로 설정하여 반복을 줄이면서도 대화 품질 유지
+    float rep_penalty = (repeatPenalty > 0.0f) ? repeatPenalty : 1.2f;
     int rep_last_n = (repeatLastN > 0) ? repeatLastN : 256;
     std::vector<std::string> stops;
     if (jStopSequences) {
@@ -1114,14 +1222,27 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         // 바이트를 버퍼에 모아서 완전한 UTF-8 시퀀스가 완성될 때까지 기다립니다
         std::string utf8_buffer;
         
+        // 문장 완성 감지를 위한 변수
+        bool sentence_complete = false;
+        int extra_tokens_after_limit = 0;
+        const int MAX_EXTRA_TOKENS = 20;  // 최대 추가 토큰 수 (문장 완성을 위해)
+        
         // Continue generating tokens until limit is reached
         // Note: n_gen starts at 0, so we generate tokens 0..(n_predict-1) = n_predict tokens total
         // But we check n_gen < n_predict at the start of loop, so after generating n_predict tokens, n_gen will be n_predict and loop will exit
-        while (n_past < context_size && n_gen < n_predict) {
+        while (n_past < context_size && (n_gen < n_predict || (!sentence_complete && extra_tokens_after_limit < MAX_EXTRA_TOKENS))) {
             // Check limit before generating token to ensure we don't exceed n_predict
             if (n_gen >= n_predict) {
-                ALOGD("completionStart(): Reached token limit (n_gen=%d >= n_predict=%d), breaking", n_gen, n_predict);
-                break;
+                if (!sentence_complete && extra_tokens_after_limit < MAX_EXTRA_TOKENS) {
+                    // n_predict에 도달했지만 문장이 완성되지 않았으면 추가 토큰 생성
+                    extra_tokens_after_limit++;
+                    ALOGD("completionStart(): Reached token limit (n_gen=%d >= n_predict=%d), but sentence incomplete, generating extra token %d/%d", 
+                          n_gen, n_predict, extra_tokens_after_limit, MAX_EXTRA_TOKENS);
+                } else {
+                    ALOGD("completionStart(): Reached token limit (n_gen=%d >= n_predict=%d) and (sentence_complete=%d or extra_tokens=%d >= %d), breaking", 
+                          n_gen, n_predict, sentence_complete ? 1 : 0, extra_tokens_after_limit, MAX_EXTRA_TOKENS);
+                    break;
+                }
             }
             ALOGD("completionStart(): Loop iteration n_gen=%d, n_past=%d", n_gen, n_past);
             if (handle->stopRequested) {
@@ -1183,9 +1304,16 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             llama_sampler_accept(smpl, id);
             ALOGD("completionStart(): llama_sampler_accept() completed");
 
-            // Check for EOG tokens (as per iOS: 128001, 128008, 128009)
-            if (id == llama_vocab_eos(vocab) || id == 128001 || id == 128008 || id == 128009) {
-                ALOGD("completionStart(): EOG token detected, breaking");
+            // Check for End of Turn (EOT) token to stop generation gracefully
+            // Llama 3.1's official EOT token ID is 128009 (<|eot_id|>)
+            // EOT 토큰이 생성되면 모델이 "내 답변은 여기까지입니다"라고 판단한 것이므로 즉시 생성 중단
+            if (id == 128009) {
+                ALOGD("completionStart(): EOT token (128009) detected, breaking generation loop gracefully");
+                break;  // 루프를 즉시 탈출합니다
+            }
+            // Also check for the generic End of Sequence (EOS) token, just in case
+            if (id == llama_vocab_eos(vocab) || id == 128001 || id == 128008) {
+                ALOGD("completionStart(): EOS token detected (id=%d), breaking generation loop", (int)id);
                 break;
             }
             
@@ -1290,14 +1418,17 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 ALOGD("completionStart(): No complete UTF-8 sequence yet, waiting for next token (buffer size=%zu)", utf8_buffer.length());
             }
             
-            // 1단계: 토큰 레벨 특수 토큰 필터링 (각 토큰이 생성될 때 즉시 필터링)
-            if (!isSpecialToken && !tokenText.empty()) {
+            // 1단계: 토큰 레벨 특수 토큰 필터링 (모든 토큰에 대해 적용)
+            // 특수 토큰 ID가 아니더라도 텍스트에 특수 토큰 패턴이 포함될 수 있으므로 모든 토큰에 필터링 적용
+            if (!tokenText.empty()) {
                 tokenText = filterSpecialTokensTokenLevel(tokenText);
                 if (tokenText.empty()) {
                     ALOGD("completionStart(): Token filtered out by token-level filter");
                 }
             }
             
+            // 특수 토큰 ID를 가진 토큰은 절대 출력하지 않음
+            // 필터링 후에도 빈 문자열이면 출력하지 않음
             // Only send non-special tokens to callback
             if (!isSpecialToken && !tokenText.empty()) {
                 ALOGD("completionStart(): Token text='%s' (length=%zu), creating JNI string and calling callback", 
@@ -1386,21 +1517,80 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                     ALOGE("completionStart(): Failed to create JNI string");
                 }
                 generated.append(tokenText);
-            } else {
-                ALOGD("completionStart(): Skipping token (isSpecialToken=%d, empty=%d)", 
-                      isSpecialToken ? 1 : 0, tokenText.empty() ? 1 : 0);
-            }
-            
-            // 2단계: 텍스트 레벨 특수 토큰 필터링 (누적된 텍스트에서 추가 필터링)
-            // 주기적으로 누적된 텍스트를 필터링하여 여러 토큰이 조합되어 생성된 특수 토큰 패턴도 제거
-            if (n_gen % 10 == 0 || n_gen == n_predict - 1) {
-                // 매 10개 토큰마다 또는 마지막 토큰에서 텍스트 레벨 필터링 수행
+                
+                // 2단계: 텍스트 레벨 특수 토큰 필터링 (누적된 텍스트에서 추가 필터링)
+                // 매 토큰마다 텍스트 레벨 필터링을 수행하여 여러 토큰이 조합되어 생성된 특수 토큰 패턴도 즉시 제거
+                // 이렇게 하면 특수 토큰이 화면에 출력되는 것을 완전히 방지할 수 있음
                 std::string filteredGenerated = filterSpecialTokensTextLevel(generated);
+                
+                // 추가 필터링: "eot>", "eom>", "_id>" 등의 패턴이 텍스트 끝에 있는지 확인하고 제거
+                // 이는 여러 토큰으로 분리되어 생성된 경우를 처리하기 위함
+                if (filteredGenerated.length() >= 4) {
+                    // 텍스트 끝에서 "eot>", "eom>", "_id>" 패턴 확인
+                    std::string suffix = filteredGenerated.substr(filteredGenerated.length() - 4);
+                    if (suffix == "eot>" || suffix == "eom>" || suffix == "_id>") {
+                        filteredGenerated.erase(filteredGenerated.length() - 4);
+                        ALOGD("completionStart(): Removed special token pattern '%s' from end of text", suffix.c_str());
+                    }
+                }
+                // 텍스트 끝에서 "eot", "eom" 패턴 확인 (다음 토큰에서 ">"가 올 수 있음)
+                // 단, 줄바꿈(단일 또는 두 줄 바꿈) 다음에 오는 경우는 제외 (줄바꿈은 유지)
+                if (filteredGenerated.length() >= 3) {
+                    std::string suffix = filteredGenerated.substr(filteredGenerated.length() - 3);
+                    if (suffix == "eot" || suffix == "eom") {
+                        // 줄바꿈(단일 또는 두 줄 바꿈) 다음에 오는 경우는 제외
+                        bool shouldRemove = true;
+                        if (filteredGenerated.length() > 3) {
+                            char prevChar = filteredGenerated[filteredGenerated.length() - 4];
+                            // 단일 줄바꿈 또는 두 줄 바꿈 다음에 오는 경우는 제외
+                            if (prevChar == '\n') {
+                                // 두 줄 바꿈인지 확인
+                                if (filteredGenerated.length() > 4 && filteredGenerated[filteredGenerated.length() - 5] == '\n') {
+                                    shouldRemove = false; // 두 줄 바꿈 다음
+                                } else {
+                                    shouldRemove = false; // 단일 줄바꿈 다음
+                                }
+                            }
+                        }
+                        if (shouldRemove) {
+                            // 다음 토큰이 ">"일 가능성이 높으므로 미리 제거
+                            filteredGenerated.erase(filteredGenerated.length() - 3);
+                            ALOGD("completionStart(): Removed special token pattern '%s' from end of text (preventing 'eot>' or 'eom>')", suffix.c_str());
+                        }
+                    }
+                }
+                // 텍스트 끝에서 단일 문자 "e" 확인 (다음 토큰에서 "ot>"가 올 수 있음)
+                // 단, 줄바꿈(단일 또는 두 줄 바꿈) 다음에 오는 경우는 제외
+                if (filteredGenerated.length() >= 1 && filteredGenerated.back() == 'e') {
+                    // 다음 토큰이 "ot>"일 가능성이 있으므로 제거하지 않지만, 텍스트 레벨 필터링에서 처리됨
+                    // 단, 줄바꿈(단일 또는 두 줄 바꿈) 다음에 오는 경우는 제외
+                    bool shouldWarn = true;
+                    if (filteredGenerated.length() > 1) {
+                        char prevChar = filteredGenerated[filteredGenerated.length() - 2];
+                        if (prevChar == '\n') {
+                            // 두 줄 바꿈인지 확인
+                            if (filteredGenerated.length() > 2 && filteredGenerated[filteredGenerated.length() - 3] == '\n') {
+                                shouldWarn = false; // 두 줄 바꿈 다음
+                            } else {
+                                shouldWarn = false; // 단일 줄바꿈 다음
+                            }
+                        }
+                    }
+                    if (shouldWarn) {
+                        ALOGD("completionStart(): Warning: text ends with 'e', may form 'eot>' pattern");
+                    }
+                }
+                
                 if (filteredGenerated != generated) {
                     ALOGD("completionStart(): Text-level filter removed special tokens (before=%zu, after=%zu)", 
                           generated.length(), filteredGenerated.length());
                     generated = filteredGenerated;
+                    // 필터링 후 길이가 줄어들었으면, UI에 반영하기 위해 마지막 메시지를 다시 전송해야 할 수도 있음
+                    // 하지만 이미 토큰 단위로 전송했으므로, 다음 토큰에서 자연스럽게 수정됨
                 }
+            } else {
+                ALOGD("completionStart(): Skipping token (isSpecialToken=%d, empty=%d)", 
+                      isSpecialToken ? 1 : 0, tokenText.empty() ? 1 : 0);
             }
             
             bool hitStop = false;
@@ -1416,10 +1606,38 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             n_gen++;
             ALOGD("completionStart(): Incremented n_gen to %d", n_gen);
             
+            // 문장 완성 감지: 마지막으로 생성된 텍스트에 문장 종료 문자가 있는지 확인
+            // 줄바꿈은 제외: 줄바꿈 이후에도 더 출력될 내용이 있을 수 있으므로 종료 신호로 사용하지 않음
+            if (!tokenText.empty() && !sentence_complete) {
+                // 문장 종료 문자 확인: 마침표, 느낌표, 물음표만 (줄바꿈 제외)
+                char last_char = tokenText.back();
+                if (last_char == '.' || last_char == '!' || last_char == '?') {
+                    sentence_complete = true;
+                    ALOGD("completionStart(): Sentence completion detected (last_char='%c'), will finish after current token", last_char);
+                }
+                // 생성된 전체 텍스트의 마지막 문자도 확인 (UTF-8 버퍼 처리 후)
+                // 줄바꿈은 제외: 줄바꿈 이후에도 더 출력될 내용이 있을 수 있으므로 종료 신호로 사용하지 않음
+                if (!generated.empty()) {
+                    char last_gen_char = generated.back();
+                    if (last_gen_char == '.' || last_gen_char == '!' || last_gen_char == '?') {
+                        sentence_complete = true;
+                        ALOGD("completionStart(): Sentence completion detected in generated text (last_char='%c')", last_gen_char);
+                    }
+                }
+            }
+            
             // Check if we've reached the token limit after incrementing
+            // 문장이 완성되었거나 최대 추가 토큰 수에 도달했으면 종료
             if (n_gen >= n_predict) {
-                ALOGD("completionStart(): Reached token limit (n_gen=%d >= n_predict=%d), breaking before decode", n_gen, n_predict);
-                break;
+                if (sentence_complete || extra_tokens_after_limit >= MAX_EXTRA_TOKENS) {
+                    ALOGD("completionStart(): Reached token limit (n_gen=%d >= n_predict=%d) and (sentence_complete=%d or extra_tokens=%d >= %d), breaking before decode", 
+                          n_gen, n_predict, sentence_complete ? 1 : 0, extra_tokens_after_limit, MAX_EXTRA_TOKENS);
+                    break;
+                }
+                // 문장이 완성되지 않았고 추가 토큰을 더 생성할 수 있으면 계속 진행
+                extra_tokens_after_limit++;
+                ALOGD("completionStart(): Reached token limit but sentence incomplete, continuing with extra token %d/%d", 
+                      extra_tokens_after_limit, MAX_EXTRA_TOKENS);
             }
 
             // Prepare and run next decode with a single token
@@ -1488,6 +1706,17 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         }
 
         llama_sampler_free(smpl);
+
+        // 최종 텍스트 레벨 필터링: 생성 완료 시점에 한 번 더 필터링하여 특수 토큰 완전 제거
+        // "eot>", "eom>" 등의 패턴이 최종적으로 남아있을 수 있으므로 한 번 더 필터링
+        if (!generated.empty()) {
+            std::string finalFiltered = filterSpecialTokensTextLevel(generated);
+            if (finalFiltered != generated) {
+                ALOGD("completionStart(): Final text-level filter removed special tokens (before=%zu, after=%zu)", 
+                      generated.length(), finalFiltered.length());
+                generated = finalFiltered;
+            }
+        }
 
         // 남은 UTF-8 버퍼 처리 (생성 완료 시점에)
         // 버퍼에 남은 바이트가 있으면, 가능한 한 완전한 UTF-8 문자를 추출하여 출력
