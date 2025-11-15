@@ -124,23 +124,15 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
 
     auto progressFn = [](float progress, void * user) -> bool {
         auto* ctx = static_cast<LoadProgressContext*>(user);
-        if (!ctx || !g_OnLoadProgress) {
+        if (!ctx) {
             return true;
         }
-        // If loading is already completed, don't call callback anymore
+        // If loading is already completed, don't do anything
         if (ctx->completed.load()) {
             return true;
         }
-        // If callback is null, skip
-        if (!ctx->callback) {
-            return true;
-        }
-        // Attach current thread to JVM (progress callback may run on different thread)
-        JNIEnv* threadEnv = attachThread();
-        if (!threadEnv) {
-            ALOGE("progressFn(): Failed to attach thread");
-            return true;
-        }
+        // Just track progress, don't call callback from background thread
+        // This prevents JNI callback conflicts when callback object is replaced
         jint percent = static_cast<jint>(std::lround(progress * 100.0f));
         if (percent < 0) percent = 0;
         if (percent > 100) percent = 100;
@@ -150,33 +142,9 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
             ctx->completed.store(true);
         }
         
-        // Check if callback object is still valid and of correct type before calling
-        // This prevents JNI errors when callback object has been replaced or GC'd
-        if (threadEnv->IsSameObject(ctx->callback, nullptr)) {
-            ALOGD("progressFn(): callback object is null, skipping");
-            ctx->completed.store(true);
-            return true;
-        }
-        
-        // Verify that the callback object is an instance of the correct class
-        // This prevents calling methods on wrong object types (e.g., ChatViewModel$generate$1$1 vs ChatViewModel$2$1)
-        if (g_CallbackClass && !threadEnv->IsInstanceOf(ctx->callback, g_CallbackClass)) {
-            ALOGE("progressFn(): callback object is not an instance of TokenCallback - disabling");
-            ctx->callback = nullptr;
-            ctx->completed.store(true);
-            return true;
-        }
-        
-        ALOGD("progressFn(): progress=%d%%", (int)percent);
-        threadEnv->CallVoidMethod(ctx->callback, g_OnLoadProgress, percent);
-        if (threadEnv->ExceptionCheck()) {
-            ALOGE("progressFn(): Exception in callback - disabling callback and clearing exception");
-            threadEnv->ExceptionClear();
-            // Disable callback to prevent future calls
-            ctx->callback = nullptr;
-            ctx->completed.store(true);
-        }
-        // Note: We don't detach here as the thread may be reused
+        // Log progress but don't call callback from background thread
+        // Callback will be called from main thread after model loading completes
+        ALOGD("progressFn(): progress=%d%% (callback disabled to prevent JNI conflicts)", (int)percent);
         return true;
     };
 
@@ -185,11 +153,11 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
           path ? path : "(null)", (int)nCtx, (int)nThreads, (int)nBatch, (int)nGpuLayers, (int)useMmap, (int)useMlock, (int)seed);
 
     llama_model_params mparams = llama_model_default_params();
-    // Optimized Vulkan settings for Adreno 830 stability
-    // Reduced GPU layers to minimize shader operations and avoid "Failed to link shaders" errors
+    // Optimized Vulkan settings for Adreno 830
+    // Reduced GPU layers to 29 to test if 30th layer causes crashes
     if (nGpuLayers == -1) {
-        // Default to 5 layers for stability
-        mparams.n_gpu_layers = 5;
+        // Default to 29 layers - testing to find maximum stable layers
+        mparams.n_gpu_layers = 29;
     } else {
         mparams.n_gpu_layers = nGpuLayers;
     }
@@ -214,7 +182,16 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
         ALOGE("init(): llama_load_model_from_file failed");
         if (callbackGlobal && g_OnError) {
             jstring err = env->NewStringUTF("모델을 로드할 수 없습니다.");
-            env->CallVoidMethod(callbackGlobal, g_OnError, err);
+            // Safely call error callback with type validation
+            if (g_CallbackClass && !env->IsInstanceOf(callbackGlobal, g_CallbackClass)) {
+                ALOGE("init(): Error callback object is not an instance of TokenCallback - skipping");
+            } else {
+                env->CallVoidMethod(callbackGlobal, g_OnError, err);
+                if (env->ExceptionCheck()) {
+                    ALOGE("init(): Exception in error callback - clearing");
+                    env->ExceptionClear();
+                }
+            }
             env->DeleteLocalRef(err);
         }
         if (callbackGlobal) env->DeleteGlobalRef(callbackGlobal);
@@ -231,16 +208,32 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
     cparams.n_batch = nBatch;
     // Reduced micro-batch size to minimize memory pressure and Vulkan operations
     // Lower n_ubatch reduces concurrent GPU operations, improving stability on Adreno 830
-    cparams.n_ubatch = 2;  // Reduced from 4 to 2 for stability
-    // Disable Flash Attention on Android as it may cause hangs
-    cparams.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_DISABLED;
+    cparams.n_ubatch = 2;  // Restored to stable value (was 1, but may cause issues)
+    // Enable Flash Attention to support V cache quantization
+    // Flash Attention may cause shader linking failures on some Adreno GPUs, but we attempt it
+    // to enable full KV Cache quantization (both K and V to Q4_0)
+    cparams.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_AUTO;
+    // Enable full KV Cache quantization to Q4_0 to maximize VRAM savings
+    // Both K and V cache are quantized to Q4_0, reducing total KV Cache memory by ~75%
+    // This should allow more GPU layers to be offloaded (29+ layers)
+    cparams.type_k = GGML_TYPE_Q4_0;  // Quantize K cache to Q4_0
+    cparams.type_v = GGML_TYPE_Q4_0;  // Quantize V cache to Q4_0 (requires Flash Attention)
 
     llama_context* ctx = llama_init_from_model(model, cparams);
     if (!ctx) {
-        ALOGE("init(): llama_new_context_with_model failed");
+        ALOGE("init(): llama_new_context_with_model failed - possible VRAM shortage for KV Cache");
         if (callbackGlobal && g_OnError) {
-            jstring err = env->NewStringUTF("컨텍스트 초기화에 실패했습니다.");
-            env->CallVoidMethod(callbackGlobal, g_OnError, err);
+            jstring err = env->NewStringUTF("컨텍스트 초기화에 실패했습니다. VRAM 부족일 수 있습니다.");
+            // Safely call error callback with type validation
+            if (g_CallbackClass && !env->IsInstanceOf(callbackGlobal, g_CallbackClass)) {
+                ALOGE("init(): Error callback object is not an instance of TokenCallback - skipping");
+            } else {
+                env->CallVoidMethod(callbackGlobal, g_OnError, err);
+                if (env->ExceptionCheck()) {
+                    ALOGE("init(): Exception in error callback - clearing");
+                    env->ExceptionClear();
+                }
+            }
             env->DeleteLocalRef(err);
         }
         llama_model_free(model);
@@ -254,8 +247,18 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
     if (progressCtx) {
         progressCtx->completed.store(true);
     }
+    // Safely call final progress callback with type validation
     if (callbackGlobal && g_OnLoadProgress) {
-        env->CallVoidMethod(callbackGlobal, g_OnLoadProgress, 100);
+        // Verify callback type before calling to prevent JNI errors
+        if (g_CallbackClass && !env->IsInstanceOf(callbackGlobal, g_CallbackClass)) {
+            ALOGE("init(): Final callback object is not an instance of TokenCallback - skipping");
+        } else {
+            env->CallVoidMethod(callbackGlobal, g_OnLoadProgress, 100);
+            if (env->ExceptionCheck()) {
+                ALOGE("init(): Exception in final progress callback - clearing");
+                env->ExceptionClear();
+            }
+        }
     }
 
     if (callbackGlobal && g_OnModelMetadata) {
@@ -281,13 +284,26 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
 
         std::string metaDump = meta.dump();
         jstring metaJson = env->NewStringUTF(metaDump.c_str());
-        env->CallVoidMethod(callbackGlobal, g_OnModelMetadata, metaJson);
+        // Safely call metadata callback with type validation
+        if (g_CallbackClass && !env->IsInstanceOf(callbackGlobal, g_CallbackClass)) {
+            ALOGE("init(): Metadata callback object is not an instance of TokenCallback - skipping");
+        } else {
+            env->CallVoidMethod(callbackGlobal, g_OnModelMetadata, metaJson);
+            if (env->ExceptionCheck()) {
+                ALOGE("init(): Exception in metadata callback - clearing");
+                env->ExceptionClear();
+            }
+        }
         env->DeleteLocalRef(metaJson);
     }
 
     handle->model = model;
     handle->ctx = ctx;
     ALOGD("init(): success, handle=%p", (void*)handle);
+
+    // Don't call progress callback from JNI to avoid callback conflicts
+    // Kotlin layer will detect model loading completion by checking if handle != 0
+    // and update progress bar accordingly
 
     // Clean up progress context (callback is stored in handle if needed later)
     // Note: progressCtx->callback is the same as callbackGlobal, so we'll delete it below
@@ -412,7 +428,15 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         if (!ctx) {
             ALOGE("completionStart(): ctx is null");
             jstring err = threadEnv->NewStringUTF("Context is null");
-            threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+            if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
+                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                if (threadEnv->ExceptionCheck()) {
+                    ALOGE("completionStart(): Exception in error callback - clearing");
+                    threadEnv->ExceptionClear();
+                }
+            } else {
+                ALOGE("completionStart(): Callback validation failed - skipping error callback");
+            }
             threadEnv->DeleteLocalRef(err);
             detachThread();
             return;
@@ -422,7 +446,15 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         if (!model) {
             ALOGE("completionStart(): model is null");
             jstring err = threadEnv->NewStringUTF("Model is null");
-            threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+            if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
+                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                if (threadEnv->ExceptionCheck()) {
+                    ALOGE("completionStart(): Exception in error callback - clearing");
+                    threadEnv->ExceptionClear();
+                }
+            } else {
+                ALOGE("completionStart(): Callback validation failed - skipping error callback");
+            }
             threadEnv->DeleteLocalRef(err);
             detachThread();
             return;
@@ -434,103 +466,36 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         std::vector<llama_token> prompt_tokens;
         prompt_tokens.resize(promptStr.size() + 16);
         ALOGD("completionStart(): tokenizing prompt...");
+        // Check if prompt already starts with BOS token
+        bool has_bos = (promptStr.length() > 0 && promptStr.find("<|begin_of_text|>") == 0);
         int n_tokens = llama_tokenize(
             vocab,
             promptStr.c_str(),
             (int32_t)promptStr.size(),
             prompt_tokens.data(),
             (int32_t)prompt_tokens.size(),
-            true, // add_bos
+            !has_bos, // add_bos only if not already present
             false   // special
         );
 
         if (n_tokens < 0) {
             ALOGE("completionStart(): llama_tokenize failed");
             jstring err = threadEnv->NewStringUTF("Tokenization failed");
-            threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+            if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
+                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                if (threadEnv->ExceptionCheck()) {
+                    ALOGE("completionStart(): Exception in error callback - clearing");
+                    threadEnv->ExceptionClear();
+                }
+            } else {
+                ALOGE("completionStart(): Callback validation failed - skipping error callback");
+            }
             threadEnv->DeleteLocalRef(err);
             detachThread();
             return;
         }
         prompt_tokens.resize(n_tokens);
         ALOGD("completionStart(): tokenized prompt into %d tokens", n_tokens);
-
-        // Decode prompt in small chunks to reduce peak memory usage
-        // Reduced chunk size to avoid Vulkan driver crashes
-        ALOGD("completionStart(): evaluating prompt...");
-        const int chunk = 32; // Reduced from 64 to 32 to reduce memory pressure
-        for (int cur = 0; cur < n_tokens; cur += chunk) {
-            const int n_cur = std::min(chunk, n_tokens - cur);
-            ALOGD("completionStart(): llama_decode chunk start cur=%d n_cur=%d", cur, n_cur);
-            
-            // Initialize batch with proper sequence ID support
-            llama_batch batch = llama_batch_init(n_cur, 0, 1);
-            if (!batch.token || !batch.pos || !batch.seq_id || !batch.n_seq_id || !batch.logits) {
-                ALOGE("completionStart(): llama_batch_init() returned invalid batch");
-                jstring err = threadEnv->NewStringUTF("Failed to initialize batch");
-                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
-                threadEnv->DeleteLocalRef(err);
-                llama_batch_free(batch);
-                detachThread();
-                return;
-            }
-            
-            batch.n_tokens = n_cur;
-            ALOGD("completionStart(): Batch initialized, filling tokens");
-            for (int j = 0; j < n_cur; ++j) {
-                batch.token   [j] = prompt_tokens[cur + j];
-                batch.pos     [j] = cur + j;
-                if (batch.seq_id[j]) {
-                    batch.seq_id  [j][0] = 0;
-                } else {
-                    ALOGE("completionStart(): batch.seq_id[%d] is null!", j);
-                    llama_batch_free(batch);
-                    detachThread();
-                    return;
-                }
-                batch.n_seq_id[j] = 1;
-                batch.logits  [j] = false;
-            }
-            if (cur + n_cur == n_tokens) {
-                batch.logits[n_cur - 1] = true;
-            }
-            ALOGD("completionStart(): Batch filled, calling llama_decode() for chunk cur=%d n_cur=%d", cur, n_cur);
-            int decode_result = llama_decode(ctx, batch);
-            ALOGD("completionStart(): llama_decode() returned %d for chunk cur=%d n_cur=%d", decode_result, cur, n_cur);
-            if (decode_result != 0) {
-                ALOGE("completionStart(): llama_decode() failed at chunk cur=%d n_cur=%d", cur, n_cur);
-                jstring err = threadEnv->NewStringUTF("Failed to decode prompt");
-                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
-                threadEnv->DeleteLocalRef(err);
-                llama_batch_free(batch);
-                detachThread();
-                return;
-            }
-            llama_batch_free(batch);
-            ALOGD("completionStart(): llama_decode chunk ok cur=%d n_cur=%d", cur, n_cur);
-            // Report decode progress (reuse onLoadProgress as a generic progress channel)
-            if (g_OnLoadProgress) {
-                const int done = std::min(cur + n_cur, n_tokens);
-                const int percent = (n_tokens > 0) ? (done * 100) / n_tokens : 100;
-                threadEnv->CallVoidMethod(gCallback, g_OnLoadProgress, (jint) percent);
-                if (threadEnv->ExceptionCheck()) {
-                    threadEnv->ExceptionClear();
-                }
-            }
-        }
-        ALOGD("completionStart(): evaluate prompt ok. starting sampling...");
-        // Ensure UI progress reaches 100 before sampling
-        if (g_OnLoadProgress) {
-            threadEnv->CallVoidMethod(gCallback, g_OnLoadProgress, (jint) 100);
-            if (threadEnv->ExceptionCheck()) {
-                threadEnv->ExceptionClear();
-            }
-        }
-
-        // Main generation loop
-        int n_past = n_tokens;
-        int n_gen = 0;
-        std::string generated;
 
         // Create sampler chain matching iOS implementation (Llama 3.1 optimized)
         auto sparams = llama_sampler_chain_default_params();
@@ -562,8 +527,162 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         // 6. Dist sampling (final token selection)
         llama_sampler_chain_add(smpl, llama_sampler_init_dist(static_cast<uint32_t>(std::random_device{}())));
 
+        // Main generation loop - evaluate prompt and generate tokens in streaming mode
+        int n_past = 0;
+        int n_gen = 0;
+        std::string generated;
+
+        // Decode prompt in small chunks to reduce peak memory usage
+        ALOGD("completionStart(): evaluating prompt...");
+        const int chunk = 16; // Reduced from 32 to 16 to minimize CPU processing time and memory pressure
         uint32_t context_size = llama_n_ctx(ctx);
-        ALOGD("completionStart(): Starting generation loop, context_size=%u, n_predict=%d, n_past=%d", context_size, n_predict, n_past);
+        
+        // Evaluate prompt tokens and generate tokens in streaming mode
+        // If the last chunk is too small (< 8 tokens), merge it with the previous chunk to avoid Vulkan backend issues
+        for (int cur = 0; cur < n_tokens; ) {
+            int remaining = n_tokens - cur;
+            int n_cur = std::min(chunk, remaining);
+            
+            // Always merge remaining tokens if they would form a small last chunk (< 200 tokens)
+            // This prevents the last chunk from being too small, which causes Vulkan backend to hang
+            // We use a very high threshold to ensure all remaining tokens are merged
+            int next_remaining = remaining - n_cur;
+            if (next_remaining > 0 && next_remaining < 200) {
+                ALOGD("completionStart(): Next chunk would be too small (%d tokens), merging with current chunk", next_remaining);
+                n_cur = remaining;  // Merge with current chunk to avoid small last chunk
+            }
+            // For the last chunk, if it's still too large (> 16), split it into smaller pieces
+            // This is a workaround for pipeline failures that occur with larger last chunks
+            bool is_last_chunk = (cur + n_cur == n_tokens);
+            if (is_last_chunk && n_cur > 16) {
+                ALOGD("completionStart(): Last chunk size %d is too large, will process in smaller pieces", n_cur);
+                // Process it in smaller pieces by limiting n_cur to 16
+                n_cur = 16;  // Process first 16 tokens, remaining will be handled in next iteration
+            }
+            // Limit maximum chunk size to 20 to avoid Vulkan pipeline issues
+            if (n_cur > 20) {
+                ALOGD("completionStart(): Chunk size %d exceeds maximum 20, limiting to 20", n_cur);
+                n_cur = 20;
+            }
+            
+            ALOGD("completionStart(): llama_decode chunk start cur=%d n_cur=%d (remaining after=%d)", cur, n_cur, n_tokens - cur - n_cur);
+            
+            // Initialize batch with proper sequence ID support
+            llama_batch batch = llama_batch_init(n_cur, 0, 1);
+            if (!batch.token || !batch.seq_id || !batch.n_seq_id || !batch.logits) {
+                ALOGE("completionStart(): llama_batch_init() returned invalid batch");
+                jstring err = threadEnv->NewStringUTF("Failed to initialize batch");
+                if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
+                    threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                    if (threadEnv->ExceptionCheck()) {
+                        ALOGE("completionStart(): Exception in error callback - clearing");
+                        threadEnv->ExceptionClear();
+                    }
+                } else {
+                    ALOGE("completionStart(): Callback validation failed - skipping error callback");
+                }
+                threadEnv->DeleteLocalRef(err);
+                llama_batch_free(batch);
+                llama_sampler_free(smpl);
+                detachThread();
+                return;
+            }
+            
+            batch.n_tokens = n_cur;
+            // Set pos to nullptr to let llama_batch_allocr::init() calculate positions from memory
+            // This ensures positions are consistent with the KV cache state
+            free(batch.pos);
+            batch.pos = nullptr;
+            
+            ALOGD("completionStart(): Batch initialized, filling tokens (n_past=%d)", n_past);
+            for (int j = 0; j < n_cur; ++j) {
+                batch.token   [j] = prompt_tokens[cur + j];
+                if (batch.seq_id[j]) {
+                    batch.seq_id  [j][0] = 0;
+                } else {
+                    ALOGE("completionStart(): batch.seq_id[%d] is null!", j);
+                    llama_batch_free(batch);
+                    llama_sampler_free(smpl);
+                    detachThread();
+                    return;
+                }
+                batch.n_seq_id[j] = 1;
+                batch.logits  [j] = false;
+            }
+            // NOTE: Do NOT enable logits in the last chunk during prompt evaluation
+            // This causes decode to hang on Vulkan backend. Instead, we'll decode the last token
+            // separately after prompt evaluation is complete to get logits.
+            // is_last_chunk is already defined above
+            // Keep all logits disabled during prompt evaluation to avoid Vulkan backend issues
+            // We'll handle logits separately after prompt evaluation
+            
+            ALOGD("completionStart(): Batch filled, calling llama_decode() for chunk cur=%d n_cur=%d (total tokens=%d, is_last_chunk=%d)", 
+                  cur, n_cur, n_tokens, is_last_chunk ? 1 : 0);
+            ALOGD("completionStart(): About to call llama_decode() for prompt evaluation chunk cur=%d n_cur=%d", cur, n_cur);
+            
+            int decode_result = llama_decode(ctx, batch);
+            ALOGD("completionStart(): llama_decode() returned %d for chunk cur=%d n_cur=%d (is_last_chunk=%d)", 
+                  decode_result, cur, n_cur, is_last_chunk ? 1 : 0);
+            if (decode_result != 0) {
+                ALOGE("completionStart(): llama_decode() failed at chunk cur=%d n_cur=%d", cur, n_cur);
+                jstring err = threadEnv->NewStringUTF("Failed to decode prompt");
+                if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
+                    threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                    if (threadEnv->ExceptionCheck()) {
+                        ALOGE("completionStart(): Exception in error callback - clearing");
+                        threadEnv->ExceptionClear();
+                    }
+                } else {
+                    ALOGE("completionStart(): Callback validation failed - skipping error callback");
+                }
+                threadEnv->DeleteLocalRef(err);
+                llama_batch_free(batch);
+                llama_sampler_free(smpl);
+                detachThread();
+                return;
+            }
+            llama_batch_free(batch);
+            n_past += n_cur;
+            ALOGD("completionStart(): llama_decode chunk ok cur=%d n_cur=%d, n_past=%d (total tokens=%d, remaining=%d)", 
+                  cur, n_cur, n_past, n_tokens, n_tokens - (cur + n_cur));
+            
+            // Move to next chunk
+            cur += n_cur;
+        }
+        
+        ALOGD("completionStart(): Exited prompt evaluation loop. n_past=%d, n_tokens=%d", n_past, n_tokens);
+        
+        // After prompt evaluation, decode the last token separately to get logits
+        // This avoids the Vulkan backend hang when enabling logits in the last chunk
+        if (n_past == n_tokens && n_tokens > 0) {
+            ALOGD("completionStart(): Decoding last prompt token separately to get logits...");
+            llama_batch last_token_batch = llama_batch_init(1, 0, 1);
+            if (last_token_batch.token && last_token_batch.seq_id) {
+                last_token_batch.n_tokens = 1;
+                last_token_batch.token[0] = prompt_tokens[n_tokens - 1];
+                last_token_batch.logits[0] = true;  // Enable logits for the last token
+                free(last_token_batch.pos);
+                last_token_batch.pos = nullptr;  // Let llama_batch_allocr calculate position
+                if (last_token_batch.seq_id[0]) {
+                    last_token_batch.seq_id[0][0] = 0;
+                    last_token_batch.n_seq_id[0] = 1;
+                }
+                
+                ALOGD("completionStart(): Calling llama_decode() for last token to get logits");
+                int last_decode_result = llama_decode(ctx, last_token_batch);
+                ALOGD("completionStart(): llama_decode() returned %d for last token", last_decode_result);
+                if (last_decode_result != 0) {
+                    ALOGE("completionStart(): Failed to decode last token for logits, result=%d", last_decode_result);
+                }
+                llama_batch_free(last_token_batch);
+            } else {
+                ALOGE("completionStart(): Failed to initialize batch for last token");
+            }
+        }
+        
+        ALOGD("completionStart(): Prompt evaluation complete. n_past=%d, starting token generation...", n_past);
+        
+        // Continue generating tokens until limit is reached
         while (n_past < context_size && n_gen < n_predict) {
             ALOGD("completionStart(): Loop iteration n_gen=%d, n_past=%d", n_gen, n_past);
             if (handle->stopRequested) {
@@ -572,8 +691,11 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             }
 
             // Sample from logits
-            ALOGD("completionStart(): Calling llama_sampler_sample()");
-            llama_token id = llama_sampler_sample(smpl, ctx, 0);
+            // For the first token generation, use idx=0 to get logits from the last decode (last prompt token)
+            // For subsequent tokens, use idx=0 to get logits from the most recent decode
+            int32_t logits_idx = 0;  // Changed from -1 to 0 since we decoded the last token separately
+            ALOGD("completionStart(): Calling llama_sampler_sample() with idx=%d", logits_idx);
+            llama_token id = llama_sampler_sample(smpl, ctx, logits_idx);
             ALOGD("completionStart(): llama_sampler_sample() returned id=%d", (int)id);
             llama_sampler_accept(smpl, id);
             ALOGD("completionStart(): llama_sampler_accept() completed");
@@ -613,16 +735,64 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             
             // Only send non-special tokens to callback
             if (!isSpecialToken && !tokenText.empty()) {
-                ALOGD("completionStart(): Creating JNI string and calling callback");
+                ALOGD("completionStart(): Token text='%s' (length=%zu), creating JNI string and calling callback", 
+                      tokenText.c_str(), tokenText.length());
                 jstring tk = threadEnv->NewStringUTF(tokenText.c_str());
                 if (tk) {
-                    threadEnv->CallVoidMethod(gCallback, g_OnToken, tk);
-                    threadEnv->DeleteLocalRef(tk);
-                    ALOGD("completionStart(): Callback completed");
+                    // For Kotlin interfaces, each implementation is a different anonymous class.
+                    // We need to get the method ID from the actual callback object's class.
+                    if (gCallback && threadEnv) {
+                        // Get method ID from the actual callback object's class
+                        jclass callbackClass = nullptr;
+                        jmethodID onTokenMethod = nullptr;
+                        bool success = false;
+                        
+                        callbackClass = threadEnv->GetObjectClass(gCallback);
+                        if (callbackClass) {
+                            onTokenMethod = threadEnv->GetMethodID(callbackClass, "onToken", "(Ljava/lang/String;)V");
+                            if (onTokenMethod) {
+                                ALOGD("completionStart(): Calling onToken callback with token='%s'", tokenText.c_str());
+                                threadEnv->CallVoidMethod(gCallback, onTokenMethod, tk);
+                                if (threadEnv->ExceptionCheck()) {
+                                    ALOGE("completionStart(): Exception in token callback - clearing");
+                                    threadEnv->ExceptionClear();
+                                } else {
+                                    ALOGD("completionStart(): Token callback completed successfully");
+                                    success = true;
+                                }
+                            } else {
+                                ALOGE("completionStart(): Failed to get onToken method ID from callback class");
+                            }
+                        } else {
+                            ALOGE("completionStart(): Failed to get callback object class");
+                        }
+                        
+                        // Clean up local references safely
+                        if (callbackClass && threadEnv) {
+                            threadEnv->DeleteLocalRef(callbackClass);
+                        }
+                        
+                        if (!success) {
+                            ALOGE("completionStart(): Token callback failed");
+                        }
+                    } else {
+                        if (!gCallback) {
+                            ALOGE("completionStart(): gCallback is null - skipping token callback");
+                        }
+                        if (!threadEnv) {
+                            ALOGE("completionStart(): threadEnv is null - skipping token callback");
+                        }
+                    }
+                    if (threadEnv && tk) {
+                        threadEnv->DeleteLocalRef(tk);
+                    }
                 } else {
                     ALOGE("completionStart(): Failed to create JNI string");
                 }
                 generated.append(tokenText);
+            } else {
+                ALOGD("completionStart(): Skipping token (isSpecialToken=%d, empty=%d)", 
+                      isSpecialToken ? 1 : 0, tokenText.empty() ? 1 : 0);
             }
             bool hitStop = false;
             for (const auto& stop : stops) {
@@ -643,14 +813,25 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             if (!gen_batch.token || !gen_batch.pos || !gen_batch.seq_id || !gen_batch.n_seq_id || !gen_batch.logits) {
                 ALOGE("completionStart(): llama_batch_init() returned invalid gen_batch");
                 jstring err = threadEnv->NewStringUTF("Failed to initialize generation batch");
-                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
+                    threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                    if (threadEnv->ExceptionCheck()) {
+                        ALOGE("completionStart(): Exception in error callback - clearing");
+                        threadEnv->ExceptionClear();
+                    }
+                } else {
+                    ALOGE("completionStart(): Callback validation failed - skipping error callback");
+                }
                 threadEnv->DeleteLocalRef(err);
                 llama_batch_free(gen_batch);
                 break;
             }
             gen_batch.n_tokens = 1;
             gen_batch.token   [0] = id;
-            gen_batch.pos     [0] = n_past;
+            // For token generation, set pos to nullptr to let llama_batch_allocr::init() calculate position from memory
+            // This ensures positions are consistent with the KV cache state, especially after separate last token decode
+            free(gen_batch.pos);
+            gen_batch.pos = nullptr;  // Let llama_batch_allocr calculate position from memory
             if (gen_batch.seq_id[0]) {
                 gen_batch.seq_id  [0][0] = 0;
             } else {
@@ -660,14 +841,23 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             }
             gen_batch.n_seq_id[0] = 1;
             gen_batch.logits  [0] = true;
-            ALOGD("completionStart(): Batch initialized, calling llama_decode() with token=%d, pos=%d", (int)id, n_past);
+            ALOGD("completionStart(): Batch initialized, calling llama_decode() with token=%d, pos=auto (n_past=%d)", (int)id, n_past);
+            ALOGD("completionStart(): About to call llama_decode() for token generation, n_past=%d, n_gen=%d", n_past, n_gen);
 
             int decode_result = llama_decode(ctx, gen_batch);
-            ALOGD("completionStart(): llama_decode() returned %d", decode_result);
+            ALOGD("completionStart(): llama_decode() returned %d for token generation", decode_result);
             if (decode_result != 0) {
                 ALOGE("completionStart(): llama_decode() failed on token, result=%d", decode_result);
                 jstring err = threadEnv->NewStringUTF("Failed to decode token");
-                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
+                    threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                    if (threadEnv->ExceptionCheck()) {
+                        ALOGE("completionStart(): Exception in error callback - clearing");
+                        threadEnv->ExceptionClear();
+                    }
+                } else {
+                    ALOGE("completionStart(): Callback validation failed - skipping error callback");
+                }
                 threadEnv->DeleteLocalRef(err);
                 llama_batch_free(gen_batch);
                 break;
@@ -684,7 +874,19 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
 
         llama_sampler_free(smpl);
 
-        threadEnv->CallVoidMethod(gCallback, g_OnCompleted);
+        // Call completed callback - try with validation but don't skip if it fails
+        if (g_OnCompleted) {
+            if (g_CallbackClass && !threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
+                ALOGE("completionStart(): Callback type mismatch, but attempting call anyway");
+            }
+            threadEnv->CallVoidMethod(gCallback, g_OnCompleted);
+            if (threadEnv->ExceptionCheck()) {
+                ALOGE("completionStart(): Exception in completed callback - clearing");
+                threadEnv->ExceptionClear();
+            }
+        } else {
+            ALOGE("completionStart(): g_OnCompleted is null - skipping completed callback");
+        }
 		detachThread();
     });
     worker.detach();

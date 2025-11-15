@@ -151,7 +151,7 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 
 		Spacer(modifier = Modifier.height(8.dp))
 
-		val text = remember { mutableStateOf("") }
+		val text = remember { mutableStateOf("안녕") }
 
 		Row(
 			verticalAlignment = Alignment.CenterVertically,
@@ -264,7 +264,7 @@ private fun ModelPathDialog(
 			onValueChange = { pathState.value = it },
 			modifier = Modifier.fillMaxWidth(),
 			singleLine = true,
-			placeholder = { Text("/sdcard/Android/data/com.example.llama/files/models/llama31-banyaa-q4_k_m.gguf") }
+			placeholder = { Text("/sdcard/Download/llama31-banyaa-q4_0.gguf") }
 		)
 		Spacer(modifier = Modifier.height(12.dp))
 		Row(
