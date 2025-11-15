@@ -1,0 +1,119 @@
+[
+  {
+    "level_": 0,
+    "message_": "Start JSON generation. Platform version: 28 min SDK version: arm64-v8a",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "rebuilding JSON /Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/5r84w4u2/arm64-v8a/android_gradle_build.json due to:",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "- no fingerprint file, will remove stale configuration folder",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "removing stale contents from \u0027/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/5r84w4u2/arm64-v8a\u0027",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "created folder \u0027/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/5r84w4u2/arm64-v8a\u0027",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "executing cmake /Users/tony/Library/Android/sdk/cmake/3.22.1/bin/cmake \\\n  -H/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp \\\n  -DCMAKE_SYSTEM_NAME\u003dAndroid \\\n  -DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON \\\n  -DCMAKE_SYSTEM_VERSION\u003d28 \\\n  -DANDROID_PLATFORM\u003dandroid-28 \\\n  -DANDROID_ABI\u003darm64-v8a \\\n  -DCMAKE_ANDROID_ARCH_ABI\u003darm64-v8a \\\n  -DANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125 \\\n  -DCMAKE_ANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125 \\\n  -DCMAKE_TOOLCHAIN_FILE\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake \\\n  \"-DCMAKE_CXX_FLAGS\u003d-O3 -DNDEBUG -fvisibility\u003dhidden\" \\\n  -DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/5r84w4u2/obj/arm64-v8a \\\n  -DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/5r84w4u2/obj/arm64-v8a \\\n  -DCMAKE_BUILD_TYPE\u003dDebug \\\n  -B/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/5r84w4u2/arm64-v8a \\\n  -GNinja \\\n  -DUSE_LLAMA\u003dON \\\n  -DGGML_VULKAN\u003dOFF \\\n  -DGGML_OPENCL\u003dON \\\n  -DGGML_OPENCL_USE_ADRENO_KERNELS\u003dON \\\n  -DGGML_K_QUANTS\u003dON \\\n  -DCMAKE_MAKE_PROGRAM\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja \\\n  -DCMAKE_PROGRAM_PATH\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin\n",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/cmake \\\n  -H/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp \\\n  -DCMAKE_SYSTEM_NAME\u003dAndroid \\\n  -DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON \\\n  -DCMAKE_SYSTEM_VERSION\u003d28 \\\n  -DANDROID_PLATFORM\u003dandroid-28 \\\n  -DANDROID_ABI\u003darm64-v8a \\\n  -DCMAKE_ANDROID_ARCH_ABI\u003darm64-v8a \\\n  -DANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125 \\\n  -DCMAKE_ANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125 \\\n  -DCMAKE_TOOLCHAIN_FILE\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake \\\n  \"-DCMAKE_CXX_FLAGS\u003d-O3 -DNDEBUG -fvisibility\u003dhidden\" \\\n  -DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/5r84w4u2/obj/arm64-v8a \\\n  -DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/5r84w4u2/obj/arm64-v8a \\\n  -DCMAKE_BUILD_TYPE\u003dDebug \\\n  -B/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/5r84w4u2/arm64-v8a \\\n  -GNinja \\\n  -DUSE_LLAMA\u003dON \\\n  -DGGML_VULKAN\u003dOFF \\\n  -DGGML_OPENCL\u003dON \\\n  -DGGML_OPENCL_USE_ADRENO_KERNELS\u003dON \\\n  -DGGML_K_QUANTS\u003dON \\\n  -DCMAKE_MAKE_PROGRAM\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja \\\n  -DCMAKE_PROGRAM_PATH\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin\n",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "Received process result: 1",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  },
+  {
+    "level_": 0,
+    "message_": "JSON generation completed with problem. Exception: com.android.ide.common.process.ProcessException: -- The C compiler identification is Clang 17.0.2\n-- The CXX compiler identification is Clang 17.0.2\n-- Detecting C compiler ABI info\n-- Detecting C compiler ABI info - done\n-- Check for working C compiler: /Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang - skipped\n-- Detecting C compile features\n-- Detecting C compile features - done\n-- Detecting CXX compiler ABI info\n-- Detecting CXX compiler ABI info - done\n-- Check for working CXX compiler: /Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ - skipped\n-- Detecting CXX compile features\n-- Detecting CXX compile features - done\n-- BanyaChat build ABI: arm64-v8a\n-- Found Git: /usr/bin/git (found version \"2.39.5 (Apple Git-154)\") \n-- The ASM compiler identification is Clang with GNU-like command-line\n-- Found assembler: /Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang\n-- Setting GGML_NATIVE_DEFAULT to OFF\n-- Looking for pthread.h\n-- Looking for pthread.h - found\n-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed\n-- Check if compiler accepts -pthread\n-- Check if compiler accepts -pthread - yes\n-- Found Threads: TRUE  \n-- Warning: ccache not found - consider installing it for faster compilation or disable this warning with GGML_CCACHE\u003dOFF\n-- CMAKE_SYSTEM_PROCESSOR: aarch64\n-- GGML_SYSTEM_ARCH: ARM\n-- Including CPU backend\n-- Found OpenMP_C: -fopenmp\u003dlibomp (found version \"5.0\") \n-- Found OpenMP_CXX: -fopenmp\u003dlibomp (found version \"5.0\") \n-- Found OpenMP: TRUE (found version \"5.0\")  \n-- ARM detected\n-- Performing Test GGML_COMPILER_SUPPORTS_FP16_FORMAT_I3E\n-- Performing Test GGML_COMPILER_SUPPORTS_FP16_FORMAT_I3E - Failed\n-- Adding CPU backend variant ggml-cpu:  \n-- Looking for CL_VERSION_2_2\n-- Looking for CL_VERSION_2_2 - not found\n-- Looking for CL_VERSION_2_1\n-- Looking for CL_VERSION_2_1 - not found\n-- Looking for CL_VERSION_2_0\n-- Looking for CL_VERSION_2_0 - not found\n-- Looking for CL_VERSION_1_2\n-- Looking for CL_VERSION_1_2 - not found\n-- Looking for CL_VERSION_1_1\n-- Looking for CL_VERSION_1_1 - not found\n-- Looking for CL_VERSION_1_0\n-- Looking for CL_VERSION_1_0 - not found\n-- Configuring incomplete, errors occurred!\nSee also \"/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/5r84w4u2/arm64-v8a/CMakeFiles/CMakeOutput.log\".\nSee also \"/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/5r84w4u2/arm64-v8a/CMakeFiles/CMakeError.log\".\n\nC++ build system [configure] failed while executing:\n    /Users/tony/Library/Android/sdk/cmake/3.22.1/bin/cmake \\\n      -H/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp \\\n      -DCMAKE_SYSTEM_NAME\u003dAndroid \\\n      -DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON \\\n      -DCMAKE_SYSTEM_VERSION\u003d28 \\\n      -DANDROID_PLATFORM\u003dandroid-28 \\\n      -DANDROID_ABI\u003darm64-v8a \\\n      -DCMAKE_ANDROID_ARCH_ABI\u003darm64-v8a \\\n      -DANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125 \\\n      -DCMAKE_ANDROID_NDK\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125 \\\n      -DCMAKE_TOOLCHAIN_FILE\u003d/Users/tony/Library/Android/sdk/ndk/26.1.10909125/build/cmake/android.toolchain.cmake \\\n      \"-DCMAKE_CXX_FLAGS\u003d-O3 -DNDEBUG -fvisibility\u003dhidden\" \\\n      -DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/5r84w4u2/obj/arm64-v8a \\\n      -DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/Volumes/Transcend/Projects/andriod-llm/app/build/intermediates/cxx/Debug/5r84w4u2/obj/arm64-v8a \\\n      -DCMAKE_BUILD_TYPE\u003dDebug \\\n      -B/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/5r84w4u2/arm64-v8a \\\n      -GNinja \\\n      -DUSE_LLAMA\u003dON \\\n      -DGGML_VULKAN\u003dOFF \\\n      -DGGML_OPENCL\u003dON \\\n      -DGGML_OPENCL_USE_ADRENO_KERNELS\u003dON \\\n      -DGGML_K_QUANTS\u003dON \\\n      -DCMAKE_MAKE_PROGRAM\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin/ninja \\\n      -DCMAKE_PROGRAM_PATH\u003d/Users/tony/Library/Android/sdk/cmake/3.22.1/bin\n  from /Volumes/Transcend/Projects/andriod-llm/app\nCMAKE_BUILD_TYPE\u003dDebug\nCMake Error at /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake:230 (message):\n  Could NOT find OpenCL (missing: OpenCL_LIBRARY OpenCL_INCLUDE_DIR)\nCall Stack (most recent call first):\n  /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake:594 (_FPHSA_FAILURE_MESSAGE)\n  /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindOpenCL.cmake:163 (find_package_handle_standard_args)\n  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-opencl/CMakeLists.txt:1 (find_package)",
+    "file_": "/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp/CMakeLists.txt",
+    "tag_": "debug|arm64-v8a",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 0
+  }
+]

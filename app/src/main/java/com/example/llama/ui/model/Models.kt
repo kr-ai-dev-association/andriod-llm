@@ -22,13 +22,18 @@ data class ChatUiState(
 		return copy(messages = messages + message)
 	}
 	fun appendToLastAssistant(token: String): ChatUiState {
-		if (messages.isEmpty()) return this
+		if (messages.isEmpty()) {
+			// If no messages, add a new assistant message with the token
+			return copy(messages = messages + ChatMessage(text = token, isUser = false))
+		}
 		val last = messages.last()
 		return if (!last.isUser) {
+			// Append token to last assistant message
 			val updated = last.copy(text = last.text + token)
 			copy(messages = messages.dropLast(1) + updated)
 		} else {
-			this
+			// If last message is from user, add a new assistant message with the token
+			copy(messages = messages + ChatMessage(text = token, isUser = false))
 		}
 	}
 

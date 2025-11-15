@@ -27,6 +27,10 @@ class ChatRepository(private val app: Application) {
 		handle = 0L
 	}
 
+	fun isInitialized(): Boolean {
+		return handle != 0L
+	}
+
 	fun stop() {
 		if (handle != 0L) {
 			try {
@@ -83,22 +87,24 @@ class ChatRepository(private val app: Application) {
 		val modelPath = modelFile.absolutePath
 		Log.d("BanyaChat", "ensureInit(): chosen modelPath=$modelPath size=${modelFile.length()}")
 		// Using Vulkan backend with Q4_0 model
-		// Optimized Vulkan settings for Adreno 830 stability:
-		// - Reduced GPU layers to 5 to minimize shader operations
-		// - Reduced batch size to 32 to reduce memory pressure
-		// - no_host=true to use DEVICE_LOCAL memory for better GPU performance
+		// Optimized settings to increase GPU offloading:
+		// - Increased GPU layers to 20 to offload more layers to GPU
+		// - Reduced batch size to 16 to minimize memory pressure
+		// - Increased context size to 512 to accommodate longer prompts (289 tokens)
 		handle = LlamaBridge.init(
 			modelPath = modelPath,
-			nCtx = 768,
+			nCtx = 512, // Increased from 256 to accommodate longer prompts
 			nThreads = 8,
-			nBatch = 32, // Reduced from 64 to 32 to reduce memory pressure and avoid crashes
-			nGpuLayers = 5, // Reduced to 5 layers to minimize Vulkan shader operations
-			useMmap = true,
+			nBatch = 16, // Stable value
+			nGpuLayers = 29, // Reduced from 30 to test if 30th layer causes crashes
+			useMmap = false, // Disable mmap to avoid conflicts with Vulkan GPU offloading
 			useMlock = false,
 			seed = 0,
 			callback = callback
 		)
 		Log.d("BanyaChat", "ensureInit(): LlamaBridge.init handle=$handle")
+		// Don't call callback from here to avoid JNI callback conflicts
+		// ChatViewModel will detect model loading completion by checking handle != 0
 	}
 
 	suspend fun generateStream(
@@ -133,10 +139,10 @@ class ChatRepository(private val app: Application) {
 				handle = handle,
 				prompt = prompt,
 				numPredict = 100,
-				temperature = 0.6f,  // iOS와 동일: 0.6
-				topP = 0.9f,        // iOS와 동일: 0.9
+				temperature = 0.3f,  // 한국어 생성 안정성을 위해 낮춤 (0.6 -> 0.3)
+				topP = 0.85f,       // 한국어 생성 안정성을 위해 낮춤 (0.9 -> 0.85)
 				topK = 0,           // iOS와 동일: 0 (비활성화)
-				repeatPenalty = 1.15f,  // iOS와 동일: 1.15
+				repeatPenalty = 1.2f,  // 반복 억제 강화 (1.15 -> 1.2)
 				repeatLastN = 64,   // iOS와 동일: 64
 				stopSequences = emptyArray(),
 				callback = callback
@@ -149,7 +155,13 @@ class ChatRepository(private val app: Application) {
 	}
 
 	private fun formatPrompt(messages: List<ChatMessage>): String {
-		val systemPrompt = """너는 10대 발달장애인의 일상을 돕는 한국어 에이전트다. 말은 간단하고 짧게 한다. 한 번에 한 단계씩 안내한다. 위급한 상황이라고 판단될 경우 즉시 보호자나 119에 연락하도록 안내한다. 복잡한 요청은 다시 확인하고 필요한 정보를 먼저 묻는다. 일정 관리, 준비물 체크, 이동 안내, 감정 조절 도움, 사회적 상황 대처 연습을 친절하게 돕는다. 물결표와 이모티콘, 과도한 문장부호(!!!, .. 등)는 사용하지 않는다. 문장부호는 최대 1개만 사용한다."""
+		val systemPrompt = """너는 10대 발달장애인의 일상을 돕는 한국어 에이전트다. 
+
+중요: 모든 대답은 반드시 한국어로만 해야 한다. 영어, 중국어, 일본어 등 다른 언어는 절대 사용하지 않는다. 한국어가 아닌 언어를 사용하면 안 된다.
+
+말은 간단하고 짧게 한다. 한 번에 한 단계씩 안내한다. 위급한 상황이라고 판단될 경우 즉시 보호자나 119에 연락하도록 안내한다. 복잡한 요청은 다시 확인하고 필요한 정보를 먼저 묻는다. 일정 관리, 준비물 체크, 이동 안내, 감정 조절 도움, 사회적 상황 대처 연습을 친절하게 돕는다. 물결표와 이모티콘, 과도한 문장부호(!!!, .. 등)는 사용하지 않는다. 문장부호는 최대 1개만 사용한다.
+
+예시 응답: "안녕하세요. 무엇을 도와드릴까요?" (한국어로만 응답)"""
 		val sb = StringBuilder()
 		sb.append("<|begin_of_text|>")
 		sb.append("<|start_header_id|>system<|end_header_id|>\n\n")

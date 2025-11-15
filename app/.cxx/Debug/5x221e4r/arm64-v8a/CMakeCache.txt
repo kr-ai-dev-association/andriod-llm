@@ -759,6 +759,9 @@ llama_android_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 llama_android_SOURCE_DIR:STATIC=/Volumes/Transcend/Projects/andriod-llm/app/src/main/cpp
 
+//Path to a library.
+log-lib:FILEPATH=/Users/tony/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/28/liblog.so
+
 
 ########################
 # INTERNAL cache entries

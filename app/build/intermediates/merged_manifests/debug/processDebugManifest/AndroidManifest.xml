@@ -8,6 +8,9 @@
     <uses-sdk
         android:minSdkVersion="28"
         android:targetSdkVersion="35" />
+    <!-- Permission to read model files from Download directory -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <permission
         android:name="com.example.llama.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"

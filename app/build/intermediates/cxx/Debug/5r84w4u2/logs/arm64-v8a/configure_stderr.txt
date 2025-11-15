@@ -1,0 +1,9 @@
+CMAKE_BUILD_TYPE=Debug
+CMake Error at /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake:230 (message):
+  Could NOT find OpenCL (missing: OpenCL_LIBRARY OpenCL_INCLUDE_DIR)
+Call Stack (most recent call first):
+  /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake:594 (_FPHSA_FAILURE_MESSAGE)
+  /Users/tony/Library/Android/sdk/cmake/3.22.1/share/cmake-3.22/Modules/FindOpenCL.cmake:163 (find_package_handle_standard_args)
+  /Volumes/Transcend/Projects/andriod-llm/third_party/llama.cpp/ggml/src/ggml-opencl/CMakeLists.txt:1 (find_package)
+
+

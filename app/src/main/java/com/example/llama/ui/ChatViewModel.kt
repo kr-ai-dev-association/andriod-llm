@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.llama.data.ChatRepository
@@ -48,11 +49,14 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 
 		// Preload model at startup so users don't type before load completes
 		viewModelScope.launch(Dispatchers.Default) {
+			var modelLoadSuccess = false
 			repo.preload(object : TokenCallback {
 				override fun onLoadProgress(progress: Int) {
-					// Dispatch to main thread for UI updates
-					mainHandler.post {
-						_uiState.value = _uiState.value.withProgress(progress)
+					// Only handle initial progress (0%), don't call from JNI to avoid conflicts
+					if (progress == 0) {
+						mainHandler.post {
+							_uiState.value = _uiState.value.withProgress(progress)
+						}
 					}
 				}
 				override fun onModelMetadata(json: String) {
@@ -81,6 +85,20 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 					}
 				}
 			})
+			// Check if model loaded successfully (handle != 0)
+			modelLoadSuccess = repo.isInitialized()
+			
+			// After preload completes, update progress to 100% if model loaded successfully
+			// This avoids JNI callback conflicts by calling from Kotlin layer
+			mainHandler.post {
+				_uiState.value = _uiState.value.withProgress(100)
+				
+				// Automatically send "안녕" when model load completes successfully
+				if (modelLoadSuccess && _uiState.value.messages.isEmpty()) {
+					// Only send if no messages exist yet (first load)
+					send("안녕")
+				}
+			}
 		}
 	}
 
@@ -172,8 +190,11 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 					}
 
 					override fun onToken(token: String) {
+						Log.d("BanyaChat", "ChatViewModel.onToken(): received token='$token', posting to main thread")
 						mainHandler.post {
+							Log.d("BanyaChat", "ChatViewModel.onToken(): updating UI with token='$token', current messages count=${_uiState.value.messages.size}")
 							_uiState.value = _uiState.value.appendToLastAssistant(token)
+							Log.d("BanyaChat", "ChatViewModel.onToken(): UI updated, new messages count=${_uiState.value.messages.size}, last message text='${_uiState.value.messages.lastOrNull()?.text}'")
 						}
 					}
 

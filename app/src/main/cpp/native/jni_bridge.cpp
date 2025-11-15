@@ -417,12 +417,19 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         struct CallbackGuard {
             JNIEnv* env;
             jobject ref;
+            bool shouldDelete;
+            CallbackGuard() : env(nullptr), ref(nullptr), shouldDelete(true) {}
             ~CallbackGuard() {
-                if (env && ref) {
+                if (env && ref && shouldDelete) {
+                    // Only delete if thread is still attached (env is valid)
+                    // Note: We can't check if thread is attached safely, so we rely on shouldDelete flag
+                    // which should be set to false before detachThread() is called
                     env->DeleteGlobalRef(ref);
                 }
             }
-        } guard{threadEnv, gCallback};
+        } guard;
+        guard.env = threadEnv;
+        guard.ref = gCallback;
 
         llama_context* ctx = handle->ctx;
         if (!ctx) {
@@ -438,6 +445,12 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 ALOGE("completionStart(): Callback validation failed - skipping error callback");
             }
             threadEnv->DeleteLocalRef(err);
+            // Prevent CallbackGuard from trying to delete gCallback after detachThread()
+            if (guard.env && guard.ref) {
+                guard.env->DeleteGlobalRef(guard.ref);
+                guard.ref = nullptr;
+            }
+            guard.shouldDelete = false;
             detachThread();
             return;
         }
@@ -456,6 +469,12 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 ALOGE("completionStart(): Callback validation failed - skipping error callback");
             }
             threadEnv->DeleteLocalRef(err);
+            // Prevent CallbackGuard from trying to delete gCallback after detachThread()
+            if (guard.env && guard.ref) {
+                guard.env->DeleteGlobalRef(guard.ref);
+                guard.ref = nullptr;
+            }
+            guard.shouldDelete = false;
             detachThread();
             return;
         }
@@ -466,8 +485,10 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         std::vector<llama_token> prompt_tokens;
         prompt_tokens.resize(promptStr.size() + 16);
         ALOGD("completionStart(): tokenizing prompt...");
+        ALOGD("completionStart(): prompt length=%zu, first 200 chars: %.200s", promptStr.length(), promptStr.c_str());
         // Check if prompt already starts with BOS token
         bool has_bos = (promptStr.length() > 0 && promptStr.find("<|begin_of_text|>") == 0);
+        ALOGD("completionStart(): has_bos=%d, add_bos=%d", has_bos ? 1 : 0, !has_bos ? 1 : 0);
         int n_tokens = llama_tokenize(
             vocab,
             promptStr.c_str(),
@@ -496,6 +517,23 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         }
         prompt_tokens.resize(n_tokens);
         ALOGD("completionStart(): tokenized prompt into %d tokens", n_tokens);
+        // Log first and last few tokens for debugging
+        if (n_tokens > 0) {
+            ALOGD("completionStart(): First 5 tokens: %d %d %d %d %d", 
+                  (int)prompt_tokens[0], 
+                  n_tokens > 1 ? (int)prompt_tokens[1] : -1,
+                  n_tokens > 2 ? (int)prompt_tokens[2] : -1,
+                  n_tokens > 3 ? (int)prompt_tokens[3] : -1,
+                  n_tokens > 4 ? (int)prompt_tokens[4] : -1);
+            if (n_tokens >= 5) {
+                ALOGD("completionStart(): Last 5 tokens: %d %d %d %d %d", 
+                      (int)prompt_tokens[n_tokens-5], 
+                      (int)prompt_tokens[n_tokens-4],
+                      (int)prompt_tokens[n_tokens-3],
+                      (int)prompt_tokens[n_tokens-2],
+                      (int)prompt_tokens[n_tokens-1]);
+            }
+        }
 
         // Create sampler chain matching iOS implementation (Llama 3.1 optimized)
         auto sparams = llama_sampler_chain_default_params();
@@ -584,6 +622,12 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 threadEnv->DeleteLocalRef(err);
                 llama_batch_free(batch);
                 llama_sampler_free(smpl);
+                // Prevent CallbackGuard from trying to delete gCallback after detachThread()
+                if (guard.env && guard.ref) {
+                    guard.env->DeleteGlobalRef(guard.ref);
+                    guard.ref = nullptr;
+                }
+                guard.shouldDelete = false;
                 detachThread();
                 return;
             }
@@ -638,6 +682,13 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 threadEnv->DeleteLocalRef(err);
                 llama_batch_free(batch);
                 llama_sampler_free(smpl);
+                // Prevent CallbackGuard from trying to delete gCallback after detachThread()
+                // We need to delete it manually before detaching
+                if (guard.env && guard.ref) {
+                    guard.env->DeleteGlobalRef(guard.ref);
+                    guard.ref = nullptr;
+                }
+                guard.shouldDelete = false;  // Prevent double deletion
                 detachThread();
                 return;
             }
@@ -694,9 +745,9 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             // For the first token generation, use idx=0 to get logits from the last decode (last prompt token)
             // For subsequent tokens, use idx=0 to get logits from the most recent decode
             int32_t logits_idx = 0;  // Changed from -1 to 0 since we decoded the last token separately
-            ALOGD("completionStart(): Calling llama_sampler_sample() with idx=%d", logits_idx);
+            ALOGD("completionStart(): Calling llama_sampler_sample() with idx=%d (n_gen=%d, n_past=%d)", logits_idx, n_gen, n_past);
             llama_token id = llama_sampler_sample(smpl, ctx, logits_idx);
-            ALOGD("completionStart(): llama_sampler_sample() returned id=%d", (int)id);
+            ALOGD("completionStart(): llama_sampler_sample() returned id=%d (n_gen=%d)", (int)id, n_gen);
             llama_sampler_accept(smpl, id);
             ALOGD("completionStart(): llama_sampler_accept() completed");
 
@@ -874,18 +925,48 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
 
         llama_sampler_free(smpl);
 
-        // Call completed callback - try with validation but don't skip if it fails
-        if (g_OnCompleted) {
-            if (g_CallbackClass && !threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
-                ALOGE("completionStart(): Callback type mismatch, but attempting call anyway");
+        // Call completed callback - dynamically get method ID from actual callback object's class
+        // This is necessary because Kotlin interfaces are implemented as anonymous classes
+        if (gCallback && threadEnv) {
+            jclass callbackClass = nullptr;
+            jmethodID onCompletedMethod = nullptr;
+            bool success = false;
+            
+            callbackClass = threadEnv->GetObjectClass(gCallback);
+            if (callbackClass) {
+                onCompletedMethod = threadEnv->GetMethodID(callbackClass, "onCompleted", "()V");
+                if (onCompletedMethod) {
+                    ALOGD("completionStart(): Calling onCompleted callback");
+                    threadEnv->CallVoidMethod(gCallback, onCompletedMethod);
+                    if (threadEnv->ExceptionCheck()) {
+                        ALOGE("completionStart(): Exception in completed callback - clearing");
+                        threadEnv->ExceptionClear();
+                    } else {
+                        ALOGD("completionStart(): onCompleted callback completed successfully");
+                        success = true;
+                    }
+                } else {
+                    ALOGE("completionStart(): Failed to get onCompleted method ID from callback class");
+                }
+            } else {
+                ALOGE("completionStart(): Failed to get callback object class for onCompleted");
             }
-            threadEnv->CallVoidMethod(gCallback, g_OnCompleted);
-            if (threadEnv->ExceptionCheck()) {
-                ALOGE("completionStart(): Exception in completed callback - clearing");
-                threadEnv->ExceptionClear();
+            
+            // Clean up local references safely
+            if (callbackClass && threadEnv) {
+                threadEnv->DeleteLocalRef(callbackClass);
+            }
+            
+            if (!success) {
+                ALOGE("completionStart(): onCompleted callback failed");
             }
         } else {
-            ALOGE("completionStart(): g_OnCompleted is null - skipping completed callback");
+            if (!gCallback) {
+                ALOGE("completionStart(): gCallback is null - skipping onCompleted callback");
+            }
+            if (!threadEnv) {
+                ALOGE("completionStart(): threadEnv is null - skipping onCompleted callback");
+            }
         }
 		detachThread();
     });

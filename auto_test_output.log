@@ -1,0 +1,88 @@
+==========================================
+반복 1 시작
+==========================================
+빌드 중...
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :app:packageDebug UP-TO-DATE
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleDebug UP-TO-DATE
+
+BUILD SUCCESSFUL in 3s
+39 actionable tasks: 2 executed, 37 up-to-date
+앱 설치 중...
+Performing Streamed Install
+Success
+로그 클리어 및 앱 실행...
+Starting: Intent { cmp=com.example.llama/.MainActivity }
+모델 로드 완료 대기 중...
+모델 로드 타임아웃 (60초). 계속 진행...
+챗 메시지 전송 중...
+응답 생성 대기 중...
+크래시 확인 중...
+==========================================
+크래시 발견!
+==========================================
+11-15 15:36:25.557  3223  7913 W ActivityManager: Scheduling restart of crashed service com.google.android.googlequicksearchbox/com.google.android.apps.gsa.nowoverlayservice.DrawerOverlayService in 1000ms for connection
+11-15 15:36:26.912  3223  7914 W ActivityManager: Scheduling restart of crashed service com.samsung.android.rubin.app/com.samsung.android.rubin.controller.services.KeepAliveService in 1000ms for start-requested
+11-15 15:36:27.767  3223  3403 W ActivityManager: Rescheduling restart of crashed service com.samsung.android.rubin.app/com.samsung.android.rubin.controller.services.KeepAliveService in 19145ms for mem-pressure-event
+11-15 15:36:27.767  3223  3403 W ActivityManager: Rescheduling restart of crashed service com.samsung.android.mtp/.MtpService in 79399ms for mem-pressure-event
+11-15 15:36:29.170  3223  3403 W ActivityManager: Rescheduling restart of crashed service com.samsung.android.rubin.app/com.samsung.android.rubin.controller.services.KeepAliveService in 0ms for mem-pressure-event
+11-15 15:36:29.170  3223  3403 W ActivityManager: Rescheduling restart of crashed service com.samsung.android.mtp/.MtpService in 77997ms for mem-pressure-event
+11-15 15:36:37.955 18445 18445 I Finsky:background: [2] [BGP] Initializing crash detector...
+==========================================
+상세 크래시 로그:
+11-15 15:36:27.331 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.331 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.331 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.331 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.331 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.331 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.332 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.332 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.332 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.332 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.332 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.332 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.332 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.332 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.333 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.334 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.334 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.334 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.334 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.334 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.334 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.334 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.334 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Before ggml_set_rows: v_view ne=[32,8192,1,1] type=2 nb=[18,18,147456,147456], v_cur ne=[32,2,1,1] type=0 nb=[4,128,256,256], v_idxs ne=[2048,1,1,1] type=27
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: v_trans is true: v_idxs->ne[0]=2048, n_tokens=2, v_view->ne[0]=32
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Final v_cur for v_trans: ne=[32,2048,1,1] type=0
+11-15 15:36:27.335 18001 18047 W BanyaChatLlama: cpy_v: Calling ggml_set_rows
+크래시가 발생했습니다. 코드 수정이 필요합니다.
+수정 후 스크립트를 다시 실행하세요.

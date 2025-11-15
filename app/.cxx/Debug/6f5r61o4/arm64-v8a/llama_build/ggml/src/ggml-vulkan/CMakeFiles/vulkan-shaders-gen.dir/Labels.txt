@@ -1,0 +1,13 @@
+# Target labels
+ vulkan-shaders-gen
+# Source files and their labels
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/6f5r61o4/arm64-v8a/llama_build/ggml/src/ggml-vulkan/CMakeFiles/vulkan-shaders-gen
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/6f5r61o4/arm64-v8a/llama_build/ggml/src/ggml-vulkan/CMakeFiles/vulkan-shaders-gen.rule
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/6f5r61o4/arm64-v8a/llama_build/ggml/src/ggml-vulkan/CMakeFiles/vulkan-shaders-gen-complete.rule
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/6f5r61o4/arm64-v8a/llama_build/ggml/src/ggml-vulkan/vulkan-shaders-gen-prefix/src/vulkan-shaders-gen-stamp/vulkan-shaders-gen-build.rule
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/6f5r61o4/arm64-v8a/llama_build/ggml/src/ggml-vulkan/vulkan-shaders-gen-prefix/src/vulkan-shaders-gen-stamp/vulkan-shaders-gen-configure.rule
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/6f5r61o4/arm64-v8a/llama_build/ggml/src/ggml-vulkan/vulkan-shaders-gen-prefix/src/vulkan-shaders-gen-stamp/vulkan-shaders-gen-download.rule
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/6f5r61o4/arm64-v8a/llama_build/ggml/src/ggml-vulkan/vulkan-shaders-gen-prefix/src/vulkan-shaders-gen-stamp/vulkan-shaders-gen-install.rule
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/6f5r61o4/arm64-v8a/llama_build/ggml/src/ggml-vulkan/vulkan-shaders-gen-prefix/src/vulkan-shaders-gen-stamp/vulkan-shaders-gen-mkdir.rule
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/6f5r61o4/arm64-v8a/llama_build/ggml/src/ggml-vulkan/vulkan-shaders-gen-prefix/src/vulkan-shaders-gen-stamp/vulkan-shaders-gen-patch.rule
+/Volumes/Transcend/Projects/andriod-llm/app/.cxx/Debug/6f5r61o4/arm64-v8a/llama_build/ggml/src/ggml-vulkan/vulkan-shaders-gen-prefix/src/vulkan-shaders-gen-stamp/vulkan-shaders-gen-update.rule
