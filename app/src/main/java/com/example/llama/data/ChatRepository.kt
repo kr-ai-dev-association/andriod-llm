@@ -95,8 +95,8 @@ class ChatRepository(private val app: Application) {
 			modelPath = modelPath,
 			nCtx = 512, // Increased from 256 to accommodate longer prompts
 			nThreads = 8,
-			nBatch = 16, // Stable value
-			nGpuLayers = 31, // Increased to 31 for maximum GPU offloading
+			nBatch = 512, // Increased for faster prompt evaluation (n_batch=512 allows larger chunks)
+			nGpuLayers = 31, // Stable at 31 layers (V-Cache F16 allows stable operation)
 			useMmap = false, // Disable mmap to avoid conflicts with Vulkan GPU offloading
 			useMlock = false,
 			seed = 0,
@@ -139,11 +139,11 @@ class ChatRepository(private val app: Application) {
 			handle = handle,
 			prompt = prompt,
 			numPredict = 100,
-			temperature = 0.6f,  // Llama 3.1 권장값: 0.6 (문맥과 다양성의 균형)
+			temperature = 0.7f,  // 반복 감소를 위해 다양성 증가 (0.6 → 0.7)
 			topP = 0.9f,         // Llama 3.1 권장값: 0.9 (Top-P + Min-P 조합)
 			topK = 0,            // Llama 3.1 권장: Top-K 비활성화 (Top-P + Min-P 사용)
-			repeatPenalty = 1.15f,  // Llama 3.1 권장값: 1.15
-			repeatLastN = 64,   // Llama 3.1 권장값: 64
+			repeatPenalty = 1.25f,  // 반복 방지 강화 (1.15 → 1.25)
+			repeatLastN = 128,   // 더 긴 범위에서 반복 체크 (64 → 128)
 			stopSequences = emptyArray(),
 			callback = callback
 		)

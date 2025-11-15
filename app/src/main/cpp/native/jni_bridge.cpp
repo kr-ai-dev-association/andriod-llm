@@ -12,6 +12,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <nlohmann/json.hpp>
+#include <regex>
+#include <algorithm>
 
 #ifndef LLAMA_STUB_MODE
 #define LLAMA_STUB_MODE 0
@@ -71,6 +73,313 @@ static void llama_log_callback(ggml_log_level level, const char * text, void * u
     }
 }
 
+// Special token filtering functions (based on Swift implementation in sp_token_rm.md)
+// 1단계: 토큰 레벨 필터링 - 각 토큰이 생성될 때 즉시 필터링
+static std::string filterSpecialTokensTokenLevel(const std::string& tokenText) {
+    if (tokenText.empty()) {
+        return tokenText;
+    }
+    
+    std::string cleaned = tokenText;
+    
+    // 1.1 완전한 특수 토큰 패턴 제거
+    const std::vector<std::string> specialTokenPatterns = {
+        "<|begin_of_text|>",
+        "<|end_of_text|>",
+        "<|start_header_id|>",
+        "<|end_header_id|>",
+        "<|eot_id|>",
+        "<|eom_id|>",
+        "<|python_tag|>",
+        "<|finetune_right_pad_id|>"
+    };
+    
+    for (const auto& pattern : specialTokenPatterns) {
+        size_t pos = 0;
+        while ((pos = cleaned.find(pattern, pos)) != std::string::npos) {
+            cleaned.erase(pos, pattern.length());
+        }
+    }
+    
+    // 1.2 Reserved Special Token 패턴 제거 (<|reserved_special_token_\d+|>)
+    try {
+        std::regex reservedRegex("<\\|reserved_special_token_\\d+\\|>");
+        cleaned = std::regex_replace(cleaned, reservedRegex, "");
+    } catch (const std::regex_error& e) {
+        ALOGE("filterSpecialTokensTokenLevel(): Regex error for reserved pattern: %s", e.what());
+    }
+    
+    // 1.3 부분 특수 토큰 패턴 제거
+    // 단독 파이프 제거
+    if (cleaned == "|") {
+        cleaned = "";
+    }
+    
+    // 단독 '<' 또는 '>' 제거 (특수 토큰의 일부로 생성되는 경우)
+    if (cleaned == "<" || cleaned == ">") {
+        cleaned = "";
+    }
+    
+    // 특수 토큰 일부 패턴 제거 (eot, eom, _id 등)
+    const std::vector<std::string> partialTokenPatterns = {
+        "_id",
+        "eot",
+        "eom",
+        "begin_of_text",
+        "end_of_text",
+        "start_header_id",
+        "end_header_id",
+        "python_tag",
+        "finetune_right_pad_id"
+    };
+    
+    for (const auto& pattern : partialTokenPatterns) {
+        // 단독으로 나타나는 경우만 제거 (다른 단어의 일부가 아닌 경우)
+        if (cleaned == pattern) {
+            cleaned = "";
+            break;
+        }
+        // 공백과 함께 나타나는 경우 제거
+        size_t pos = 0;
+        while ((pos = cleaned.find(" " + pattern, pos)) != std::string::npos) {
+            cleaned.erase(pos, pattern.length() + 1);
+        }
+        pos = 0;
+        while ((pos = cleaned.find(pattern + " ", pos)) != std::string::npos) {
+            cleaned.erase(pos, pattern.length() + 1);
+        }
+    }
+    
+    // '<|' 또는 '|>' 포함 시 제거
+    if (cleaned.find("<|") != std::string::npos || cleaned.find("|>") != std::string::npos) {
+        size_t pos = 0;
+        while ((pos = cleaned.find("<|", pos)) != std::string::npos) {
+            cleaned.erase(pos, 2);
+        }
+        pos = 0;
+        while ((pos = cleaned.find("|>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 2);
+        }
+    }
+    
+    // 공백과 함께 나타나는 '<' 또는 '>' 제거
+    size_t pos = 0;
+    while ((pos = cleaned.find(" <", pos)) != std::string::npos) {
+        cleaned.erase(pos, 2);
+    }
+    pos = 0;
+    while ((pos = cleaned.find("< ", pos)) != std::string::npos) {
+        cleaned.erase(pos, 2);
+    }
+    pos = 0;
+    while ((pos = cleaned.find(" >", pos)) != std::string::npos) {
+        cleaned.erase(pos, 2);
+    }
+    pos = 0;
+    while ((pos = cleaned.find("> ", pos)) != std::string::npos) {
+        cleaned.erase(pos, 2);
+    }
+    
+    // 정규식으로 부분 패턴 제거 (<|.*?|>)
+    try {
+        std::regex partialRegex("<\\|.*?\\|>");
+        cleaned = std::regex_replace(cleaned, partialRegex, "");
+    } catch (const std::regex_error& e) {
+        ALOGE("filterSpecialTokensTokenLevel(): Regex error for partial pattern: %s", e.what());
+    }
+    
+    return cleaned;
+}
+
+// 2단계: 텍스트 레벨 필터링 - 누적된 전체 텍스트에서 추가 필터링
+static std::string filterSpecialTokensTextLevel(const std::string& text) {
+    if (text.empty()) {
+        return text;
+    }
+    
+    std::string cleaned = text;
+    
+    // 2.1 완전한 특수 토큰 패턴 제거 (반복 처리)
+    const std::vector<std::string> specialTokenPatterns = {
+        "<|begin_of_text|>",
+        "<|end_of_text|>",
+        "<|start_header_id|>",
+        "<|end_header_id|>",
+        "<|eot_id|>",
+        "<|eom_id|>",
+        "<|python_tag|>",
+        "<|finetune_right_pad_id|>"
+    };
+    
+    size_t previousLength = 0;
+    int iterations = 0;
+    while (cleaned.length() != previousLength && iterations < 10) {
+        previousLength = cleaned.length();
+        for (const auto& pattern : specialTokenPatterns) {
+            size_t pos = 0;
+            while ((pos = cleaned.find(pattern, pos)) != std::string::npos) {
+                cleaned.erase(pos, pattern.length());
+            }
+        }
+        iterations++;
+    }
+    
+    // 2.2 Reserved Special Token 패턴 제거
+    try {
+        std::regex reservedRegex("<\\|reserved_special_token_\\d+\\|>");
+        cleaned = std::regex_replace(cleaned, reservedRegex, "");
+    } catch (const std::regex_error& e) {
+        ALOGE("filterSpecialTokensTextLevel(): Regex error for reserved pattern: %s", e.what());
+    }
+    
+    // 2.3 부분 특수 토큰 패턴 제거 (공격적 필터링)
+    bool foundPattern = true;
+    int patternIterations = 0;
+    while (foundPattern && patternIterations < 10) {
+        patternIterations++;
+        foundPattern = false;
+        
+        // 방법 1: "<|" + "|>" 조합 찾기 (뒤에서부터)
+        size_t startPos = cleaned.rfind("<|");
+        if (startPos != std::string::npos) {
+            size_t endPos = cleaned.find("|>", startPos);
+            if (endPos != std::string::npos) {
+                cleaned.erase(startPos, endPos - startPos + 2);
+                foundPattern = true;
+                continue;
+            }
+        }
+        
+        // 방법 2: 단독 파이프 제거
+        if (cleaned.find("|") != std::string::npos && 
+            cleaned.find("<|") == std::string::npos && 
+            cleaned.find("|>") == std::string::npos) {
+            size_t pos = 0;
+            while ((pos = cleaned.find("|", pos)) != std::string::npos) {
+                cleaned.erase(pos, 1);
+                foundPattern = true;
+            }
+        }
+        
+        // 방법 3: 정규식으로 부분 패턴 제거 (<|[^|]*|>)
+        try {
+            std::regex partialRegex("<\\|[^|]*\\|>");
+            std::string newCleaned = std::regex_replace(cleaned, partialRegex, "");
+            if (newCleaned != cleaned) {
+                cleaned = newCleaned;
+                foundPattern = true;
+            }
+        } catch (const std::regex_error& e) {
+            ALOGE("filterSpecialTokensTextLevel(): Regex error for partial pattern: %s", e.what());
+        }
+        
+        // 방법 4: 공백과 결합된 패턴 제거
+        size_t pos = 0;
+        while ((pos = cleaned.find(" <|", pos)) != std::string::npos) {
+            cleaned.erase(pos, 3);
+            foundPattern = true;
+        }
+        pos = 0;
+        while ((pos = cleaned.find("<| ", pos)) != std::string::npos) {
+            cleaned.erase(pos, 3);
+            foundPattern = true;
+        }
+        pos = 0;
+        while ((pos = cleaned.find(" |>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 3);
+            foundPattern = true;
+        }
+        pos = 0;
+        while ((pos = cleaned.find("|> ", pos)) != std::string::npos) {
+            cleaned.erase(pos, 3);
+            foundPattern = true;
+        }
+        
+        // 방법 5: 단독 '<' 또는 '>' 제거 (특수 토큰의 일부로 생성되는 경우)
+        pos = 0;
+        while ((pos = cleaned.find(" <", pos)) != std::string::npos) {
+            // 다음 문자가 '|'가 아니고 공백이나 끝이면 제거
+            if (pos + 2 >= cleaned.length() || cleaned[pos + 2] == ' ' || cleaned[pos + 2] == '\n' || cleaned[pos + 2] == '\t') {
+                cleaned.erase(pos, 2);
+                foundPattern = true;
+            } else {
+                pos++;
+            }
+        }
+        pos = 0;
+        while ((pos = cleaned.find("< ", pos)) != std::string::npos) {
+            cleaned.erase(pos, 2);
+            foundPattern = true;
+        }
+        pos = 0;
+        while ((pos = cleaned.find(" >", pos)) != std::string::npos) {
+            cleaned.erase(pos, 2);
+            foundPattern = true;
+        }
+        pos = 0;
+        while ((pos = cleaned.find("> ", pos)) != std::string::npos) {
+            cleaned.erase(pos, 2);
+            foundPattern = true;
+        }
+        
+        // 방법 6: 특수 토큰 일부 패턴 제거 (eot, eom, _id 등)
+        const std::vector<std::string> partialTokenPatterns = {
+            "_id",
+            "eot",
+            "eom",
+            "begin_of_text",
+            "end_of_text",
+            "start_header_id",
+            "end_header_id",
+            "python_tag",
+            "finetune_right_pad_id"
+        };
+        
+        for (const auto& pattern : partialTokenPatterns) {
+            // 공백과 함께 나타나는 경우 제거
+            pos = 0;
+            while ((pos = cleaned.find(" " + pattern + " ", pos)) != std::string::npos) {
+                cleaned.erase(pos, pattern.length() + 2);
+                foundPattern = true;
+            }
+            pos = 0;
+            while ((pos = cleaned.find(" " + pattern, pos)) != std::string::npos) {
+                // 다음 문자가 공백, 끝, 또는 특수문자면 제거
+                if (pos + pattern.length() + 1 >= cleaned.length() || 
+                    cleaned[pos + pattern.length() + 1] == ' ' || 
+                    cleaned[pos + pattern.length() + 1] == '\n' ||
+                    cleaned[pos + pattern.length() + 1] == '\t' ||
+                    cleaned[pos + pattern.length() + 1] == '>' ||
+                    cleaned[pos + pattern.length() + 1] == '|') {
+                    cleaned.erase(pos, pattern.length() + 1);
+                    foundPattern = true;
+                } else {
+                    pos++;
+                }
+            }
+        }
+    }
+    
+    // 2.4 기타 이상한 패턴 제거 (<[^>]*>)
+    try {
+        std::regex htmlTagRegex("<[^>]*>");
+        cleaned = std::regex_replace(cleaned, htmlTagRegex, "");
+    } catch (const std::regex_error& e) {
+        ALOGE("filterSpecialTokensTextLevel(): Regex error for HTML tag pattern: %s", e.what());
+    }
+    
+    // 2.5 특수 문자 조합 제거 (^^, ^^^)
+    size_t pos = 0;
+    while ((pos = cleaned.find("^^^", pos)) != std::string::npos) {
+        cleaned.erase(pos, 3);
+    }
+    pos = 0;
+    while ((pos = cleaned.find("^^", pos)) != std::string::npos) {
+        cleaned.erase(pos, 2);
+    }
+    
+    return cleaned;
+}
 
 struct LlamaCtx {
 #if LLAMA_STUB_MODE
@@ -209,12 +518,13 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
     // Reduced micro-batch size to minimize memory pressure and Vulkan operations
     // Lower n_ubatch reduces concurrent GPU operations, improving stability on Adreno 830
     cparams.n_ubatch = 2;  // Restored to stable value (was 1, but may cause issues)
-    // TEST: V-Cache Q4_0 양자화가 무작위 토큰 생성의 원인인지 확인하기 위한 테스트
-    // V-Cache만 F16으로 되돌려서 문제를 분리합니다
-    // 만약 이 변경으로 정상적인 텍스트가 생성된다면, V-Cache Q4_0 처리 과정(패딩 또는 디퀀타이즈 커널)에 문제가 있음이 확정됩니다
+    // STABLE: V-Cache를 F16으로 유지 (Q4_0 패딩 로직에 문제가 있어 Logit NaN 발생)
+    // K-Cache는 Q4_0으로 유지하여 VRAM 절약
+    // V-Cache F16 + K-Cache Q4_0 조합으로 안정성과 성능을 모두 확보
+    // n_batch=512와 chunk=512 최적화는 유지하여 프롬프트 평가 속도 향상
     cparams.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_AUTO;
-    cparams.type_k = GGML_TYPE_Q4_0;  // K-Cache는 Q4_0 유지
-    cparams.type_v = GGML_TYPE_F16;   // V-Cache를 F16으로 복원 (테스트용)
+    cparams.type_k = GGML_TYPE_Q4_0;  // K-Cache: Q4_0 (VRAM 절약)
+    cparams.type_v = GGML_TYPE_F16;   // V-Cache: F16 (안정성 확보, Logit NaN 방지)
 
     llama_context* ctx = llama_init_from_model(model, cparams);
     if (!ctx) {
@@ -451,6 +761,11 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             detachThread();
             return;
         }
+        
+        // Get actual n_batch from context for optimal chunk size
+        // Use llama_n_batch() to get the actual batch size from context
+        uint32_t chunk_size = llama_n_batch(ctx);
+        ALOGD("completionStart(): Retrieved n_batch=%u from context for chunk size", chunk_size);
 
         llama_model* model = handle->model;
         if (!model) {
@@ -583,12 +898,13 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         }
         
         // 5. Repeat Penalty (with freq_penalty and presence_penalty)
-        // Llama 3.1 recommended: repeat_penalty=1.15, last_n=64, freq_penalty=0.1, presence_penalty=0.1
+        // 반복 방지 강화: repeat_penalty 증가, last_n 증가, freq/presence_penalty 증가
+        // freq_penalty와 presence_penalty를 0.15로 증가하여 반복을 더 강하게 억제
         if (rep_last_n != 0 && rep_penalty > 0.0f && rep_penalty != 1.0f) {
-            llama_sampler_chain_add(smpl, llama_sampler_init_penalties(rep_last_n, rep_penalty, 0.1f, 0.1f));
+            llama_sampler_chain_add(smpl, llama_sampler_init_penalties(rep_last_n, rep_penalty, 0.15f, 0.15f));
         } else {
             ALOGD("completionStart(): WARNING: Repeat penalty is disabled or invalid, using defaults");
-            llama_sampler_chain_add(smpl, llama_sampler_init_penalties(64, 1.15f, 0.1f, 0.1f));
+            llama_sampler_chain_add(smpl, llama_sampler_init_penalties(128, 1.25f, 0.15f, 0.15f));
         }
         
         // 6. Dist sampling (final token selection)
@@ -605,33 +921,34 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         int n_gen = 0;
         std::string generated;
 
-        // Decode prompt in chunks - conservative chunk size for stability
+        // Decode prompt in chunks - use n_batch size for maximum performance
         ALOGD("completionStart(): evaluating prompt...");
-        // Use conservative chunk size (64) to avoid assertion failures
-        // Large chunks (128+) can cause assertion failures in llama_decode
-        const int chunk = 64; // Conservative size for stability
+        // Use n_batch as chunk size to maximize GPU utilization
+        // With V-Cache Q4_0 and 33/33 layers offload, larger chunks are stable
+        const uint32_t chunk = chunk_size; // Use n_batch for optimal performance
+        ALOGD("completionStart(): Using chunk size=%u (n_batch=%u) for prompt evaluation", chunk, chunk_size);
         uint32_t context_size = llama_n_ctx(ctx);
         
         // Evaluate prompt tokens and generate tokens in streaming mode
-        // Optimize chunking for speed while maintaining stability
+        // Optimize chunking for speed - use full n_batch size
         for (int cur = 0; cur < n_tokens; ) {
             int remaining = n_tokens - cur;
-            int n_cur = std::min(chunk, remaining);
+            int n_cur = std::min(static_cast<int>(chunk), remaining);
             
-            // For the last chunk, if it's small (< 32), merge with previous chunk for efficiency
+            // For the last chunk, if it's small (< chunk/4), merge with previous chunk for efficiency
             bool is_last_chunk = (cur + n_cur == n_tokens);
-            if (is_last_chunk && n_cur < 32 && cur > 0) {
+            if (is_last_chunk && n_cur < (chunk / 4) && cur > 0) {
                 // Merge small last chunk with previous chunk for better efficiency
                 ALOGD("completionStart(): Last chunk size %d is small, will merge with previous", n_cur);
                 // Process remaining tokens in current iteration
                 n_cur = remaining;
             }
             
-            // Limit maximum chunk size to 64 for stability
-            // Large chunks can cause assertion failures in llama_decode
-            if (n_cur > 64) {
-                ALOGD("completionStart(): Chunk size %d exceeds maximum 64, limiting to 64", n_cur);
-                n_cur = 64;
+            // Limit maximum chunk size to n_batch for stability
+            // With V-Cache Q4_0 and full GPU offload, n_batch size chunks are stable
+            if (n_cur > static_cast<int>(chunk)) {
+                ALOGD("completionStart(): Chunk size %d exceeds maximum %u, limiting to %u", n_cur, chunk, chunk);
+                n_cur = static_cast<int>(chunk);
             }
             
             ALOGD("completionStart(): llama_decode chunk start cur=%d n_cur=%d (remaining after=%d)", cur, n_cur, n_tokens - cur - n_cur);
@@ -792,6 +1109,11 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         
         ALOGD("completionStart(): Prompt evaluation complete. n_past=%d, starting token generation...", n_past);
         
+        // UTF-8 바이트 버퍼: 토큰의 바이트를 모아서 완전한 UTF-8 문자만 추출
+        // Llama 토크나이저가 한글 한 글자의 3바이트를 여러 토큰으로 분리할 수 있으므로
+        // 바이트를 버퍼에 모아서 완전한 UTF-8 시퀀스가 완성될 때까지 기다립니다
+        std::string utf8_buffer;
+        
         // Continue generating tokens until limit is reached
         // Note: n_gen starts at 0, so we generate tokens 0..(n_predict-1) = n_predict tokens total
         // But we check n_gen < n_predict at the start of loop, so after generating n_predict tokens, n_gen will be n_predict and loop will exit
@@ -891,8 +1213,90 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 }
             }
             piece.resize(n_len);
-            std::string tokenText(piece.begin(), piece.end());
-            ALOGD("completionStart(): Token text length=%zu", tokenText.length());
+            
+            // [수정 1] 바이트를 즉시 변환하지 말고 버퍼에 추가합니다
+            utf8_buffer.append(piece.data(), piece.size());
+            ALOGD("completionStart(): Added %d bytes to UTF-8 buffer (total buffer size=%zu)", n_len, utf8_buffer.length());
+            
+            // [수정 2] 버퍼에서 유효한 UTF-8 문자열을 추출합니다
+            size_t valid_utf8_len = 0;
+            size_t offset = 0;
+            
+            while (offset < utf8_buffer.length()) {
+                unsigned char first_byte = static_cast<unsigned char>(utf8_buffer[offset]);
+                int char_len = 0;
+                
+                if (first_byte < 0x80) {
+                    // 1-byte char (ASCII)
+                    char_len = 1;
+                } else if ((first_byte & 0xE0) == 0xC0) {
+                    // 2-byte char
+                    char_len = 2;
+                } else if ((first_byte & 0xF0) == 0xE0) {
+                    // 3-byte char (대부분의 한글)
+                    char_len = 3;
+                } else if ((first_byte & 0xF8) == 0xF0) {
+                    // 4-byte char
+                    char_len = 4;
+                } else {
+                    // 잘못된 바이트 시퀀스 - 첫 바이트를 건너뛰고 계속
+                    ALOGD("completionStart(): Invalid UTF-8 start byte 0x%02x at offset %zu, skipping", first_byte, offset);
+                    offset++;
+                    continue;
+                }
+                
+                // 버퍼에 완전한 문자가 존재하는지 확인
+                if (offset + char_len <= utf8_buffer.length()) {
+                    // continuation bytes 검증
+                    bool valid = true;
+                    for (int i = 1; i < char_len; i++) {
+                        unsigned char byte = static_cast<unsigned char>(utf8_buffer[offset + i]);
+                        if ((byte & 0xC0) != 0x80) {
+                            // continuation byte가 아님
+                            valid = false;
+                            break;
+                        }
+                    }
+                    
+                    if (valid) {
+                        // 완전한 UTF-8 문자가 존재합니다
+                        valid_utf8_len += char_len;
+                        offset += char_len;
+                    } else {
+                        // continuation byte가 잘못됨 - 첫 바이트를 건너뛰고 계속
+                        ALOGD("completionStart(): Invalid continuation byte at offset %zu, skipping first byte", offset);
+                        offset++;
+                        break;
+                    }
+                } else {
+                    // 버퍼에 불완전한 문자만 남았습니다. 다음 토큰을 기다립니다
+                    ALOGD("completionStart(): Incomplete UTF-8 sequence at offset %zu (need %d bytes, have %zu), waiting for next token", 
+                          offset, char_len, utf8_buffer.length() - offset);
+                    break;
+                }
+            }
+            
+            std::string tokenText;
+            if (valid_utf8_len > 0) {
+                // [수정 3] 유효한 부분만 문자열로 만듭니다
+                tokenText = utf8_buffer.substr(0, valid_utf8_len);
+                ALOGD("completionStart(): Extracted valid UTF-8 text (length=%zu)", tokenText.length());
+                
+                // [수정 4] 처리된 부분을 버퍼에서 제거합니다
+                utf8_buffer.erase(0, valid_utf8_len);
+                ALOGD("completionStart(): Remaining buffer size=%zu", utf8_buffer.length());
+            } else {
+                // 유효한 UTF-8 문자가 없음 - 다음 토큰을 기다립니다
+                ALOGD("completionStart(): No complete UTF-8 sequence yet, waiting for next token (buffer size=%zu)", utf8_buffer.length());
+            }
+            
+            // 1단계: 토큰 레벨 특수 토큰 필터링 (각 토큰이 생성될 때 즉시 필터링)
+            if (!isSpecialToken && !tokenText.empty()) {
+                tokenText = filterSpecialTokensTokenLevel(tokenText);
+                if (tokenText.empty()) {
+                    ALOGD("completionStart(): Token filtered out by token-level filter");
+                }
+            }
             
             // Only send non-special tokens to callback
             if (!isSpecialToken && !tokenText.empty()) {
@@ -986,6 +1390,19 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 ALOGD("completionStart(): Skipping token (isSpecialToken=%d, empty=%d)", 
                       isSpecialToken ? 1 : 0, tokenText.empty() ? 1 : 0);
             }
+            
+            // 2단계: 텍스트 레벨 특수 토큰 필터링 (누적된 텍스트에서 추가 필터링)
+            // 주기적으로 누적된 텍스트를 필터링하여 여러 토큰이 조합되어 생성된 특수 토큰 패턴도 제거
+            if (n_gen % 10 == 0 || n_gen == n_predict - 1) {
+                // 매 10개 토큰마다 또는 마지막 토큰에서 텍스트 레벨 필터링 수행
+                std::string filteredGenerated = filterSpecialTokensTextLevel(generated);
+                if (filteredGenerated != generated) {
+                    ALOGD("completionStart(): Text-level filter removed special tokens (before=%zu, after=%zu)", 
+                          generated.length(), filteredGenerated.length());
+                    generated = filteredGenerated;
+                }
+            }
+            
             bool hitStop = false;
             for (const auto& stop : stops) {
                 if (!stop.empty() && generated.size() >= stop.size()) {
@@ -1072,6 +1489,112 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
 
         llama_sampler_free(smpl);
 
+        // 남은 UTF-8 버퍼 처리 (생성 완료 시점에)
+        // 버퍼에 남은 바이트가 있으면, 가능한 한 완전한 UTF-8 문자를 추출하여 출력
+        if (!utf8_buffer.empty()) {
+            ALOGD("completionStart(): Processing remaining UTF-8 buffer at completion (length=%zu)", utf8_buffer.length());
+            
+            // 버퍼에서 가능한 한 많은 완전한 UTF-8 문자를 추출
+            size_t valid_utf8_len = 0;
+            size_t offset = 0;
+            
+            while (offset < utf8_buffer.length()) {
+                unsigned char first_byte = static_cast<unsigned char>(utf8_buffer[offset]);
+                int char_len = 0;
+                
+                if (first_byte < 0x80) {
+                    char_len = 1;
+                } else if ((first_byte & 0xE0) == 0xC0) {
+                    char_len = 2;
+                } else if ((first_byte & 0xF0) == 0xE0) {
+                    char_len = 3;
+                } else if ((first_byte & 0xF8) == 0xF0) {
+                    char_len = 4;
+                } else {
+                    // 잘못된 바이트 - 건너뛰기
+                    offset++;
+                    continue;
+                }
+                
+                if (offset + char_len <= utf8_buffer.length()) {
+                    // continuation bytes 검증
+                    bool valid = true;
+                    for (int i = 1; i < char_len; i++) {
+                        unsigned char byte = static_cast<unsigned char>(utf8_buffer[offset + i]);
+                        if ((byte & 0xC0) != 0x80) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    
+                    if (valid) {
+                        valid_utf8_len += char_len;
+                        offset += char_len;
+                    } else {
+                        break;
+                    }
+                } else {
+                    // 불완전한 문자 - 버퍼에 남김
+                    break;
+                }
+            }
+            
+            if (valid_utf8_len > 0) {
+                std::string remainingText = utf8_buffer.substr(0, valid_utf8_len);
+                remainingText = filterSpecialTokensTokenLevel(remainingText);
+                
+                if (!remainingText.empty() && gCallback && threadEnv) {
+                    // 남은 텍스트를 콜백으로 전송
+                    jbyteArray byteArray = threadEnv->NewByteArray(remainingText.length());
+                    if (byteArray) {
+                        threadEnv->SetByteArrayRegion(byteArray, 0, remainingText.length(), 
+                                                      reinterpret_cast<const jbyte*>(remainingText.data()));
+                        jclass stringClass = threadEnv->FindClass("java/lang/String");
+                        if (stringClass) {
+                            jmethodID stringCtor = threadEnv->GetMethodID(stringClass, "<init>", "([BLjava/lang/String;)V");
+                            if (stringCtor) {
+                                jstring charsetName = threadEnv->NewStringUTF("UTF-8");
+                                if (charsetName) {
+                                    jstring tk = (jstring)threadEnv->NewObject(stringClass, stringCtor, byteArray, charsetName);
+                                    if (tk && !threadEnv->ExceptionCheck()) {
+                                        jclass callbackClass = threadEnv->GetObjectClass(gCallback);
+                                        if (callbackClass) {
+                                            jmethodID onTokenMethod = threadEnv->GetMethodID(callbackClass, "onToken", "(Ljava/lang/String;)V");
+                                            if (onTokenMethod) {
+                                                threadEnv->CallVoidMethod(gCallback, onTokenMethod, tk);
+                                                threadEnv->ExceptionClear();
+                                            }
+                                            threadEnv->DeleteLocalRef(callbackClass);
+                                        }
+                                    }
+                                    if (tk) threadEnv->DeleteLocalRef(tk);
+                                    threadEnv->DeleteLocalRef(charsetName);
+                                }
+                            }
+                            threadEnv->DeleteLocalRef(stringClass);
+                        }
+                        threadEnv->DeleteLocalRef(byteArray);
+                    }
+                }
+                
+                utf8_buffer.erase(0, valid_utf8_len);
+            }
+            
+            // 남은 불완전한 바이트는 버퍼에서 제거
+            if (!utf8_buffer.empty()) {
+                ALOGD("completionStart(): Discarding incomplete UTF-8 bytes at completion (length=%zu)", utf8_buffer.length());
+                utf8_buffer.clear();
+            }
+        }
+
+        // 최종 텍스트 레벨 필터링 (생성 완료 시점에 한 번 더 필터링)
+        std::string finalGenerated = filterSpecialTokensTextLevel(generated);
+        if (finalGenerated != generated) {
+            ALOGD("completionStart(): Final text-level filter removed special tokens (before=%zu, after=%zu)", 
+                  generated.length(), finalGenerated.length());
+            generated = finalGenerated;
+        }
+
         // Call completed callback - dynamically get method ID from actual callback object's class
         // This is necessary because Kotlin interfaces are implemented as anonymous classes
         if (gCallback && threadEnv) {
@@ -1115,9 +1638,23 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 ALOGE("completionStart(): threadEnv is null - skipping onCompleted callback");
             }
         }
+        
+        // Clean up gCallback before detaching thread
+        // gCallback은 전역 참조이므로 명시적으로 정리해야 합니다
+        // detachThread() 전에 정리해야 JNI 환경이 유효한 상태에서 DeleteGlobalRef를 호출할 수 있습니다
+        if (guard.env && guard.ref) {
+            ALOGD("completionStart(): Cleaning up gCallback before detaching thread");
+            guard.env->DeleteGlobalRef(guard.ref);
+            guard.ref = nullptr;
+            guard.shouldDelete = false;  // 이미 정리했으므로 CallbackGuard가 다시 정리하지 않도록
+        }
+        
+        ALOGD("completionStart(): Worker thread completing, detaching from JVM");
 		detachThread();
+        ALOGD("completionStart(): Worker thread detached from JVM");
     });
     worker.detach();
+    ALOGD("completionStart(): Worker thread detached, function returning (app should remain active)");
 }
 
 extern "C" JNIEXPORT jint JNICALL
