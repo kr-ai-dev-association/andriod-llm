@@ -96,7 +96,7 @@ class ChatRepository(private val app: Application) {
 			nCtx = 512, // Increased from 256 to accommodate longer prompts
 			nThreads = 8,
 			nBatch = 16, // Stable value
-			nGpuLayers = 29, // Reduced from 30 to test if 30th layer causes crashes
+			nGpuLayers = 31, // Increased to 31 for maximum GPU offloading
 			useMmap = false, // Disable mmap to avoid conflicts with Vulkan GPU offloading
 			useMlock = false,
 			seed = 0,
@@ -135,18 +135,18 @@ class ChatRepository(private val app: Application) {
 			return@withContext
 		}
 		try {
-			LlamaBridge.completionStart(
-				handle = handle,
-				prompt = prompt,
-				numPredict = 100,
-				temperature = 0.3f,  // 한국어 생성 안정성을 위해 낮춤 (0.6 -> 0.3)
-				topP = 0.85f,       // 한국어 생성 안정성을 위해 낮춤 (0.9 -> 0.85)
-				topK = 0,           // iOS와 동일: 0 (비활성화)
-				repeatPenalty = 1.2f,  // 반복 억제 강화 (1.15 -> 1.2)
-				repeatLastN = 64,   // iOS와 동일: 64
-				stopSequences = emptyArray(),
-				callback = callback
-			)
+		LlamaBridge.completionStart(
+			handle = handle,
+			prompt = prompt,
+			numPredict = 100,
+			temperature = 0.6f,  // Llama 3.1 권장값: 0.6 (문맥과 다양성의 균형)
+			topP = 0.9f,         // Llama 3.1 권장값: 0.9 (Top-P + Min-P 조합)
+			topK = 0,            // Llama 3.1 권장: Top-K 비활성화 (Top-P + Min-P 사용)
+			repeatPenalty = 1.15f,  // Llama 3.1 권장값: 1.15
+			repeatLastN = 64,   // Llama 3.1 권장값: 64
+			stopSequences = emptyArray(),
+			callback = callback
+		)
 			Log.d("BanyaChat", "generateStream(): completionStart dispatched")
 		} catch (t: Throwable) {
 			Log.e("BanyaChat", "generateStream(): completionStart error -> stub fallback: ${t.message}", t)
@@ -155,13 +155,9 @@ class ChatRepository(private val app: Application) {
 	}
 
 	private fun formatPrompt(messages: List<ChatMessage>): String {
-		val systemPrompt = """너는 10대 발달장애인의 일상을 돕는 한국어 에이전트다. 
-
-중요: 모든 대답은 반드시 한국어로만 해야 한다. 영어, 중국어, 일본어 등 다른 언어는 절대 사용하지 않는다. 한국어가 아닌 언어를 사용하면 안 된다.
-
-말은 간단하고 짧게 한다. 한 번에 한 단계씩 안내한다. 위급한 상황이라고 판단될 경우 즉시 보호자나 119에 연락하도록 안내한다. 복잡한 요청은 다시 확인하고 필요한 정보를 먼저 묻는다. 일정 관리, 준비물 체크, 이동 안내, 감정 조절 도움, 사회적 상황 대처 연습을 친절하게 돕는다. 물결표와 이모티콘, 과도한 문장부호(!!!, .. 등)는 사용하지 않는다. 문장부호는 최대 1개만 사용한다.
-
-예시 응답: "안녕하세요. 무엇을 도와드릴까요?" (한국어로만 응답)"""
+			// Simplified system prompt for better context understanding
+		// Too long and complex prompts can confuse the model and lead to random token generation
+		val systemPrompt = """너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다. 사용자의 질문에 자연스럽고 의미 있는 한국어로 답변하세요."""
 		val sb = StringBuilder()
 		sb.append("<|begin_of_text|>")
 		sb.append("<|start_header_id|>system<|end_header_id|>\n\n")

@@ -209,15 +209,12 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
     // Reduced micro-batch size to minimize memory pressure and Vulkan operations
     // Lower n_ubatch reduces concurrent GPU operations, improving stability on Adreno 830
     cparams.n_ubatch = 2;  // Restored to stable value (was 1, but may cause issues)
-    // Enable Flash Attention to support V cache quantization
-    // Flash Attention may cause shader linking failures on some Adreno GPUs, but we attempt it
-    // to enable full KV Cache quantization (both K and V to Q4_0)
+    // TEST: V-Cache Q4_0 양자화가 무작위 토큰 생성의 원인인지 확인하기 위한 테스트
+    // V-Cache만 F16으로 되돌려서 문제를 분리합니다
+    // 만약 이 변경으로 정상적인 텍스트가 생성된다면, V-Cache Q4_0 처리 과정(패딩 또는 디퀀타이즈 커널)에 문제가 있음이 확정됩니다
     cparams.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_AUTO;
-    // Enable full KV Cache quantization to Q4_0 to maximize VRAM savings
-    // Both K and V cache are quantized to Q4_0, reducing total KV Cache memory by ~75%
-    // This should allow more GPU layers to be offloaded (29+ layers)
-    cparams.type_k = GGML_TYPE_Q4_0;  // Quantize K cache to Q4_0
-    cparams.type_v = GGML_TYPE_Q4_0;  // Quantize V cache to Q4_0 (requires Flash Attention)
+    cparams.type_k = GGML_TYPE_Q4_0;  // K-Cache는 Q4_0 유지
+    cparams.type_v = GGML_TYPE_F16;   // V-Cache를 F16으로 복원 (테스트용)
 
     llama_context* ctx = llama_init_from_model(model, cparams);
     if (!ctx) {
@@ -386,10 +383,10 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
 
     // Defaults if invalid values are passed
     int n_predict = (numPredict > 0) ? numPredict : 100;
-    float temp = (temperature > 0.0f) ? temperature : 0.3f;
-    float top_p = (topP > 0.0f) ? topP : 0.85f;
-    int top_k = (topK > 0) ? topK : 50;
-    float rep_penalty = (repeatPenalty > 0.0f) ? repeatPenalty : 1.2f;
+    float temp = (temperature > 0.0f) ? temperature : 0.7f;  // Llama 3.1 기본값에 가까운 값
+    float top_p = (topP > 0.0f) ? topP : 0.9f;  // Llama 3.1 권장값
+    int top_k = (topK > 0) ? topK : 40;  // Llama 3.1 기본값
+    float rep_penalty = (repeatPenalty > 0.0f) ? repeatPenalty : 1.1f;  // 한국어 튜닝 모델에 적합한 값
     int rep_last_n = (repeatLastN > 0) ? repeatLastN : 256;
     std::vector<std::string> stops;
     if (jStopSequences) {
@@ -533,74 +530,108 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                       (int)prompt_tokens[n_tokens-2],
                       (int)prompt_tokens[n_tokens-1]);
             }
+            // Log actual token text for first and last tokens to verify prompt
+            char first_token_text[256];
+            int first_len = llama_token_to_piece(vocab, prompt_tokens[0], first_token_text, sizeof(first_token_text), false, false);
+            if (first_len > 0 && first_len < 256) {
+                first_token_text[first_len] = '\0';
+                ALOGD("completionStart(): First token text: '%s' (id=%d)", first_token_text, (int)prompt_tokens[0]);
+            }
+            char last_token_text[256];
+            int last_len = llama_token_to_piece(vocab, prompt_tokens[n_tokens-1], last_token_text, sizeof(last_token_text), false, false);
+            if (last_len > 0 && last_len < 256) {
+                last_token_text[last_len] = '\0';
+                ALOGD("completionStart(): Last token text: '%s' (id=%d)", last_token_text, (int)prompt_tokens[n_tokens-1]);
+            }
         }
 
         // Create sampler chain matching iOS implementation (Llama 3.1 optimized)
         auto sparams = llama_sampler_chain_default_params();
         llama_sampler * smpl = llama_sampler_chain_init(sparams);
         
-        // 1. Top-K (0 = disabled, as per iOS)
+        // Llama 3.1 optimized sampling chain (matching iOS implementation)
+        // Order is critical: Top-P -> Min-P -> Temperature -> Repeat Penalty -> Dist
+        
+        // 1. Top-K (0 = disabled, Llama 3.1 recommendation: use Top-P + Min-P instead)
+        // Top-K is disabled for Llama 3.1 as it works better with Top-P + Min-P combination
         if (top_k > 0) {
+            ALOGD("completionStart(): WARNING: Top-K is enabled (%d) but Llama 3.1 recommends Top-K=0 (use Top-P + Min-P)", top_k);
             llama_sampler_chain_add(smpl, llama_sampler_init_top_k(top_k));
         }
         
-        // 2. Top-P (Nucleus Sampling)
+        // 2. Top-P (Nucleus Sampling) - Llama 3.1 recommended: 0.9
+        // Keeps tokens with cumulative probability up to top_p
         if (top_p > 0.0f && top_p < 1.0f) {
             llama_sampler_chain_add(smpl, llama_sampler_init_top_p(top_p, 1));
+        } else {
+            ALOGD("completionStart(): WARNING: Top-P is disabled or invalid (%.2f), using default 0.9", top_p);
+            llama_sampler_chain_add(smpl, llama_sampler_init_top_p(0.9f, 1));
         }
         
         // 3. Min-P (Llama 3.1 key setting - exclude low probability tokens)
+        // Removes tokens with probability less than min_p * max_probability
+        // This is critical for Llama 3.1 quality
         llama_sampler_chain_add(smpl, llama_sampler_init_min_p(0.05f, 1));
         
-        // 4. Temperature
+        // 4. Temperature - Llama 3.1 recommended: 0.6
+        // Lower temperature = more deterministic, less repetition
         if (temp > 0.0f && temp != 1.0f) {
             llama_sampler_chain_add(smpl, llama_sampler_init_temp(temp));
+        } else {
+            ALOGD("completionStart(): WARNING: Temperature is disabled or invalid (%.2f), using default 0.6", temp);
+            llama_sampler_chain_add(smpl, llama_sampler_init_temp(0.6f));
         }
         
-        // 5. Repeat Penalty (with freq_penalty and presence_penalty as per iOS)
+        // 5. Repeat Penalty (with freq_penalty and presence_penalty)
+        // Llama 3.1 recommended: repeat_penalty=1.15, last_n=64, freq_penalty=0.1, presence_penalty=0.1
         if (rep_last_n != 0 && rep_penalty > 0.0f && rep_penalty != 1.0f) {
             llama_sampler_chain_add(smpl, llama_sampler_init_penalties(rep_last_n, rep_penalty, 0.1f, 0.1f));
+        } else {
+            ALOGD("completionStart(): WARNING: Repeat penalty is disabled or invalid, using defaults");
+            llama_sampler_chain_add(smpl, llama_sampler_init_penalties(64, 1.15f, 0.1f, 0.1f));
         }
         
         // 6. Dist sampling (final token selection)
+        // Random seed for diversity
         llama_sampler_chain_add(smpl, llama_sampler_init_dist(static_cast<uint32_t>(std::random_device{}())));
+        
+        ALOGD("completionStart(): Sampling chain configured: Top-K=%d, Top-P=%.2f, Min-P=0.05, Temp=%.2f, Repeat=%d/%.2f",
+              top_k, top_p, temp, rep_last_n, rep_penalty);
+        ALOGD("completionStart(): Sampling parameters: top_k=%d, top_p=%.3f, temp=%.3f, rep_penalty=%.3f, rep_last_n=%d",
+              top_k, top_p, temp, rep_penalty, rep_last_n);
 
         // Main generation loop - evaluate prompt and generate tokens in streaming mode
         int n_past = 0;
         int n_gen = 0;
         std::string generated;
 
-        // Decode prompt in small chunks to reduce peak memory usage
+        // Decode prompt in chunks - conservative chunk size for stability
         ALOGD("completionStart(): evaluating prompt...");
-        const int chunk = 16; // Reduced from 32 to 16 to minimize CPU processing time and memory pressure
+        // Use conservative chunk size (64) to avoid assertion failures
+        // Large chunks (128+) can cause assertion failures in llama_decode
+        const int chunk = 64; // Conservative size for stability
         uint32_t context_size = llama_n_ctx(ctx);
         
         // Evaluate prompt tokens and generate tokens in streaming mode
-        // If the last chunk is too small (< 8 tokens), merge it with the previous chunk to avoid Vulkan backend issues
+        // Optimize chunking for speed while maintaining stability
         for (int cur = 0; cur < n_tokens; ) {
             int remaining = n_tokens - cur;
             int n_cur = std::min(chunk, remaining);
             
-            // Always merge remaining tokens if they would form a small last chunk (< 200 tokens)
-            // This prevents the last chunk from being too small, which causes Vulkan backend to hang
-            // We use a very high threshold to ensure all remaining tokens are merged
-            int next_remaining = remaining - n_cur;
-            if (next_remaining > 0 && next_remaining < 200) {
-                ALOGD("completionStart(): Next chunk would be too small (%d tokens), merging with current chunk", next_remaining);
-                n_cur = remaining;  // Merge with current chunk to avoid small last chunk
-            }
-            // For the last chunk, if it's still too large (> 16), split it into smaller pieces
-            // This is a workaround for pipeline failures that occur with larger last chunks
+            // For the last chunk, if it's small (< 32), merge with previous chunk for efficiency
             bool is_last_chunk = (cur + n_cur == n_tokens);
-            if (is_last_chunk && n_cur > 16) {
-                ALOGD("completionStart(): Last chunk size %d is too large, will process in smaller pieces", n_cur);
-                // Process it in smaller pieces by limiting n_cur to 16
-                n_cur = 16;  // Process first 16 tokens, remaining will be handled in next iteration
+            if (is_last_chunk && n_cur < 32 && cur > 0) {
+                // Merge small last chunk with previous chunk for better efficiency
+                ALOGD("completionStart(): Last chunk size %d is small, will merge with previous", n_cur);
+                // Process remaining tokens in current iteration
+                n_cur = remaining;
             }
-            // Limit maximum chunk size to 20 to avoid Vulkan pipeline issues
-            if (n_cur > 20) {
-                ALOGD("completionStart(): Chunk size %d exceeds maximum 20, limiting to 20", n_cur);
-                n_cur = 20;
+            
+            // Limit maximum chunk size to 64 for stability
+            // Large chunks can cause assertion failures in llama_decode
+            if (n_cur > 64) {
+                ALOGD("completionStart(): Chunk size %d exceeds maximum 64, limiting to 64", n_cur);
+                n_cur = 64;
             }
             
             ALOGD("completionStart(): llama_decode chunk start cur=%d n_cur=%d (remaining after=%d)", cur, n_cur, n_tokens - cur - n_cur);
@@ -724,6 +755,34 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 ALOGD("completionStart(): llama_decode() returned %d for last token", last_decode_result);
                 if (last_decode_result != 0) {
                     ALOGE("completionStart(): Failed to decode last token for logits, result=%d", last_decode_result);
+                } else {
+                    // Verify logits are available after decoding last token
+                    const float* last_logits = llama_get_logits_ith(ctx, 0);
+                    if (last_logits) {
+                        ALOGD("completionStart(): Logits available after last token decode (idx=0)");
+                        // Log top 3 logits for verification
+                        const llama_model* model = llama_get_model(ctx);
+                        const llama_vocab* vocab = llama_model_get_vocab(model);
+                        const int n_vocab = llama_vocab_n_tokens(vocab);
+                        std::vector<std::pair<float, llama_token>> candidates;
+                        for (llama_token token_id = 0; token_id < n_vocab; token_id++) {
+                            candidates.push_back({last_logits[token_id], token_id});
+                        }
+                        std::sort(candidates.begin(), candidates.end(), 
+                            [](const std::pair<float, llama_token>& a, const std::pair<float, llama_token>& b) {
+                                return a.first > b.first;
+                            });
+                        ALOGD("completionStart(): Top 3 logits after last prompt token decode:");
+                        for (int i = 0; i < 3 && i < (int)candidates.size(); i++) {
+                            char token_text[256];
+                            int n_len = llama_token_to_piece(vocab, candidates[i].second, token_text, sizeof(token_text), false, false);
+                            token_text[n_len] = '\0';
+                            ALOGD("completionStart():   [%d] id=%d, logit=%.3f, text='%s'", 
+                                  i, (int)candidates[i].second, candidates[i].first, token_text);
+                        }
+                    } else {
+                        ALOGE("completionStart(): Logits NOT available after last token decode (idx=0)");
+                    }
                 }
                 llama_batch_free(last_token_batch);
             } else {
@@ -734,7 +793,14 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         ALOGD("completionStart(): Prompt evaluation complete. n_past=%d, starting token generation...", n_past);
         
         // Continue generating tokens until limit is reached
+        // Note: n_gen starts at 0, so we generate tokens 0..(n_predict-1) = n_predict tokens total
+        // But we check n_gen < n_predict at the start of loop, so after generating n_predict tokens, n_gen will be n_predict and loop will exit
         while (n_past < context_size && n_gen < n_predict) {
+            // Check limit before generating token to ensure we don't exceed n_predict
+            if (n_gen >= n_predict) {
+                ALOGD("completionStart(): Reached token limit (n_gen=%d >= n_predict=%d), breaking", n_gen, n_predict);
+                break;
+            }
             ALOGD("completionStart(): Loop iteration n_gen=%d, n_past=%d", n_gen, n_past);
             if (handle->stopRequested) {
                 ALOGD("completionStart(): Stop requested, breaking");
@@ -746,8 +812,52 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             // For subsequent tokens, use idx=0 to get logits from the most recent decode
             int32_t logits_idx = 0;  // Changed from -1 to 0 since we decoded the last token separately
             ALOGD("completionStart(): Calling llama_sampler_sample() with idx=%d (n_gen=%d, n_past=%d)", logits_idx, n_gen, n_past);
+            
+            // Check if logits are available before sampling
+            const float* logits_check = llama_get_logits_ith(ctx, logits_idx);
+            if (!logits_check) {
+                ALOGE("completionStart(): logits are null for idx=%d, cannot sample token", logits_idx);
+                jstring err = threadEnv->NewStringUTF("Logits not available");
+                if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
+                    threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                    if (threadEnv->ExceptionCheck()) {
+                        ALOGE("completionStart(): Exception in error callback - clearing");
+                        threadEnv->ExceptionClear();
+                    }
+                }
+                threadEnv->DeleteLocalRef(err);
+                break;
+            }
+            
+            // REMOVED: Korean token boosting - this was interfering with context understanding
+            // The model should generate tokens based on context, not forced language preference
+            // Let the system prompt and model's natural understanding guide token selection
+            
             llama_token id = llama_sampler_sample(smpl, ctx, logits_idx);
             ALOGD("completionStart(): llama_sampler_sample() returned id=%d (n_gen=%d)", (int)id, n_gen);
+            
+            // Log top 5 candidate tokens for analysis (for debugging context understanding)
+            if (logits_check) {
+                const llama_model* model = llama_get_model(ctx);
+                const llama_vocab* vocab = llama_model_get_vocab(model);
+                const int n_vocab = llama_vocab_n_tokens(vocab);
+                std::vector<std::pair<float, llama_token>> candidates;
+                for (llama_token token_id = 0; token_id < n_vocab; token_id++) {
+                    candidates.push_back({logits_check[token_id], token_id});
+                }
+                std::sort(candidates.begin(), candidates.end(), 
+                    [](const std::pair<float, llama_token>& a, const std::pair<float, llama_token>& b) {
+                        return a.first > b.first;
+                    });
+                ALOGD("completionStart(): Top 5 candidate tokens (context-based):");
+                for (int i = 0; i < 5 && i < (int)candidates.size(); i++) {
+                    char token_text[256];
+                    int n_len = llama_token_to_piece(vocab, candidates[i].second, token_text, sizeof(token_text), false, false);
+                    token_text[n_len] = '\0';
+                    ALOGD("completionStart():   [%d] id=%d, logit=%.3f, text='%s'", 
+                          i, (int)candidates[i].second, candidates[i].first, token_text);
+                }
+            }
             llama_sampler_accept(smpl, id);
             ALOGD("completionStart(): llama_sampler_accept() completed");
 
@@ -788,7 +898,38 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             if (!isSpecialToken && !tokenText.empty()) {
                 ALOGD("completionStart(): Token text='%s' (length=%zu), creating JNI string and calling callback", 
                       tokenText.c_str(), tokenText.length());
-                jstring tk = threadEnv->NewStringUTF(tokenText.c_str());
+                
+                // Convert UTF-8 to JNI string safely
+                // NewStringUTF requires Modified UTF-8 which can fail for invalid UTF-8 bytes
+                // Use byte array method which handles any UTF-8 bytes safely
+                jstring tk = nullptr;
+                
+                // Create byte array from UTF-8 bytes and convert to String via Java
+                jbyteArray byteArray = threadEnv->NewByteArray(tokenText.length());
+                if (byteArray) {
+                    threadEnv->SetByteArrayRegion(byteArray, 0, tokenText.length(), 
+                                                  reinterpret_cast<const jbyte*>(tokenText.data()));
+                    // Call Java method to convert byte array to String using UTF-8 charset
+                    jclass stringClass = threadEnv->FindClass("java/lang/String");
+                    if (stringClass) {
+                        jmethodID stringCtor = threadEnv->GetMethodID(stringClass, "<init>", "([BLjava/lang/String;)V");
+                        if (stringCtor) {
+                            jstring charsetName = threadEnv->NewStringUTF("UTF-8");
+                            if (charsetName) {
+                                tk = (jstring)threadEnv->NewObject(stringClass, stringCtor, byteArray, charsetName);
+                                if (threadEnv->ExceptionCheck()) {
+                                    ALOGE("completionStart(): Exception creating String from byte array");
+                                    threadEnv->ExceptionClear();
+                                    tk = nullptr;
+                                }
+                                threadEnv->DeleteLocalRef(charsetName);
+                            }
+                        }
+                        threadEnv->DeleteLocalRef(stringClass);
+                    }
+                    threadEnv->DeleteLocalRef(byteArray);
+                }
+                
                 if (tk) {
                     // For Kotlin interfaces, each implementation is a different anonymous class.
                     // We need to get the method ID from the actual callback object's class.
@@ -857,6 +998,12 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
 
             n_gen++;
             ALOGD("completionStart(): Incremented n_gen to %d", n_gen);
+            
+            // Check if we've reached the token limit after incrementing
+            if (n_gen >= n_predict) {
+                ALOGD("completionStart(): Reached token limit (n_gen=%d >= n_predict=%d), breaking before decode", n_gen, n_predict);
+                break;
+            }
 
             // Prepare and run next decode with a single token
             ALOGD("completionStart(): Initializing llama_batch");
