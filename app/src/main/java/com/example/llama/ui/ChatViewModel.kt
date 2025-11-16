@@ -253,8 +253,6 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 			}
 			
 			// Automatically send test question when model load completes successfully
-			// 테스트 종료를 위해 주석 처리
-			/*
 			if (modelLoadSuccess && _uiState.value.messages.isEmpty()) {
 				// Only send test question if no messages exist yet (first load)
 				mainHandler.post {
@@ -262,7 +260,6 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 					send("대한민국 대통령은 누구야?")
 				}
 			}
-			*/
 		}
 	}
 
@@ -508,11 +505,11 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 						// 검색 결과가 있는 경우: 검색 결과를 바탕으로 답변 생성
 						Log.d("BanyaChat", "RAG: Search completed, found ${searchResults.size} results")
 						
-						// 검색 결과를 하나의 문자열로 가공 (프롬프트 평가 속도 향상을 위해 150자로 제한)
-						val searchContext = searchResults.joinToString("\n") { result ->
+						// 검색 결과를 하나의 문자열로 가공 (내용을 300자로 제한하여 프롬프트 길이 단축, 컨텍스트 크기 512 제한 고려)
+						val searchContext = searchResults.joinToString("\n\n") { result ->
 							val content = result.content ?: "N/A"
-							val truncatedContent = if (content.length > 150) content.substring(0, 150) + "..." else content
-							truncatedContent
+							val truncatedContent = if (content.length > 300) content.substring(0, 300) + "..." else content
+							"제목: ${result.title ?: "N/A"}\n내용: $truncatedContent"
 						}
 
 						// 검색 결과 기반 답변 생성

@@ -46,14 +46,12 @@ android {
                 // Use GGML_ prefixed flags for subproject options
                 arguments(
                     "-DUSE_LLAMA=ON",
-                    "-DGGML_VULKAN=ON",  // Re-enable Vulkan for Q4_0 model (Q4_K had shader issues)
-                    "-DGGML_VULKAN_USE_VOLK=ON",
+                    "-DGGML_VULKAN=OFF",  // Disabled: Testing OpenCL with android_dlopen_ext
+                    "-DGGML_OPENCL=ON",   // Enabled: Using android_dlopen_ext to bypass namespace restrictions
                     "-DGGML_K_QUANTS=ON",
+                    "-DOPENCL_INCLUDE_DIR=${project.projectDir}/../third_party/OpenCL-Headers",
                     "-DCMAKE_MAKE_PROGRAM=${android.sdkDirectory}/cmake/3.22.1/bin/ninja",
-                    "-DCMAKE_PROGRAM_PATH=${android.sdkDirectory}/cmake/3.22.1/bin",
-                    "-DVulkan_GLSLC_EXECUTABLE=${android.ndkDirectory}/shader-tools/$hostTag/glslc",
-                    "-DVulkan_INCLUDE_DIR=${project.projectDir}/third_party/Vulkan-Headers/include",
-                    "-DCMAKE_INCLUDE_PATH=${project.projectDir}/third_party/Vulkan-Headers/include"
+                    "-DCMAKE_PROGRAM_PATH=${android.sdkDirectory}/cmake/3.22.1/bin"
                 )
             }
         }

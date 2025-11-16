@@ -14,6 +14,11 @@
     <!-- Permission for RAG system to access Tavily API -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- GPU hardware feature declaration for OpenCL access -->
+    <uses-feature
+        android:name="android.hardware.opengles.aep"
+        android:required="true" />
+
     <permission
         android:name="com.example.llama.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
         android:protectionLevel="signature" />

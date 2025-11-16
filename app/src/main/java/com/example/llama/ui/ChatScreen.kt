@@ -96,7 +96,7 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 	Box(
 		modifier = Modifier
 			.fillMaxSize()
-			.background(
+					.background(
 				Brush.verticalGradient(
 					colors = listOf(
 						Color(0xFFE8D5FF), // 라이트 퍼플
@@ -104,7 +104,7 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 					)
 				)
 			)
-	) {
+			) {
 		Column(
 			modifier = Modifier.fillMaxSize()
 		) {
@@ -121,13 +121,13 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 			)
 
 			// 메시지 리스트
-			LazyColumn(
-				modifier = Modifier
-					.weight(1f)
+		LazyColumn(
+			modifier = Modifier
+				.weight(1f)
 					.fillMaxWidth(),
 				contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp, vertical = 8.dp),
 				verticalArrangement = Arrangement.spacedBy(12.dp)
-			) {
+		) {
 				items(uiState.messages.size) { index ->
 					val msg = uiState.messages[index]
 					val isLastMessage = index == uiState.messages.size - 1
@@ -141,13 +141,13 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 				text = text.value,
 				onTextChange = { text.value = it },
 			onSend = {
-				if (uiState.loadProgress == 100 && !uiState.isGenerating && text.value.isNotBlank()) {
+					if (uiState.loadProgress == 100 && !uiState.isGenerating && text.value.isNotBlank()) {
 					Log.d("BanyaChat", "ChatScreen: onSend called with text='${text.value}'")
 					Log.d("BanyaChat", "ChatScreen: loadProgress=${uiState.loadProgress}, isGenerating=${uiState.isGenerating}")
-					vm.send(text.value)
-					text.value = ""
-					keyboardController?.hide()
-				} else {
+						vm.send(text.value)
+						text.value = ""
+						keyboardController?.hide()
+					} else {
 					Log.d("BanyaChat", "ChatScreen: onSend blocked - loadProgress=${uiState.loadProgress}, isGenerating=${uiState.isGenerating}, text.isNotBlank=${text.value.isNotBlank()}")
 				}
 			},
@@ -408,7 +408,7 @@ private fun ChatInputBar(
 				.weight(1f)
 				.height(56.dp),
 			placeholder = { 
-				Text(
+		Text(
 					"메시지를 입력하세요", 
 					fontSize = 14.sp,
 					lineHeight = 20.sp

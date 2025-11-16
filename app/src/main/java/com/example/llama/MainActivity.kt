@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
 			MaterialTheme {
 				SafeAreaSurface {
 					SplashScreen {
-						ChatScreen()
+					ChatScreen()
 					}
 				}
 			}
