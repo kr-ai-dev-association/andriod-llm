@@ -98,7 +98,7 @@ class ChatRepository(private val app: Application) {
 		// - Increased context size to 512 to accommodate longer prompts (289 tokens)
 		handle = LlamaBridge.init(
 			modelPath = modelPath,
-			nCtx = 2048, // Increased to accommodate longer prompts and longer responses
+			nCtx = 1536, // Increased to accommodate longer prompts with RAG (balanced between 1024 and 2048)
 			nThreads = 8,
 			nBatch = 128, // Increased for better GPU utilization (KV cache now on GPU)
 			nGpuLayers = 32, // Maximum GPU layers for optimal performance
@@ -154,7 +154,7 @@ class ChatRepository(private val app: Application) {
 		LlamaBridge.completionStart(
 			handle = handle,
 			prompt = prompt,
-			numPredict = 2048,  // 최대 토큰 생성 길이 증가 (더 긴 답변 생성 가능)
+			numPredict = 1024,  // EOT 토큰이 생성되지 않는 경우를 대비한 안전망 (넉넉하게 설정)
 			temperature = 0.7f,  // 반복 감소를 위해 다양성 증가 (0.6 → 0.7)
 			topP = 0.9f,         // Llama 3.1 권장값: 0.9 (Top-P + Min-P 조합)
 			topK = 0,            // Llama 3.1 권장: Top-K 비활성화 (Top-P + Min-P 사용)

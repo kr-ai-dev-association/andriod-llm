@@ -971,10 +971,10 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
     env->ReleaseStringUTFChars(jPrompt, prompt);
 
     // Defaults if invalid values are passed
-    // n_predict를 2048로 설정하여 더 긴 답변 생성 가능
+    // n_predict를 1024로 넉넉하게 설정하여 EOT 토큰이 생성되지 않는 경우를 대비한 안전망
     // EOT 토큰(128009)이 최우선 정지 신호이므로, n_predict는 최종 안전장치 역할만 수행
     // EOT 토큰이 제대로 작동한다면 모델은 n_predict에 도달하기 훨씬 전에 스스로 멈춤
-    int n_predict = (numPredict > 0) ? numPredict : 2048;
+    int n_predict = (numPredict > 0) ? numPredict : 1024;
     float temp = (temperature > 0.0f) ? temperature : 0.7f;  // Llama 3.1 기본값에 가까운 값
     float top_p = (topP > 0.0f) ? topP : 0.9f;  // Llama 3.1 권장값
     int top_k = (topK > 0) ? topK : 40;  // Llama 3.1 기본값
