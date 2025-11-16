@@ -352,18 +352,14 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 		// 5. 위의 조건에 해당하지 않는 모든 입력은 RAG 시스템으로 전달.
 		Log.d("BanyaChat", "ChatViewModel.send(): Not a greeting, starting RAG process")
 		
-		// 세션 관리: 메시지 리스트가 너무 길어지면 제한
-		val currentMessages = _uiState.value.messages
-		val limitedMessages = limitMessagesForSession(currentMessages)
-		if (limitedMessages.size < currentMessages.size) {
-			// 메시지가 제한되었으면 UI 상태 업데이트
-			_uiState.value = _uiState.value.copy(messages = limitedMessages)
-			Log.d("BanyaChat", "Session management: Limited messages from ${currentMessages.size} to ${limitedMessages.size}")
-		}
+		// 세션 관리: 각 사용자 질의마다 새로운 세션 시작 (메모리 과부하 방지)
+		// UI에는 모든 대화를 표시하지만, 프롬프트 생성 시에는 현재 질의만 사용
+		// 이전 대화 기록은 UI 표시용으로만 유지하고, 실제 LLM 호출 시에는 제외
 		
 		// Add user message
 		_uiState.value = _uiState.value.addMessage(ChatMessage(text = userText, isUser = true))
 		Log.d("BanyaChat", "ChatViewModel.send(): User message added to UI state")
+		Log.d("BanyaChat", "Session management: Starting new session for this query (previous context will be excluded)")
 		// Start RAG process
 		processUserInputWithRAG(userText)
 		Log.d("BanyaChat", "ChatViewModel.send(): processUserInputWithRAG() called")
@@ -387,12 +383,20 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 
 		val messages = _uiState.value.messages
 		
-		// 세션 관리: 프롬프트 길이가 임계값을 초과하면 최근 메시지만 유지
-		val limitedMessages = limitMessagesForSession(messages.dropLast(1))
+		// 세션 관리: 각 사용자 질의마다 새로운 세션 시작
+		// 현재 질의(마지막 사용자 메시지)만 포함하고, 이전 대화 기록은 모두 제외
+		val currentUserMessage = messages.lastOrNull { it.isUser }
+		val sessionMessages = if (currentUserMessage != null) {
+			listOf(currentUserMessage) // 현재 질의만 포함
+		} else {
+			emptyList()
+		}
+		
+		Log.d("BanyaChat", "Session management: Using only current query (${sessionMessages.size} messages) instead of full history (${messages.size} messages)")
 
 		viewModelScope.launch {
 			repo.generateStream(
-				messages = limitedMessages, // Don't include the empty assistant message placeholder
+				messages = sessionMessages, // 현재 질의만 포함 (새 세션)
 				callback = object : TokenCallback {
 					override fun onLoadProgress(progress: Int) {
 						// Dispatch to main thread for UI updates
