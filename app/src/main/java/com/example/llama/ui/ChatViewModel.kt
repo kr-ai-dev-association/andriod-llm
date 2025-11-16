@@ -253,13 +253,14 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 			}
 			
 			// Automatically send test question when model load completes successfully
-			if (modelLoadSuccess && _uiState.value.messages.isEmpty()) {
-				// Only send test question if no messages exist yet (first load)
-				mainHandler.post {
-					Log.d("BanyaChat", "Model load complete, automatically sending test question")
-					send("내일 대한민국 서울 날씨 알려줘")
-				}
-			}
+			// 주석 처리: 자동 테스트 질문 비활성화
+			// if (modelLoadSuccess && _uiState.value.messages.isEmpty()) {
+			// 	// Only send test question if no messages exist yet (first load)
+			// 	mainHandler.post {
+			// 		Log.d("BanyaChat", "Model load complete, automatically sending test question")
+			// 		send("내일 대한민국 서울 날씨 알려줘")
+			// 	}
+			// }
 		}
 	}
 
@@ -578,11 +579,38 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 	 * 검색 결과가 없을 경우를 위한 가이드 포함
 	 */
 	private fun createSynthesisPrompt(question: String, searchContext: String?, hasSearchResults: Boolean = false): String {
-		// 시스템 프롬프트 최대한 간소화
+		// 현재 날짜/시간 가져오기
+		val dateFormat = java.text.SimpleDateFormat("yyyy년 MM월 dd일 EEEE HH시 mm분", java.util.Locale.KOREAN)
+		val currentDateTime = dateFormat.format(java.util.Date())
+		
+		// 현재 장소 설정
+		val currentLocation = "서울 강남구"
+		
+		// 시스템 프롬프트 개선
 		val systemPrompt = if (hasSearchResults && searchContext != null && searchContext.isNotEmpty()) {
-			"검색 결과를 바탕으로 답변하세요. 질문을 반복하지 마세요."
+			"""너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다.
+
+현재 정보:
+- 현재 위치: $currentLocation
+- 현재 날짜/시간: $currentDateTime
+
+답변 규칙:
+1. 검색 결과를 바탕으로 답변하세요. 질문을 반복하지 마세요.
+2. 절대 번호 나열식(1. 2. 3. 또는 ① ② ③ 등)으로 대답하지 말고, 항상 자연스러운 문장으로 설명하세요.
+3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요.
+4. 현재 위치와 날짜/시간 정보를 활용하여 정확하고 관련성 있는 답변을 제공하세요."""
 		} else {
-			"질문에 답변하세요. 질문을 반복하지 마세요."
+			"""너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다.
+
+현재 정보:
+- 현재 위치: $currentLocation
+- 현재 날짜/시간: $currentDateTime
+
+답변 규칙:
+1. 질문에 답변하세요. 질문을 반복하지 마세요.
+2. 절대 번호 나열식(1. 2. 3. 또는 ① ② ③ 등)으로 대답하지 말고, 항상 자연스러운 문장으로 설명하세요.
+3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요.
+4. 현재 위치와 날짜/시간 정보를 활용하여 정확하고 관련성 있는 답변을 제공하세요."""
 		}
 
 		val sb = StringBuilder()
@@ -591,6 +619,9 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 		sb.append(systemPrompt)
 		sb.append("<|eot_id|>")
 		sb.append("<|start_header_id|>user<|end_header_id|>\n\n")
+		
+		// 사용자 질문에 현재 위치와 날짜/시간을 context로 추가
+		sb.append("[현재 위치: $currentLocation, 현재 날짜/시간: $currentDateTime]\n\n")
 		
 		if (hasSearchResults && searchContext != null && searchContext.isNotEmpty()) {
 			// 프롬프트 길이 최소화: 마크다운 형식 제거, 간결한 형식

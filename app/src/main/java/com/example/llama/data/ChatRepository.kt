@@ -10,6 +10,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ChatRepository(private val app: Application) {
 
@@ -176,9 +179,26 @@ class ChatRepository(private val app: Application) {
 	}
 
 	private fun formatPrompt(messages: List<ChatMessage>): String {
-			// Simplified system prompt for better context understanding
-		// Too long and complex prompts can confuse the model and lead to random token generation
-		val systemPrompt = """너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다. 사용자의 질문에 자연스럽고 의미 있는 한국어로 답변하세요. 절대 열거형(리스트, 번호 목록, 항목 나열 등)으로 대답하지 말고, 항상 자연스러운 문장으로 설명하세요."""
+		// 현재 날짜/시간 가져오기
+		val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일 EEEE HH시 mm분", Locale.KOREAN)
+		val currentDateTime = dateFormat.format(Date())
+		
+		// 현재 장소 설정
+		val currentLocation = "서울 강남구"
+		
+		// 시스템 프롬프트 개선
+		val systemPrompt = """너는 한국어로 대화하는 친절한 어시스턴트입니다.
+
+현재 정보:
+- 현재 위치: $currentLocation
+- 현재 날짜/시간: $currentDateTime
+
+답변 규칙:
+1. 사용자의 질문에 자연스럽고 의미 있는 한국어로 답변하세요.
+2. 절대 번호 나열식(1. 2. 3. 또는 ① ② ③ 등)으로 대답하지 말고, 항상 자연스러운 문장으로 설명하세요.
+3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요.
+4. 현재 위치와 날짜/시간 정보를 활용하여 정확하고 관련성 있는 답변을 제공하세요."""
+		
 		val sb = StringBuilder()
 		sb.append("<|begin_of_text|>")
 		sb.append("<|start_header_id|>system<|end_header_id|>\n\n")
@@ -190,6 +210,12 @@ class ChatRepository(private val app: Application) {
 			sb.append("<|start_header_id|>")
 			sb.append(role)
 			sb.append("<|end_header_id|>\n\n")
+			
+			// 사용자 메시지인 경우 현재 위치와 날짜/시간을 context로 추가
+			if (it.isUser) {
+				sb.append("[현재 위치: $currentLocation, 현재 날짜/시간: $currentDateTime]\n\n")
+			}
+			
 			sb.append(it.text)
 			sb.append("<|eot_id|>")
 		}
