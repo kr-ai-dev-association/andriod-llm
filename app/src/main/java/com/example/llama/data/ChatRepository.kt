@@ -98,7 +98,7 @@ class ChatRepository(private val app: Application) {
 		// - Increased context size to 512 to accommodate longer prompts (289 tokens)
 		handle = LlamaBridge.init(
 			modelPath = modelPath,
-			nCtx = 1536, // Increased to accommodate longer prompts with RAG (balanced between 1024 and 2048)
+			nCtx = 2048, // Increased to accommodate longer prompts and longer responses
 			nThreads = 8,
 			nBatch = 128, // Increased for better GPU utilization (KV cache now on GPU)
 			nGpuLayers = 32, // Maximum GPU layers for optimal performance
@@ -154,7 +154,7 @@ class ChatRepository(private val app: Application) {
 		LlamaBridge.completionStart(
 			handle = handle,
 			prompt = prompt,
-			numPredict = 1024,  // EOT 토큰이 생성되지 않는 경우를 대비한 안전망 (넉넉하게 설정)
+			numPredict = 2048,  // 최대 토큰 생성 길이 증가 (더 긴 답변 생성 가능)
 			temperature = 0.7f,  // 반복 감소를 위해 다양성 증가 (0.6 → 0.7)
 			topP = 0.9f,         // Llama 3.1 권장값: 0.9 (Top-P + Min-P 조합)
 			topK = 0,            // Llama 3.1 권장: Top-K 비활성화 (Top-P + Min-P 사용)
@@ -202,7 +202,7 @@ class ChatRepository(private val app: Application) {
 		sb.append("Today Date: $todayDate\n\n")
 		
 		// 시스템 프롬프트 내용
-		sb.append("너는 한국어로 대화하는 친절한 어시스턴트입니다.")
+		sb.append("너는 발달장애인의 생활에 도움을 주는 친절한 도우미입니다.")
 		
 		sb.append("<|eot_id|>")
 
