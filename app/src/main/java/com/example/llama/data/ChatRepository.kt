@@ -31,6 +31,10 @@ class ChatRepository(private val app: Application) {
 		return handle != 0L
 	}
 
+	fun getHandle(): Long {
+		return handle
+	}
+
 	fun stop() {
 		if (handle != 0L) {
 			try {

@@ -9,4 +9,6 @@ public final class BuildConfig {
   public static final String BUILD_TYPE = "debug";
   public static final int VERSION_CODE = 1;
   public static final String VERSION_NAME = "1.0.0";
+  // Field from default config.
+  public static final String TAVILY_API_KEY = "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";
 }

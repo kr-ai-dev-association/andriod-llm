@@ -20,9 +20,19 @@ import com.example.llama.ui.model.ChatUiState
 import com.example.llama.ui.model.ModelMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.TimeoutCancellationException
 import org.json.JSONObject
 import java.io.File
 import java.io.IOException
+import com.example.llama.data.TavilyApiService
+import com.example.llama.data.TavilySearchRequest
+import com.example.llama.nativebridge.LlamaBridge
+import com.google.gson.Gson
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 
 class ChatViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -31,6 +41,28 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 
 	private val _uiState = MutableStateFlow(ChatUiState())
 	val uiState: StateFlow<ChatUiState> = _uiState
+
+	// RAG 시스템을 위한 Tavily API 설정
+	// local.properties에서 읽어온 API 키 사용
+	private val tavilyApiKey = com.example.llama.BuildConfig.TAVILY_API_KEY
+	private val gson = Gson()
+	
+	// Tavily API 서비스 초기화
+	private val tavilyApi: TavilyApiService by lazy {
+		val loggingInterceptor = HttpLoggingInterceptor().apply {
+			level = HttpLoggingInterceptor.Level.BODY
+		}
+		val client = OkHttpClient.Builder()
+			.addInterceptor(loggingInterceptor)
+			.build()
+		
+		Retrofit.Builder()
+			.baseUrl("https://api.tavily.com/")
+			.client(client)
+			.addConverterFactory(GsonConverterFactory.create())
+			.build()
+			.create(TavilyApiService::class.java)
+	}
 
 	/**
 	 * 자동 테스트 케이스 배열
@@ -220,15 +252,14 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 				modelLoadSuccess = true
 			}
 			
-			// Automatically start test cases when model load completes successfully
-			// 테스트 종료를 위해 주석처리
+			// Automatically send test question when model load completes successfully
+			// 테스트 종료를 위해 주석 처리
 			/*
 			if (modelLoadSuccess && _uiState.value.messages.isEmpty()) {
-				// Only start tests if no messages exist yet (first load)
-				isTestMode = true
-				currentTestIndex = 0
-				if (testCases.isNotEmpty()) {
-					send(testCases[currentTestIndex])
+				// Only send test question if no messages exist yet (first load)
+				mainHandler.post {
+					Log.d("BanyaChat", "Model load complete, automatically sending test question")
+					send("대한민국 대통령은 누구야?")
 				}
 			}
 			*/
@@ -274,8 +305,12 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 	}
 
 	fun send(userText: String) {
+		Log.d("BanyaChat", "========================================")
+		Log.d("BanyaChat", "ChatViewModel.send(): called with text='$userText'")
+		Log.d("BanyaChat", "ChatViewModel.send(): text length=${userText.length}")
 		// 1. 입력 정규화: 앞뒤 공백을 제거하고 모두 소문자로 변환하여 비교 준비.
 		val normalizedInput = userText.trim().lowercase()
+		Log.d("BanyaChat", "ChatViewModel.send(): normalizedInput='$normalizedInput'")
 
 		// 입력이 비어있으면 아무것도 하지 않음.
 		if (normalizedInput.isEmpty()) {
@@ -316,15 +351,18 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 			return
 		}
 
-		// 5. 위의 조건에 해당하지 않는 모든 입력은 LLM으로 전달.
+		// 5. 위의 조건에 해당하지 않는 모든 입력은 RAG 시스템으로 전달.
+		Log.d("BanyaChat", "ChatViewModel.send(): Not a greeting, starting RAG process")
 		// Add user message
 		_uiState.value = _uiState.value.addMessage(ChatMessage(text = userText, isUser = true))
-		// Start generation
-		generate()
+		Log.d("BanyaChat", "ChatViewModel.send(): User message added to UI state")
+		// Start RAG process
+		processUserInputWithRAG(userText)
+		Log.d("BanyaChat", "ChatViewModel.send(): processUserInputWithRAG() called")
 	}
 
 	private fun generate() {
-		if (_uiState.value.isGenerating) return
+		// isGenerating 체크를 제거: RAG에서 이미 설정했을 수 있으므로
 		// Block generation until model load has reached 100
 		if (_uiState.value.loadProgress in 0..99) {
 			_uiState.value = _uiState.value.addMessage(ChatMessage(text = "모델 로딩 중입니다. 잠시만 기다려 주세요.", isUser = false))
@@ -332,8 +370,12 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 		}
 		_uiState.value = _uiState.value.copy(isGenerating = true)
 
+		// 빈 메시지가 이미 마지막에 없으면 추가 (RAG에서 이미 추가했을 수 있음)
+		val lastMessage = _uiState.value.messages.lastOrNull()
+		if (lastMessage == null || lastMessage.isUser || lastMessage.text.isNotEmpty()) {
+			_uiState.value = _uiState.value.addMessage(ChatMessage(text = "", isUser = false))
+		}
 		val builderIndex = _uiState.value.messages.size
-		_uiState.value = _uiState.value.addMessage(ChatMessage(text = "", isUser = false))
 
 		val messages = _uiState.value.messages
 
@@ -423,6 +465,149 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 	fun stop() {
 		repo.stop()
 		_uiState.value = _uiState.value.copy(isGenerating = false)
+	}
+
+	/**
+	 * RAG 시스템: 사용자 입력을 처리하여 항상 웹 검색을 시도하고, 검색 결과가 없을 경우만 LLM이 직접 답변
+	 */
+	private fun processUserInputWithRAG(userInput: String) {
+		if (_uiState.value.isGenerating) return
+		// Block generation until model load has reached 100
+		if (_uiState.value.loadProgress in 0..99) {
+			_uiState.value = _uiState.value.addMessage(ChatMessage(text = "모델 로딩 중입니다. 잠시만 기다려 주세요.", isUser = false))
+			return
+		}
+
+		// 빈 응답 메시지 추가 및 isGenerating 설정 (생각중... 애니메이션 표시용)
+		_uiState.value = _uiState.value.copy(isGenerating = true)
+		_uiState.value = _uiState.value.addMessage(ChatMessage(text = "", isUser = false))
+
+		viewModelScope.launch(Dispatchers.IO) {
+			try {
+				Log.d("BanyaChat", "RAG: Starting web search for question: $userInput")
+
+				// --- 1단계: 항상 Tavily API 호출 시도 ---
+				val searchRequest = TavilySearchRequest(
+					api_key = tavilyApiKey,
+					query = userInput, // 사용자 질문을 그대로 검색 쿼리로 사용
+					max_results = 1 // 프롬프트 길이 단축을 위해 1개만 반환
+				)
+				
+				val searchResponse = try {
+					tavilyApi.search(searchRequest)
+				} catch (e: Exception) {
+					Log.e("BanyaChat", "RAG: Error calling Tavily API", e)
+					null
+				}
+				
+				// --- 2단계: 검색 결과 확인 및 처리 ---
+				if (searchResponse != null && searchResponse.isSuccessful && searchResponse.body() != null) {
+					val searchResults = searchResponse.body()!!.results
+					
+					if (searchResults.isNotEmpty()) {
+						// 검색 결과가 있는 경우: 검색 결과를 바탕으로 답변 생성
+						Log.d("BanyaChat", "RAG: Search completed, found ${searchResults.size} results")
+						
+						// 검색 결과를 하나의 문자열로 가공 (내용을 300자로 제한하여 프롬프트 길이 단축, 컨텍스트 크기 512 제한 고려)
+						val searchContext = searchResults.joinToString("\n\n") { result ->
+							val content = result.content ?: "N/A"
+							val truncatedContent = if (content.length > 300) content.substring(0, 300) + "..." else content
+							"제목: ${result.title ?: "N/A"}\n내용: $truncatedContent"
+						}
+
+						// 검색 결과 기반 답변 생성
+						// 빈 메시지는 이미 processUserInputWithRAG() 시작 시 추가되었으므로 중복 추가하지 않음
+						withContext(Dispatchers.Main) {
+							_uiState.value = _uiState.value.copy(isGenerating = true)
+						}
+
+						val finalPrompt = createSynthesisPrompt(userInput, searchContext, hasSearchResults = true)
+						// UI 상태의 마지막 메시지(빈 어시스턴트 메시지)를 제거하고 프롬프트를 추가
+						// generateStream에 전달할 메시지 리스트 구성
+						val messagesForLLM = _uiState.value.messages.dropLast(1) + ChatMessage(
+							text = finalPrompt,
+							isUser = true
+						)
+
+						repo.generateStream(
+							messages = messagesForLLM,
+							callback = object : TokenCallback {
+								override fun onLoadProgress(progress: Int) {}
+								override fun onModelMetadata(json: String) {}
+								override fun onToken(token: String) {
+									mainHandler.post {
+										_uiState.value = _uiState.value.appendToLastAssistant(token)
+									}
+								}
+								override fun onCompleted() {
+									mainHandler.post {
+										_uiState.value = _uiState.value.copy(isGenerating = false)
+									}
+								}
+								override fun onError(message: String) {
+									Log.e("BanyaChat", "RAG: Error during final answer generation: $message")
+									mainHandler.post {
+										_uiState.value = _uiState.value.copy(isGenerating = false)
+									}
+								}
+							}
+						)
+					} else {
+						// 검색 결과가 없는 경우: LLM이 직접 답변
+						Log.d("BanyaChat", "RAG: No search results found, generating answer directly")
+						withContext(Dispatchers.Main) {
+							generate()
+						}
+					}
+				} else {
+					// 검색 실패 또는 응답이 없는 경우: LLM이 직접 답변
+					Log.w("BanyaChat", "RAG: Search failed or no response, generating answer directly")
+					withContext(Dispatchers.Main) {
+						generate()
+					}
+				}
+			} catch (e: Exception) {
+				Log.e("BanyaChat", "RAG: Unexpected error in processUserInputWithRAG", e)
+				withContext(Dispatchers.Main) {
+					generate()
+				}
+			}
+		}
+	}
+
+	/**
+	 * 프롬프트: 검색 결과를 바탕으로 최종 답변을 생성하도록 하는 프롬프트
+	 * 검색 결과가 없을 경우를 위한 가이드 포함
+	 */
+	private fun createSynthesisPrompt(question: String, searchContext: String?, hasSearchResults: Boolean = false): String {
+		val systemPrompt = if (hasSearchResults && searchContext != null && searchContext.isNotEmpty()) {
+			// 검색 결과가 있는 경우 (간결한 버전)
+			"""검색 결과를 바탕으로 질문에 답변하세요. 자연스러운 문장으로 설명하세요.
+절대 질문을 반복하거나 인용하지 마세요. 질문 내용을 그대로 출력하지 마세요. 오직 답변만 제공하세요."""
+		} else {
+			// 검색 결과가 없는 경우 (간결한 버전)
+			"""질문에 답변하세요. 자연스러운 문장으로 설명하세요.
+절대 질문을 반복하거나 인용하지 마세요. 질문 내용을 그대로 출력하지 마세요. 오직 답변만 제공하세요."""
+		}
+
+		val sb = StringBuilder()
+		sb.append("<|begin_of_text|>")
+		sb.append("<|start_header_id|>system<|end_header_id|>\n\n")
+		sb.append(systemPrompt)
+		sb.append("<|eot_id|>")
+		sb.append("<|start_header_id|>user<|end_header_id|>\n\n")
+		
+		if (hasSearchResults && searchContext != null && searchContext.isNotEmpty()) {
+			// 프롬프트 길이 단축: 간결한 형식 사용
+			sb.append("[검색 결과]\n$searchContext\n\n[질문]\n$question\n\n[답변]")
+		} else {
+			sb.append("[질문]\n$question\n\n[답변]")
+		}
+		
+		sb.append("<|eot_id|>")
+		sb.append("<|start_header_id|>assistant<|end_header_id|>\n\n")
+
+		return sb.toString()
 	}
 }
 

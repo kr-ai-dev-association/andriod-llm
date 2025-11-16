@@ -38,6 +38,22 @@ object LlamaBridge {
 
 	external fun completionStop(handle: Long)
 
+	/**
+	 * 동기식 completion 함수 - 짧은 텍스트(JSON 등)를 생성하고 즉시 반환
+	 * RAG 시스템의 1차 판단 단계에서 사용
+	 */
+	external fun completion(
+		handle: Long,
+		prompt: String,
+		numPredict: Int = 256,
+		temperature: Float = 0.7f,
+		topP: Float = 0.9f,
+		topK: Int = 40,
+		repeatPenalty: Float = 1.1f,
+		repeatLastN: Int = 64,
+		stopSequences: Array<String> = arrayOf("\n\n", "User:", "Assistant:")
+	): String
+
 	external fun saveSession(handle: Long, path: String): Int
 	external fun loadSession(handle: Long, path: String): Boolean
 	external fun tokenize(handle: Long, text: String): IntArray

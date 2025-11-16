@@ -140,13 +140,17 @@ fun ChatScreen(vm: ChatViewModel = viewModel()) {
 			ChatInputBar(
 				text = text.value,
 				onTextChange = { text.value = it },
-				onSend = {
-					if (uiState.loadProgress == 100 && !uiState.isGenerating && text.value.isNotBlank()) {
-						vm.send(text.value)
-						text.value = ""
-						keyboardController?.hide()
-					}
-				},
+			onSend = {
+				if (uiState.loadProgress == 100 && !uiState.isGenerating && text.value.isNotBlank()) {
+					Log.d("BanyaChat", "ChatScreen: onSend called with text='${text.value}'")
+					Log.d("BanyaChat", "ChatScreen: loadProgress=${uiState.loadProgress}, isGenerating=${uiState.isGenerating}")
+					vm.send(text.value)
+					text.value = ""
+					keyboardController?.hide()
+				} else {
+					Log.d("BanyaChat", "ChatScreen: onSend blocked - loadProgress=${uiState.loadProgress}, isGenerating=${uiState.isGenerating}, text.isNotBlank=${text.value.isNotBlank()}")
+				}
+			},
 				onAttachClick = {
 					filePicker.launch(arrayOf("*/*"))
 				},
@@ -402,11 +406,12 @@ private fun ChatInputBar(
 			onValueChange = onTextChange,
 			modifier = Modifier
 				.weight(1f)
-				.height(48.dp),
+				.height(56.dp),
 			placeholder = { 
 				Text(
 					"메시지를 입력하세요", 
-					fontSize = 14.sp
+					fontSize = 14.sp,
+					lineHeight = 20.sp
 				) 
 			},
 			textStyle = androidx.compose.ui.text.TextStyle(

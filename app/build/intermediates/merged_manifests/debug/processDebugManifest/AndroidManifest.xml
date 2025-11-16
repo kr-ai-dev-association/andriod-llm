@@ -11,6 +11,8 @@
     <!-- Permission to read model files from Download directory -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <!-- Permission for RAG system to access Tavily API -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <permission
         android:name="com.example.llama.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"

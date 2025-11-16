@@ -6,6 +6,8 @@ plugins {
 
 import org.gradle.api.GradleException
 import org.gradle.internal.os.OperatingSystem
+import java.util.Properties
+import java.io.FileInputStream
 
 val hostTag = when {
     OperatingSystem.current().isMacOsX -> "darwin-x86_64"
@@ -13,6 +15,14 @@ val hostTag = when {
     OperatingSystem.current().isLinux -> "linux-x86_64"
     else -> throw GradleException("Unsupported OS for shader toolchain")
 }
+
+// local.properties에서 API 키 읽기
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(FileInputStream(localPropertiesFile))
+}
+val tavilyApiKey = localProperties.getProperty("TAVILY_API_KEY") ?: ""
 
 android {
     namespace = "com.example.llama"
@@ -26,6 +36,9 @@ android {
         versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        // Tavily API 키를 BuildConfig에 추가
+        buildConfigField("String", "TAVILY_API_KEY", "\"$tavilyApiKey\"")
 
         externalNativeBuild {
             cmake {
@@ -111,6 +124,13 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+    
+    // RAG 시스템을 위한 네트워크 라이브러리
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 

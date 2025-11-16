@@ -5,6 +5,7 @@
 #include <vector>
 #include <atomic>
 #include <random>
+#include <mutex>
 #include <android/log.h>
 #include <cmath>
 #include <fstream>
@@ -258,6 +259,42 @@ static std::string filterSpecialTokensTokenLevel(const std::string& tokenText) {
         ALOGE("filterSpecialTokensTokenLevel(): Regex error for partial pattern: %s", e.what());
     }
     
+    // 프롬프트 구조 요소 제거 (header, assistant, end 등)
+    const std::vector<std::string> promptStructurePatterns = {
+        "_header",
+        "start_header",
+        "end_header",
+        "assistant",
+        "user",
+        "system"
+    };
+    
+    for (const auto& pattern : promptStructurePatterns) {
+        size_t pos = 0;
+        while ((pos = cleaned.find(pattern, pos)) != std::string::npos) {
+            cleaned.erase(pos, pattern.length());
+        }
+    }
+    
+    // 변수 표현식 제거 (NAME, USER_NAME 등 대문자 변수명)
+    // 대문자로만 이루어진 단어 제거 (최소 2자 이상, 최대 20자)
+    try {
+        std::regex varExprRegex("\\b[A-Z]{2,20}\\b");
+        cleaned = std::regex_replace(cleaned, varExprRegex, "");
+    } catch (const std::regex_error& e) {
+        ALOGE("filterSpecialTokensTokenLevel(): Regex error for variable expression pattern: %s", e.what());
+    }
+    
+    // 마크다운 형식 문자 제거 (단독으로 나타나는 경우)
+    if (cleaned == "[" || cleaned == "]") {
+        cleaned = "";
+    }
+    
+    // 프롬프트 구조 관련 단독 문자 제거
+    if (cleaned == ">" || cleaned == "<") {
+        cleaned = "";
+    }
+    
     return cleaned;
 }
 
@@ -407,7 +444,11 @@ static std::string filterSpecialTokensTextLevel(const std::string& text) {
             "eotend_header",  // 로그에서 발견된 패턴
             "end_header",     // eotend_header의 일부
             "start_header",   // start_headersystemend_header의 일부
-            "systemend_header"  // 복합 패턴의 일부
+            "systemend_header",  // 복합 패턴의 일부
+            "_header",        // 프롬프트 구조 요소
+            "assistant",      // 프롬프트 구조 요소
+            "user",           // 프롬프트 구조 요소
+            "system"          // 프롬프트 구조 요소
         };
         
         for (const auto& pattern : partialTokenPatterns) {
@@ -554,6 +595,44 @@ static std::string filterSpecialTokensTextLevel(const std::string& text) {
     // 하지만 여기서는 제거하지 않고, 다음 토큰이 추가될 때 텍스트 레벨 필터링에서 처리
     // 단, 줄바꿈(단일 또는 두 줄 바꿈) 다음에 오는 경우는 제외
     
+    // 프롬프트 구조 요소 제거 (header, assistant, end 등)
+    const std::vector<std::string> promptStructurePatterns = {
+        "_header",
+        "start_header",
+        "end_header",
+        "assistant",
+        "user",
+        "system"
+    };
+    
+    for (const auto& pattern : promptStructurePatterns) {
+        size_t pos = 0;
+        while ((pos = cleaned.find(pattern, pos)) != std::string::npos) {
+            cleaned.erase(pos, pattern.length());
+        }
+    }
+    
+    // 변수 표현식 제거 (NAME, USER_NAME 등 대문자 변수명)
+    // 대문자로만 이루어진 단어 제거 (최소 2자 이상, 최대 20자)
+    try {
+        std::regex varExprRegex("\\b[A-Z]{2,20}\\b");
+        cleaned = std::regex_replace(cleaned, varExprRegex, "");
+    } catch (const std::regex_error& e) {
+        ALOGE("filterSpecialTokensTextLevel(): Regex error for variable expression pattern: %s", e.what());
+    }
+    
+    // 마크다운 형식 문자 제거 (단독으로 나타나는 경우)
+    // "[질문]", "[답변]" 같은 패턴 제거
+    try {
+        std::regex markdownPatternRegex("\\[질문\\]|\\[답변\\]|\\[검색 결과\\]");
+        cleaned = std::regex_replace(cleaned, markdownPatternRegex, "");
+    } catch (const std::regex_error& e) {
+        ALOGE("filterSpecialTokensTextLevel(): Regex error for markdown pattern: %s", e.what());
+    }
+    
+    // 사용자 질문 패턴 제거 (예: "대한민국 대통령은 누구야?" 같은 질문이 답변에 포함되는 경우)
+    // 하지만 이것은 프롬프트 구조 문제이므로, 시스템 프롬프트에서 명시적으로 지시하는 것이 더 나음
+    
     return cleaned;
 }
 
@@ -565,6 +644,7 @@ struct LlamaCtx {
     llama_context* ctx = nullptr;
 #endif
     std::atomic<bool> stopRequested = false;
+    std::mutex ctx_mutex;  // Mutex to protect llama_context access
 };
 
 struct LoadProgressContext {
@@ -917,6 +997,11 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         guard.env = threadEnv;
         guard.ref = gCallback;
 
+        // Lock mutex to prevent concurrent access to llama_context
+        ALOGD("completionStart(): Acquiring mutex lock");
+        std::lock_guard<std::mutex> lock(handle->ctx_mutex);
+        ALOGD("completionStart(): Mutex lock acquired");
+
         llama_context* ctx = handle->ctx;
         if (!ctx) {
             ALOGE("completionStart(): ctx is null");
@@ -1190,6 +1275,32 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             ALOGD("completionStart(): Batch filled, calling llama_decode() for chunk cur=%d n_cur=%d (total tokens=%d, is_last_chunk=%d)", 
                   cur, n_cur, n_tokens, is_last_chunk ? 1 : 0);
             ALOGD("completionStart(): About to call llama_decode() for prompt evaluation chunk cur=%d n_cur=%d", cur, n_cur);
+            ALOGD("completionStart(): Context size=%u, n_past=%d, n_cur=%d, total will be n_past+n_cur=%d", 
+                  context_size, n_past, n_cur, n_past + n_cur);
+            
+            // Check if we're exceeding context size
+            if (n_past + n_cur > static_cast<int>(context_size)) {
+                ALOGE("completionStart(): ERROR: n_past (%d) + n_cur (%d) = %d exceeds context_size (%u)!", 
+                      n_past, n_cur, n_past + n_cur, context_size);
+                jstring err = threadEnv->NewStringUTF("Prompt exceeds context size");
+                if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
+                    threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                    if (threadEnv->ExceptionCheck()) {
+                        ALOGE("completionStart(): Exception in error callback - clearing");
+                        threadEnv->ExceptionClear();
+                    }
+                }
+                threadEnv->DeleteLocalRef(err);
+                llama_batch_free(batch);
+                llama_sampler_free(smpl);
+                if (guard.env && guard.ref) {
+                    guard.env->DeleteGlobalRef(guard.ref);
+                    guard.ref = nullptr;
+                }
+                guard.shouldDelete = false;
+                detachThread();
+                return;
+            }
             
             int decode_result = llama_decode(ctx, batch);
             ALOGD("completionStart(): llama_decode() returned %d for chunk cur=%d n_cur=%d (is_last_chunk=%d)", 
@@ -2519,6 +2630,275 @@ Java_com_example_llama_nativebridge_LlamaBridge_tokenize(
         env->SetIntArrayRegion(arr, 0, (jsize)out.size(), reinterpret_cast<const jint*>(out.data()));
     }
     return arr;
+}
+
+// RAG 시스템을 위한 동기식 completion 함수
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_example_llama_nativebridge_LlamaBridge_completion(
+        JNIEnv* env, jobject /*thiz*/, jlong h,
+        jstring jPrompt, jint numPredict, jfloat temperature, jfloat topP, jint topK,
+        jfloat repeatPenalty, jint repeatLastN,
+        jobjectArray jStopSequences) {
+    ALOGD("completion(): Called with handle=%p", (void*)h);
+    auto* handle = reinterpret_cast<LlamaCtx*>(h);
+    if (!handle || !handle->ctx || !handle->model) {
+        ALOGE("completion(): Invalid handle, ctx, or model (handle=%p, ctx=%p, model=%p)", 
+              (void*)handle, handle ? (void*)handle->ctx : nullptr, handle ? (void*)handle->model : nullptr);
+        return env->NewStringUTF("");
+    }
+    ALOGD("completion(): Starting completion, prompt length will be logged");
+
+#if LLAMA_STUB_MODE
+    (void) jPrompt; (void) numPredict; (void) temperature; (void) topP; (void) topK;
+    (void) repeatPenalty; (void) repeatLastN; (void) jStopSequences;
+    return env->NewStringUTF("{\"search_needed\": false, \"search_query\": null}");
+#else
+    // Lock mutex to prevent concurrent access to llama_context
+    ALOGD("completion(): Acquiring mutex lock");
+    std::lock_guard<std::mutex> lock(handle->ctx_mutex);
+    ALOGD("completion(): Mutex lock acquired");
+    
+    const char* prompt = env->GetStringUTFChars(jPrompt, nullptr);
+    std::string promptStr(prompt ? prompt : "");
+    env->ReleaseStringUTFChars(jPrompt, prompt);
+    ALOGD("completion(): Prompt length=%zu, first 200 chars: %.200s", promptStr.length(), promptStr.c_str());
+
+    int n_predict = (numPredict > 0) ? numPredict : 256;
+    float temp = (temperature > 0.0f) ? temperature : 0.3f;
+    float top_p = (topP > 0.0f) ? topP : 0.9f;
+    int top_k = (topK > 0) ? topK : 40;
+    float rep_penalty = (repeatPenalty > 0.0f) ? repeatPenalty : 1.1f;
+    int rep_last_n = (repeatLastN > 0) ? repeatLastN : 64;
+    
+    std::vector<std::string> stops;
+    if (jStopSequences) {
+        jsize len = env->GetArrayLength(jStopSequences);
+        for (jsize i = 0; i < len; ++i) {
+            jstring s = (jstring) env->GetObjectArrayElement(jStopSequences, i);
+            const char* cs = env->GetStringUTFChars(s, nullptr);
+            stops.emplace_back(cs ? cs : "");
+            env->ReleaseStringUTFChars(s, cs);
+            env->DeleteLocalRef(s);
+        }
+    }
+
+    llama_context* ctx = handle->ctx;
+    llama_model* model = handle->model;
+    const llama_vocab* vocab = llama_model_get_vocab(model);
+
+    // Tokenize prompt
+    ALOGD("completion(): Starting tokenization");
+    std::vector<llama_token> prompt_tokens;
+    prompt_tokens.resize(promptStr.size() + 16);
+    bool has_bos = (promptStr.length() > 0 && promptStr.find("<|begin_of_text|>") == 0);
+    int n_tokens = llama_tokenize(
+        vocab,
+        promptStr.c_str(),
+        (int32_t)promptStr.size(),
+        prompt_tokens.data(),
+        (int32_t)prompt_tokens.size(),
+        !has_bos,
+        false
+    );
+
+    if (n_tokens < 0) {
+        ALOGE("completion(): Tokenization failed");
+        return env->NewStringUTF("");
+    }
+    ALOGD("completion(): Tokenization complete, n_tokens=%d", n_tokens);
+    prompt_tokens.resize(n_tokens);
+
+    // Create sampler
+    auto sparams = llama_sampler_chain_default_params();
+    llama_sampler* smpl = llama_sampler_chain_init(sparams);
+    
+    if (top_k > 0) {
+        llama_sampler_chain_add(smpl, llama_sampler_init_top_k(top_k));
+    }
+    if (top_p > 0.0f && top_p < 1.0f) {
+        llama_sampler_chain_add(smpl, llama_sampler_init_top_p(top_p, 1));
+    }
+    llama_sampler_chain_add(smpl, llama_sampler_init_min_p(0.05f, 1));
+    if (temp > 0.0f) {
+        llama_sampler_chain_add(smpl, llama_sampler_init_temp(temp));
+    }
+    if (rep_last_n != 0 && rep_penalty > 0.0f && rep_penalty != 1.0f) {
+        llama_sampler_chain_add(smpl, llama_sampler_init_penalties(rep_last_n, rep_penalty, 0.15f, 0.15f));
+    }
+    llama_sampler_chain_add(smpl, llama_sampler_init_dist(static_cast<uint32_t>(std::random_device{}())));
+
+    // Evaluate prompt
+    ALOGD("completion(): Starting prompt evaluation, n_tokens=%d", n_tokens);
+    int n_past = 0;
+    uint32_t chunk_size = llama_n_batch(ctx);
+    ALOGD("completion(): chunk_size=%u", chunk_size);
+    
+    for (int cur = 0; cur < n_tokens; ) {
+        ALOGD("completion(): Evaluating prompt chunk: cur=%d, remaining=%d", cur, n_tokens - cur);
+        int remaining = n_tokens - cur;
+        int n_cur = std::min(static_cast<int>(chunk_size), remaining);
+        
+        llama_batch batch = llama_batch_init(n_cur, 0, 1);
+        if (!batch.token || !batch.seq_id) {
+            llama_batch_free(batch);
+            llama_sampler_free(smpl);
+            return env->NewStringUTF("");
+        }
+        
+        batch.n_tokens = n_cur;
+        free(batch.pos);
+        batch.pos = nullptr;
+        
+        for (int j = 0; j < n_cur; ++j) {
+            batch.token[j] = prompt_tokens[cur + j];
+            if (batch.seq_id[j]) {
+                batch.seq_id[j][0] = 0;
+            }
+            batch.n_seq_id[j] = 1;
+            batch.logits[j] = false;
+        }
+        
+        // Enable logits for last token
+        if (cur + n_cur == n_tokens && n_cur > 0) {
+            batch.logits[n_cur - 1] = true;
+        }
+        
+        ALOGD("completion(): Calling llama_decode() for prompt evaluation chunk cur=%d n_cur=%d", cur, n_cur);
+        int decode_result = llama_decode(ctx, batch);
+        ALOGD("completion(): llama_decode() returned %d for prompt evaluation chunk", decode_result);
+        if (decode_result != 0) {
+            ALOGE("completion(): llama_decode() failed for prompt evaluation chunk cur=%d n_cur=%d", cur, n_cur);
+            llama_batch_free(batch);
+            llama_sampler_free(smpl);
+            return env->NewStringUTF("");
+        }
+        
+        llama_batch_free(batch);
+        n_past += n_cur;
+        cur += n_cur;
+        ALOGD("completion(): Prompt evaluation chunk complete, n_past=%d", n_past);
+    }
+    ALOGD("completion(): Prompt evaluation complete, n_past=%d", n_past);
+
+    // Decode last token separately to get logits
+    ALOGD("completion(): Decoding last token separately to get logits");
+    if (n_tokens > 0) {
+        llama_batch last_batch = llama_batch_init(1, 0, 1);
+        if (last_batch.token && last_batch.seq_id) {
+            last_batch.n_tokens = 1;
+            last_batch.token[0] = prompt_tokens[n_tokens - 1];
+            last_batch.logits[0] = true;
+            free(last_batch.pos);
+            last_batch.pos = nullptr;
+            if (last_batch.seq_id[0]) {
+                last_batch.seq_id[0][0] = 0;
+                last_batch.n_seq_id[0] = 1;
+            }
+            ALOGD("completion(): Calling llama_decode() for last token");
+            int last_decode_result = llama_decode(ctx, last_batch);
+            ALOGD("completion(): llama_decode() returned %d for last token", last_decode_result);
+            llama_batch_free(last_batch);
+        }
+    }
+    ALOGD("completion(): Last token decode complete");
+
+    // Generate tokens
+    ALOGD("completion(): Starting token generation, n_predict=%d", n_predict);
+    std::string generated;
+    int n_gen = 0;
+    uint32_t context_size = llama_n_ctx(ctx);
+    ALOGD("completion(): context_size=%u, n_past=%d", context_size, n_past);
+
+    while (n_past < context_size && n_gen < n_predict) {
+        // Sample token
+        int32_t logits_idx = 0;
+        const float* logits = llama_get_logits_ith(ctx, logits_idx);
+        if (!logits) {
+            ALOGE("completion(): No logits available");
+            break;
+        }
+
+        llama_token id = llama_sampler_sample(smpl, ctx, logits_idx);
+        llama_sampler_accept(smpl, id);
+
+        // Check for stop tokens
+        if (id == 128009 || id == llama_vocab_eos(vocab) || id == 128001 || id == 128008) {
+            break;
+        }
+
+        // Check stop sequences
+        bool hitStop = false;
+        for (const auto& stop : stops) {
+            if (generated.find(stop) != std::string::npos) {
+                hitStop = true;
+                ALOGD("completion(): Stop sequence '%s' detected, breaking", stop.c_str());
+                break;
+            }
+        }
+        if (hitStop) break;
+        
+        // Check if JSON is complete (contains both "search_needed" and closing brace)
+        if (generated.find("search_needed") != std::string::npos && 
+            generated.find("}") != std::string::npos) {
+            // Verify JSON completeness: should have both fields or at least closing brace
+            size_t bracePos = generated.find_last_of("}");
+            if (bracePos != std::string::npos && bracePos > generated.find("search_needed")) {
+                ALOGD("completion(): JSON appears complete (contains 'search_needed' and '}'), breaking");
+                break;
+            }
+        }
+
+        // Convert token to text
+        std::vector<char> piece(16, 0);
+        int n_len = llama_token_to_piece(vocab, id, piece.data(), piece.size(), false, false);
+        if (n_len < 0) break;
+        if (static_cast<size_t>(n_len) >= piece.size()) {
+            piece.resize(n_len + 1);
+            n_len = llama_token_to_piece(vocab, id, piece.data(), piece.size(), false, false);
+            if (n_len < 0) break;
+        }
+        piece.resize(n_len);
+        
+        // Filter special tokens
+        std::string tokenText = filterSpecialTokensTokenLevel(std::string(piece.data(), piece.size()));
+        if (!tokenText.empty() && id < 128000) {
+            generated += tokenText;
+        }
+
+        // Decode generated token
+        llama_batch gen_batch = llama_batch_init(1, 0, 1);
+        if (!gen_batch.token || !gen_batch.seq_id) {
+            llama_batch_free(gen_batch);
+            break;
+        }
+        gen_batch.n_tokens = 1;
+        gen_batch.token[0] = id;
+        gen_batch.logits[0] = true;
+        free(gen_batch.pos);
+        gen_batch.pos = nullptr;
+        if (gen_batch.seq_id[0]) {
+            gen_batch.seq_id[0][0] = 0;
+            gen_batch.n_seq_id[0] = 1;
+        }
+
+        if (llama_decode(ctx, gen_batch) != 0) {
+            llama_batch_free(gen_batch);
+            break;
+        }
+        llama_batch_free(gen_batch);
+        
+        n_past++;
+        n_gen++;
+    }
+
+    llama_sampler_free(smpl);
+
+    // Final filtering
+    std::string finalResult = filterSpecialTokensTextLevel(generated);
+    ALOGD("completion(): Generated %zu characters, final result length=%zu", generated.length(), finalResult.length());
+    ALOGD("completion(): Final result: %.200s", finalResult.c_str());
+    return env->NewStringUTF(finalResult.c_str());
+#endif
 }
 
 
