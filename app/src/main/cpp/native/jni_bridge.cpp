@@ -771,9 +771,9 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
     // Use the same number of threads for batched prompt processing to speed up prefill
     cparams.n_threads_batch = nThreads;
     cparams.n_batch = nBatch;
-    // Optimized: n_ubatch=8 for n_batch=64 (64/8=8, no remainder)
-    // 64 provides best performance (128 was slower)
-    cparams.n_ubatch = 8;  // Optimized for n_batch=64
+    // Optimized: n_ubatch=16 for n_batch=128 (128/16=8, no remainder)
+    // KV cache is now on GPU, so larger batch size should improve performance
+    cparams.n_ubatch = 16;  // Optimized for n_batch=128
     // STABLE: V-Cache를 F16으로 유지 (Q4_0 패딩 로직에 문제가 있어 Logit NaN 발생)
     // K-Cache는 Q4_0으로 유지하여 VRAM 절약
     // V-Cache F16 + K-Cache Q4_0 조합으로 안정성과 성능을 모두 확보
@@ -1238,15 +1238,6 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             int remaining = n_tokens - cur;
             int n_cur = std::min(static_cast<int>(chunk), remaining);
             
-            // For the last chunk, if it's small (< chunk/4), merge with previous chunk for efficiency
-            bool is_last_chunk = (cur + n_cur == n_tokens);
-            if (is_last_chunk && n_cur < (chunk / 4) && cur > 0) {
-                // Merge small last chunk with previous chunk for better efficiency
-                ALOGD("completionStart(): Last chunk size %d is small, will merge with previous", n_cur);
-                // Process remaining tokens in current iteration
-                n_cur = remaining;
-            }
-            
             // Limit maximum chunk size to n_batch for stability
             // With V-Cache Q4_0 and full GPU offload, n_batch size chunks are stable
             if (n_cur > static_cast<int>(chunk)) {
@@ -1281,10 +1272,10 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             // NOTE: Do NOT enable logits in the last chunk during prompt evaluation
             // This causes decode to hang on Vulkan backend. Instead, we'll decode the last token
             // separately after prompt evaluation is complete to get logits.
-            // is_last_chunk is already defined above
             // Keep all logits disabled during prompt evaluation to avoid Vulkan backend issues
             // We'll handle logits separately after prompt evaluation
             
+            bool is_last_chunk = (cur + n_cur == n_tokens);
             ALOGD("completionStart(): Batch filled, calling llama_decode() for chunk cur=%d n_cur=%d (total tokens=%d, is_last_chunk=%d)", 
                   cur, n_cur, n_tokens, is_last_chunk ? 1 : 0);
             ALOGD("completionStart(): About to call llama_decode() for prompt evaluation chunk cur=%d n_cur=%d", cur, n_cur);
