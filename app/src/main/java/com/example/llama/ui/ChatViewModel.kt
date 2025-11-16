@@ -32,6 +32,89 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 	private val _uiState = MutableStateFlow(ChatUiState())
 	val uiState: StateFlow<ChatUiState> = _uiState
 
+	/**
+	 * 자동 테스트 케이스 배열
+	 * "우울할때 뭘 하면 좋을까?" - 미완성 종료 테스트
+	 */
+	private val testCases = listOf(
+		"우울할때 뭘 하면 좋을까?"
+	)
+
+	/**
+	 * 현재 테스트 케이스 인덱스
+	 */
+	private var currentTestIndex = 0
+
+	/**
+	 * 테스트 모드 활성화 여부
+	 */
+	private var isTestMode = false
+
+	/**
+	 * 한국어 인사말을 모아둔 Set.
+	 * 빠른 조회를 위해 Set을 사용하고, 소문자로 저장하여 대소문자 구분 없이 비교합니다.
+	 */
+	private val koreanGreetings = setOf(
+		"안녕", "안녕하세요", "안녕하세요.", "안뇽",
+		"하이", "하이루", "ㅎㅇ", "ㅎ2",
+		"좋은 아침", "좋은아침", "굿모닝",
+		"좋은 오후", "좋은오후",
+		"좋은 저녁", "좋은저녁", "굿나잇",
+		"잘 지내?", "잘 지내요?", "오랜만이야", "오랜만이네요"
+	)
+
+	/**
+	 * 영어 인사말을 모아둔 Set.
+	 * 빠른 조회를 위해 Set을 사용하고, 소문자로 저장하여 대소문자 구분 없이 비교합니다.
+	 */
+	private val englishGreetings = setOf(
+		"hello", "hi", "hey", "yo", "greetings",
+		"sup", "what's up", "whatsup", "wassup",
+		"what's good", "what's new", "what's happening",
+		"how are you", "how are you?", "how are ya",
+		"how's it going", "hows it going",
+		"how have you been", "how've you been",
+		"how do you do",
+		"are you ok", "are you okay",
+		"you alright?", "you alright",
+		"good morning", "goodmorning", "morning",
+		"good afternoon", "afternoon",
+		"good evening", "evening",
+		"good night", "goodnight",
+		"long time no see",
+		"it's been a while",
+		"nice to see you", "nice to see you again",
+		"good to see you", "good to see you again",
+		"pleased to meet you",
+		"it's a pleasure to meet you",
+		"wud", "wyd", "hru"
+	)
+
+	/**
+	 * 모든 인사말을 포함한 Set (기존 호환성을 위해 유지).
+	 */
+	private val commonGreetings = koreanGreetings + englishGreetings
+
+	/**
+	 * 한국어 인사말 답변 목록.
+	 */
+	private val koreanGreetingResponses = listOf(
+		"안녕하세요! 무엇을 도와드릴까요?",
+		"네, 안녕하세요! 어떤 질문이 있으신가요?",
+		"반갑습니다! 편하게 질문해주세요.",
+		"안녕하세요! 오늘은 무엇이 궁금하신가요?",
+		"네, 안녕하세요! 다시 만나서 반가워요."
+	)
+
+	/**
+	 * 영어 인사말 답변 목록.
+	 */
+	private val englishGreetingResponses = listOf(
+		"Hello! How can I help you today?",
+		"Hi there! What can I do for you?",
+		"Greetings! Feel free to ask me anything."
+	)
+
 	init {
 		ModelPathStore.getModelMetadata(app)?.let { stored ->
 			runCatching {
@@ -50,16 +133,22 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 		// Preload model at startup so users don't type before load completes
 		viewModelScope.launch(Dispatchers.Default) {
 			var modelLoadSuccess = false
+			var hasReceivedMetadata = false
+			var errorMessage: String? = null
+			var errorReported = false
+			
 			repo.preload(object : TokenCallback {
 				override fun onLoadProgress(progress: Int) {
-					// Only handle initial progress (0%), don't call from JNI to avoid conflicts
-					if (progress == 0) {
-						mainHandler.post {
-							_uiState.value = _uiState.value.withProgress(progress)
-						}
+					// 모든 진행률 업데이트 (0-100%)
+					mainHandler.post {
+						Log.d("BanyaChat", "ChatViewModel.onLoadProgress: progress=$progress")
+						_uiState.value = _uiState.value.withProgress(progress)
 					}
 				}
 				override fun onModelMetadata(json: String) {
+					// 모델 메타데이터가 수신되면 모델이 성공적으로 로드된 것
+					hasReceivedMetadata = true
+					errorMessage = null // 에러 메시지 초기화
 					runCatching {
 						val obj = JSONObject(json)
 						ModelMetadata(
@@ -72,33 +161,77 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 						ModelPathStore.setModelMetadata(getApplication(), json)
 						mainHandler.post {
 							_uiState.value = _uiState.value.withMetadata(metadata)
+							_uiState.value = _uiState.value.withProgress(100)
 						}
 					}
 				}
 				override fun onToken(token: String) {}
 				override fun onCompleted() {}
 				override fun onError(message: String) {
-					// Surface load error in chat for visibility
-					mainHandler.post {
-						_uiState.value = _uiState.value.addMessage(ChatMessage(text = "로딩 실패: $message", isUser = false))
-						_uiState.value = _uiState.value.withProgress(0)
+					// 에러 메시지를 기록하되, 즉시 표시하지 않음
+					// 모델 로딩이 완료될 시간을 주고 실제 실패인지 확인
+					// onError가 호출되어도 모델 로딩이 계속 진행될 수 있으므로
+					// preload 완료 후에만 최종적으로 에러 메시지를 표시
+					if (!hasReceivedMetadata) {
+						errorMessage = message
 					}
 				}
 			})
-			// Check if model loaded successfully (handle != 0)
-			modelLoadSuccess = repo.isInitialized()
 			
-			// After preload completes, update progress to 100% if model loaded successfully
-			// This avoids JNI callback conflicts by calling from Kotlin layer
-			mainHandler.post {
-				_uiState.value = _uiState.value.withProgress(100)
+			// preload가 완료될 때까지 대기한 후 모델 로딩 상태 확인
+			// 모델 메타데이터가 수신되었거나 handle이 0이 아니면 성공
+			// onModelMetadata가 호출되면 자동으로 progress를 100%로 설정하므로
+			// 여기서는 메타데이터를 받지 못한 경우에만 체크
+			if (!hasReceivedMetadata) {
+				// 모델 로딩이 완료될 시간을 줌 (최대 15초 대기)
+				// 큰 모델의 경우 로딩에 시간이 걸릴 수 있음
+				var waitCount = 0
+				while (!hasReceivedMetadata && waitCount < 150 && !repo.isInitialized()) {
+					kotlinx.coroutines.delay(100)
+					waitCount++
+					// 중간에 메타데이터를 받았으면 즉시 종료
+					if (hasReceivedMetadata) break
+				}
+				modelLoadSuccess = repo.isInitialized()
 				
-				// Automatically send initial query when model load completes successfully
-				if (modelLoadSuccess && _uiState.value.messages.isEmpty()) {
-					// Only send if no messages exist yet (first load)
-					send("우울할땐 뭘 하는 게 좋을까?")
+				// 모델이 로드되었지만 메타데이터를 받지 못한 경우 progress를 100%로 설정
+				if (modelLoadSuccess && !hasReceivedMetadata) {
+					mainHandler.post {
+						_uiState.value = _uiState.value.withProgress(100)
+					}
+				} else if (!modelLoadSuccess && !hasReceivedMetadata && !errorReported) {
+					// 모델이 로드되지 않았고 메타데이터도 받지 못한 경우
+					// 에러 메시지가 있으면 표시, 없으면 기본 메시지 표시
+					errorReported = true
+					mainHandler.post {
+						val errorText = if (errorMessage != null) {
+							"로딩 실패: $errorMessage"
+						} else {
+							"로딩 실패: 모델을 로드할 수 없습니다"
+						}
+						_uiState.value = _uiState.value.addMessage(
+							ChatMessage(text = errorText, isUser = false)
+						)
+						_uiState.value = _uiState.value.withProgress(0)
+					}
+				}
+			} else {
+				// 메타데이터를 받았으면 이미 progress가 100%로 설정됨
+				modelLoadSuccess = true
+			}
+			
+			// Automatically start test cases when model load completes successfully
+			// 테스트 종료를 위해 주석처리
+			/*
+			if (modelLoadSuccess && _uiState.value.messages.isEmpty()) {
+				// Only start tests if no messages exist yet (first load)
+				isTestMode = true
+				currentTestIndex = 0
+				if (testCases.isNotEmpty()) {
+					send(testCases[currentTestIndex])
 				}
 			}
+			*/
 		}
 	}
 
@@ -141,6 +274,49 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 	}
 
 	fun send(userText: String) {
+		// 1. 입력 정규화: 앞뒤 공백을 제거하고 모두 소문자로 변환하여 비교 준비.
+		val normalizedInput = userText.trim().lowercase()
+
+		// 입력이 비어있으면 아무것도 하지 않음.
+		if (normalizedInput.isEmpty()) {
+			return
+		}
+
+		// 2. 입력이 단순 인사말인지 확인하고 언어 판단.
+		val isKoreanGreeting = koreanGreetings.any { greeting ->
+			normalizedInput == greeting
+		}
+		val isEnglishGreeting = englishGreetings.any { greeting ->
+			normalizedInput == greeting
+		}
+		val isGreeting = isKoreanGreeting || isEnglishGreeting
+
+		// 3. 휴리스틱(Heuristic) 적용:
+		// "안녕하세요, 오늘 날씨 어때요?"와 같은 복합적인 질문을 LLM으로 넘기기 위해,
+		// 입력이 매우 짧은 경우에만 인사말로 간주합니다. (예: 단어 2개 이하)
+		val wordCount = normalizedInput.split(Regex("\\s+")).size
+		val isSimpleEnough = wordCount <= 2
+
+		// 4. 조건부 처리: 입력이 '인사말'이고 '충분히 단순'할 때만 즉시 응답.
+		if (isGreeting && isSimpleEnough) {
+			// 사용자 메시지 추가
+			_uiState.value = _uiState.value.addMessage(ChatMessage(text = userText, isUser = true))
+			
+			// 입력 언어에 맞는 답변만 선택.
+			val randomResponse = when {
+				isKoreanGreeting -> koreanGreetingResponses.random()
+				isEnglishGreeting -> englishGreetingResponses.random()
+				else -> koreanGreetingResponses.random() // 기본값 (발생하지 않아야 함)
+			}
+			
+			// UI에 즉시 답변을 표시.
+			_uiState.value = _uiState.value.addMessage(ChatMessage(text = randomResponse, isUser = false))
+			
+			// LLM을 호출하지 않고 여기서 로직 종료.
+			return
+		}
+
+		// 5. 위의 조건에 해당하지 않는 모든 입력은 LLM으로 전달.
 		// Add user message
 		_uiState.value = _uiState.value.addMessage(ChatMessage(text = userText, isUser = true))
 		// Start generation
@@ -201,6 +377,32 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 					override fun onCompleted() {
 						mainHandler.post {
 							_uiState.value = _uiState.value.copy(isGenerating = false)
+							
+							// 테스트 모드에서 다음 테스트 케이스 자동 전송
+							// 테스트 종료를 위해 주석처리
+							/*
+							if (isTestMode) {
+								val lastMessage = _uiState.value.messages.lastOrNull()?.text ?: ""
+								Log.d("BanyaChat", "Test case ${currentTestIndex + 1}/${testCases.size} completed. Last message: ${lastMessage.take(100)}")
+								
+								// 다음 테스트 케이스로 이동
+								currentTestIndex++
+								
+								if (currentTestIndex < testCases.size) {
+									// 다음 테스트 케이스 전송 (약간의 지연 후)
+									mainHandler.postDelayed({
+										send(testCases[currentTestIndex])
+									}, 1000) // 1초 후 다음 테스트 시작
+								} else {
+									// 모든 테스트 완료 - 반복 시작
+									Log.d("BanyaChat", "All test cases completed. Restarting test cycle...")
+									currentTestIndex = 0
+									mainHandler.postDelayed({
+										send(testCases[currentTestIndex])
+									}, 2000) // 2초 후 다시 시작
+								}
+							}
+							*/
 						}
 					}
 

@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.example.llama.app-debug-46:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.example.llama.app-main-48:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.example.llama.app-debug-46:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.example.llama.app-main-48:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.example.llama.app-debug-46:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.example.llama.app-main-48:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "/Users/tony/.gradle/daemon/8.7/com.example.llama.app-debug-46:/drawable_banya_logo_square_mint.png.flat",
+        "source": "/Users/tony/.gradle/daemon/8.7/com.example.llama.app-main-48:/drawable/banya_logo_square_mint.png"
+    },
+    {
+        "merged": "com.example.llama.app-debug-46:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.example.llama.app-main-48:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.example.llama.app-debug-46:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.example.llama.app-main-48:/mipmap-xhdpi/ic_launcher.png"
+    }
+]

@@ -55,13 +55,12 @@ class ChatRepository(private val app: Application) {
 		val overridePath = ModelPathStore.getOverridePath(app).takeIf { !it.isNullOrBlank() }
 		val overrideFile = overridePath?.let { File(it) }
 		
-		// Also check Download directory as fallback
-		val downloadDir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS)
-		val downloadFile = File(downloadDir, "llama31-banyaa-q4_0.gguf")
+		// Note: Download directory access is restricted on Android 10+ (API 29+) due to Scoped Storage
+		// Users should use the file picker to select model files, or place them in app-specific directories
 		
 		Log.d(
 			"BanyaChat",
-			"ensureInit(): override=$overridePath exists=${overrideFile?.exists()} size=${overrideFile?.length()} internalExists=${internal.exists()} internalSize=${internal.length()} external=${external?.absolutePath} externalExists=${external?.exists()} externalSize=${external?.length()} downloadExists=${downloadFile.exists()} downloadSize=${downloadFile.length()}"
+			"ensureInit(): override=$overridePath exists=${overrideFile?.exists()} size=${overrideFile?.length()} internalExists=${internal.exists()} internalSize=${internal.length()} external=${external?.absolutePath} externalExists=${external?.exists()} externalSize=${external?.length()}"
 		)
 
 		// Ensure internal dir and attempt asset copy if present (may fail due to space)
@@ -81,7 +80,6 @@ class ChatRepository(private val app: Application) {
 			overrideFile != null && overrideFile.exists() -> overrideFile
 			internal.exists() -> internal
 			external != null && external.exists() -> external
-			downloadFile.exists() -> downloadFile  // Check Download directory as fallback
 			else -> internal // fall back; init will fail and stub will be used
 		}
 		val modelPath = modelFile.absolutePath
@@ -138,13 +136,25 @@ class ChatRepository(private val app: Application) {
 		LlamaBridge.completionStart(
 			handle = handle,
 			prompt = prompt,
-			numPredict = 512,  // 최대 생성 토큰 수를 512로 설정 (EOT 토큰으로 자연스럽게 중단)
+			numPredict = 100,  // 최대 생성 토큰 수를 100으로 설정
 			temperature = 0.7f,  // 반복 감소를 위해 다양성 증가 (0.6 → 0.7)
 			topP = 0.9f,         // Llama 3.1 권장값: 0.9 (Top-P + Min-P 조합)
 			topK = 0,            // Llama 3.1 권장: Top-K 비활성화 (Top-P + Min-P 사용)
 			repeatPenalty = 1.2f,  // 반복 방지 (1.2로 설정하여 반복 감소와 대화 품질의 균형 유지)
 			repeatLastN = 128,   // 더 긴 범위에서 반복 체크 (64 → 128)
-			stopSequences = arrayOf("사용자:", "질문:", "<|eot_id|>"),  // 추가 정지 시퀀스로 불필요한 생성 방지 (두 줄 바꿈 제외: 줄바꿈 이후에도 더 출력될 내용이 있을 수 있음)
+			stopSequences = arrayOf(
+				// 신뢰도 높은 종료 패턴만 유지 (문장 중간에 나올 수 있는 "요.", "죠." 등 제거)
+				// 레벨 1: 가장 안전하고 필수적인 종료 패턴
+				"습니다.", "니다.",
+				// 질문형 패턴 (문장 끝에만 나타남)
+				"까요?", "가요?", "나요?",
+				// 감탄형 패턴 (문장 끝에만 나타남)
+				"네요!", "군요!",
+				// 레벨 4: 공격적이지만 목록을 보호하는 패턴
+				".\n\n",
+				// 기타 정지 시퀀스
+				"사용자:", "질문:", "<|eot_id|>", "eotend_header", "<eotend_header>"
+			),
 			callback = callback
 		)
 			Log.d("BanyaChat", "generateStream(): completionStart dispatched")
@@ -157,7 +167,7 @@ class ChatRepository(private val app: Application) {
 	private fun formatPrompt(messages: List<ChatMessage>): String {
 			// Simplified system prompt for better context understanding
 		// Too long and complex prompts can confuse the model and lead to random token generation
-		val systemPrompt = """너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다. 사용자의 질문에 자연스럽고 의미 있는 한국어로 답변하세요."""
+		val systemPrompt = """너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다. 사용자의 질문에 자연스럽고 의미 있는 한국어로 답변하세요. 절대 열거형(리스트, 번호 목록, 항목 나열 등)으로 대답하지 말고, 항상 자연스러운 문장으로 설명하세요."""
 		val sb = StringBuilder()
 		sb.append("<|begin_of_text|>")
 		sb.append("<|start_header_id|>system<|end_header_id|>\n\n")

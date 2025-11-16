@@ -144,7 +144,11 @@ static std::string filterSpecialTokensTokenLevel(const std::string& tokenText) {
         "start_header_id",
         "end_header_id",
         "python_tag",
-        "finetune_right_pad_id"
+        "finetune_right_pad_id",
+        "eotend_header",  // 로그에서 발견된 패턴
+        "end_header",     // eotend_header의 일부
+        "start_header",   // start_headersystemend_header의 일부
+        "systemend_header"  // 복합 패턴의 일부
     };
     
     for (const auto& pattern : partialTokenPatterns) {
@@ -199,6 +203,20 @@ static std::string filterSpecialTokensTokenLevel(const std::string& tokenText) {
         size_t pos = 0;
         while ((pos = cleaned.find("_id>", pos)) != std::string::npos) {
             cleaned.erase(pos, 4);
+        }
+    }
+    // "eotend_header>" 패턴 제거 (로그에서 발견된 패턴)
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("eotend_header>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 14);
+        }
+    }
+    // "eotend_header" 패턴 제거 (">" 없이)
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("eotend_header", pos)) != std::string::npos) {
+            cleaned.erase(pos, 13);
         }
     }
     
@@ -385,7 +403,11 @@ static std::string filterSpecialTokensTextLevel(const std::string& text) {
             "start_header_id",
             "end_header_id",
             "python_tag",
-            "finetune_right_pad_id"
+            "finetune_right_pad_id",
+            "eotend_header",  // 로그에서 발견된 패턴
+            "end_header",     // eotend_header의 일부
+            "start_header",   // start_headersystemend_header의 일부
+            "systemend_header"  // 복합 패턴의 일부
         };
         
         for (const auto& pattern : partialTokenPatterns) {
@@ -453,6 +475,55 @@ static std::string filterSpecialTokensTextLevel(const std::string& text) {
         size_t pos = 0;
         while ((pos = cleaned.find("_id>", pos)) != std::string::npos) {
             cleaned.erase(pos, 4);
+        }
+    }
+    // "eotend_header>" 패턴 강력 제거 (로그에서 발견된 패턴, 14자)
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("eotend_header>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 14);
+        }
+    }
+    // "eotend_header" 패턴 제거 (">" 없이, 13자)
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("eotend_header", pos)) != std::string::npos) {
+            cleaned.erase(pos, 13);
+        }
+    }
+    // "eotend_headerstart_headersystemend_header>" 복합 패턴 제거 (로그에서 발견된 패턴)
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("eotend_headerstart_headersystemend_header>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 44);
+        }
+    }
+    // "start_headersystemend_header>" 패턴 제거
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("start_headersystemend_header>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 31);
+        }
+    }
+    // "systemend_header>" 패턴 제거
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("systemend_header>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 17);
+        }
+    }
+    // "end_header>" 패턴 제거
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("end_header>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 11);
+        }
+    }
+    // "start_header>" 패턴 제거
+    {
+        size_t pos = 0;
+        while ((pos = cleaned.find("start_header>", pos)) != std::string::npos) {
+            cleaned.erase(pos, 13);
         }
     }
     // 텍스트 끝에서 "eot", "eom" 패턴 제거 (다음 토큰에서 ">"가 올 수 있음)
@@ -573,7 +644,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
         // Default to 29 layers - testing to find maximum stable layers
         mparams.n_gpu_layers = 29;
     } else {
-        mparams.n_gpu_layers = nGpuLayers;
+    mparams.n_gpu_layers = nGpuLayers;
     }
     mparams.use_mmap = useMmap;
     mparams.use_mlock = useMlock;
@@ -600,7 +671,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
             if (g_CallbackClass && !env->IsInstanceOf(callbackGlobal, g_CallbackClass)) {
                 ALOGE("init(): Error callback object is not an instance of TokenCallback - skipping");
             } else {
-                env->CallVoidMethod(callbackGlobal, g_OnError, err);
+            env->CallVoidMethod(callbackGlobal, g_OnError, err);
                 if (env->ExceptionCheck()) {
                     ALOGE("init(): Exception in error callback - clearing");
                     env->ExceptionClear();
@@ -640,7 +711,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
             if (g_CallbackClass && !env->IsInstanceOf(callbackGlobal, g_CallbackClass)) {
                 ALOGE("init(): Error callback object is not an instance of TokenCallback - skipping");
             } else {
-                env->CallVoidMethod(callbackGlobal, g_OnError, err);
+            env->CallVoidMethod(callbackGlobal, g_OnError, err);
                 if (env->ExceptionCheck()) {
                     ALOGE("init(): Exception in error callback - clearing");
                     env->ExceptionClear();
@@ -665,7 +736,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
         if (g_CallbackClass && !env->IsInstanceOf(callbackGlobal, g_CallbackClass)) {
             ALOGE("init(): Final callback object is not an instance of TokenCallback - skipping");
         } else {
-            env->CallVoidMethod(callbackGlobal, g_OnLoadProgress, 100);
+        env->CallVoidMethod(callbackGlobal, g_OnLoadProgress, 100);
             if (env->ExceptionCheck()) {
                 ALOGE("init(): Exception in final progress callback - clearing");
                 env->ExceptionClear();
@@ -700,7 +771,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
         if (g_CallbackClass && !env->IsInstanceOf(callbackGlobal, g_CallbackClass)) {
             ALOGE("init(): Metadata callback object is not an instance of TokenCallback - skipping");
         } else {
-            env->CallVoidMethod(callbackGlobal, g_OnModelMetadata, metaJson);
+        env->CallVoidMethod(callbackGlobal, g_OnModelMetadata, metaJson);
             if (env->ExceptionCheck()) {
                 ALOGE("init(): Exception in metadata callback - clearing");
                 env->ExceptionClear();
@@ -720,7 +791,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
     // Clean up progress context (callback is stored in handle if needed later)
     // Note: progressCtx->callback is the same as callbackGlobal, so we'll delete it below
     delete progressCtx;
-    
+
     if (callbackGlobal) {
         env->DeleteGlobalRef(callbackGlobal);
     }
@@ -851,7 +922,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             ALOGE("completionStart(): ctx is null");
             jstring err = threadEnv->NewStringUTF("Context is null");
             if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
-                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+            threadEnv->CallVoidMethod(gCallback, g_OnError, err);
                 if (threadEnv->ExceptionCheck()) {
                     ALOGE("completionStart(): Exception in error callback - clearing");
                     threadEnv->ExceptionClear();
@@ -880,7 +951,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             ALOGE("completionStart(): model is null");
             jstring err = threadEnv->NewStringUTF("Model is null");
             if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
-                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+            threadEnv->CallVoidMethod(gCallback, g_OnError, err);
                 if (threadEnv->ExceptionCheck()) {
                     ALOGE("completionStart(): Exception in error callback - clearing");
                     threadEnv->ExceptionClear();
@@ -923,7 +994,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             ALOGE("completionStart(): llama_tokenize failed");
             jstring err = threadEnv->NewStringUTF("Tokenization failed");
             if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
-                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+            threadEnv->CallVoidMethod(gCallback, g_OnError, err);
                 if (threadEnv->ExceptionCheck()) {
                     ALOGE("completionStart(): Exception in error callback - clearing");
                     threadEnv->ExceptionClear();
@@ -1098,7 +1169,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             for (int j = 0; j < n_cur; ++j) {
                 batch.token   [j] = prompt_tokens[cur + j];
                 if (batch.seq_id[j]) {
-                    batch.seq_id  [j][0] = 0;
+                batch.seq_id  [j][0] = 0;
                 } else {
                     ALOGE("completionStart(): batch.seq_id[%d] is null!", j);
                     llama_batch_free(batch);
@@ -1127,7 +1198,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 ALOGE("completionStart(): llama_decode() failed at chunk cur=%d n_cur=%d", cur, n_cur);
                 jstring err = threadEnv->NewStringUTF("Failed to decode prompt");
                 if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
-                    threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
                     if (threadEnv->ExceptionCheck()) {
                         ALOGE("completionStart(): Exception in error callback - clearing");
                         threadEnv->ExceptionClear();
@@ -1225,7 +1296,11 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         // 문장 완성 감지를 위한 변수
         bool sentence_complete = false;
         int extra_tokens_after_limit = 0;
-        const int MAX_EXTRA_TOKENS = 20;  // 최대 추가 토큰 수 (문장 완성을 위해)
+        const int MAX_EXTRA_TOKENS = 50;  // 최대 추가 토큰 수 (문장 완성을 위해, 한국어 문장 완성을 위해 증가)
+        const int MIN_GENERATION_LENGTH = 30;  // 최소 생성 길이: 최소 30개 토큰 생성 보장 (약 15~20자)
+        // 열거형 패턴 감지 변수 (while 루프 전체에서 사용)
+        bool isEnumerationPattern = false;
+        bool incompleteEnumeration = false;
         
         // Continue generating tokens until limit is reached
         // Note: n_gen starts at 0, so we generate tokens 0..(n_predict-1) = n_predict tokens total
@@ -1316,7 +1391,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 ALOGD("completionStart(): EOS token detected (id=%d), breaking generation loop", (int)id);
                 break;
             }
-            
+
             // Special token handling (ID >= 128000): skip output but still process
             // Process special tokens through normal flow but skip text output
             bool isSpecialToken = (id >= 128000);
@@ -1516,7 +1591,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 } else {
                     ALOGE("completionStart(): Failed to create JNI string");
                 }
-                generated.append(tokenText);
+            generated.append(tokenText);
                 
                 // 2단계: 텍스트 레벨 특수 토큰 필터링 (누적된 텍스트에서 추가 필터링)
                 // 매 토큰마다 텍스트 레벨 필터링을 수행하여 여러 토큰이 조합되어 생성된 특수 토큰 패턴도 즉시 제거
@@ -1594,12 +1669,63 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             }
             
             bool hitStop = false;
+            // 열거형 패턴이 진행 중인지 먼저 확인 (stop sequence 체크 전에)
+            // 열거형 패턴이 진행 중이면 목록 항목이 완성될 때까지 stop sequence를 무시
+            bool enumerationInProgress = false;
+            if (isEnumerationPattern && incompleteEnumeration) {
+                enumerationInProgress = true;
+                ALOGD("completionStart(): Enumeration in progress, will ignore stop sequences until enumeration completes");
+            }
+            
+            // 최소 생성 길이를 넘었을 때만 사용자 정의 정지 시퀀스 검사를 시작합니다.
+            // 이렇게 하면 모델이 짧은 답변이라도 최소한의 완결성을 갖출 수 있는 "숨 쉴 틈"을 주게 됩니다.
+            if (n_gen > MIN_GENERATION_LENGTH && !enumerationInProgress) {
+                // 사용자 정의 정지 시퀀스 확인
             for (const auto& stop : stops) {
                 if (!stop.empty() && generated.size() >= stop.size()) {
                     if (generated.compare(generated.size() - stop.size(), stop.size(), stop) == 0) {
+                            // ".\n\n", "!\n\n", "?\n\n" 패턴의 경우, 목록 시작 기호가 뒤에 오는지 확인
+                            // 목록 시작 기호: 숫자(0-9), "-", "*", "•" 등
+                            if (stop == ".\n\n" || stop == "!\n\n" || stop == "?\n\n") {
+                                // 다음 토큰을 미리 확인할 수 없으므로, 현재 생성된 텍스트의 끝 부분만 확인
+                                // 실제로는 다음 토큰이 생성되기 전까지는 알 수 없으므로, 
+                                // 이 패턴은 stopSequences에 포함되어 있지만 목록 보호를 위해
+                                // 문장 완성 감지 로직에서도 처리합니다.
+                                // 여기서는 일단 정지 시퀀스로 처리하되, 로그에 기록합니다.
+                                ALOGD("completionStart(): Stop sequence '%s' detected (paragraph end pattern) after generating %d tokens, breaking generation", stop.c_str(), n_gen);
+                            } else {
+                                ALOGD("completionStart(): Stop sequence '%s' detected after generating %d tokens, breaking generation", stop.c_str(), n_gen);
+                            }
                         hitStop = true;
                         break;
                     }
+                    }
+                }
+            } else {
+                if (n_gen <= MIN_GENERATION_LENGTH) {
+                    ALOGD("completionStart(): Skipping stop sequence check (n_gen=%d <= MIN_GENERATION_LENGTH=%d)", n_gen, MIN_GENERATION_LENGTH);
+                } else if (enumerationInProgress) {
+                    ALOGD("completionStart(): Skipping stop sequence check (enumeration in progress)");
+                }
+            }
+            // "eotend_header" 패턴 감지 (여러 토큰으로 분리되어 생성될 수 있음)
+            // 생성된 텍스트 어디에든 "eotend_header" 패턴이 있으면 종료
+            // 로그에서 확인된 패턴: "eotend_header>" (14자)
+            if (!hitStop && generated.size() >= 13) {
+                // "eotend_header"는 13자, "eotend_header>"는 14자
+                size_t pos = generated.find("eotend_header");
+                if (pos != std::string::npos) {
+                    hitStop = true;
+                    ALOGD("completionStart(): Pattern 'eotend_header' detected at position %zu, breaking generation", pos);
+                }
+            }
+            // "<eotend_header>" 패턴도 확인 (완전한 형태)
+            if (!hitStop && generated.size() >= 15) {
+                // "<eotend_header>"는 15자
+                size_t pos = generated.find("<eotend_header>");
+                if (pos != std::string::npos) {
+                    hitStop = true;
+                    ALOGD("completionStart(): Pattern '<eotend_header>' detected at position %zu, breaking generation", pos);
                 }
             }
 
@@ -1615,29 +1741,433 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                     sentence_complete = true;
                     ALOGD("completionStart(): Sentence completion detected (last_char='%c'), will finish after current token", last_char);
                 }
-                // 생성된 전체 텍스트의 마지막 문자도 확인 (UTF-8 버퍼 처리 후)
-                // 줄바꿈은 제외: 줄바꿈 이후에도 더 출력될 내용이 있을 수 있으므로 종료 신호로 사용하지 않음
+            }
+            
+            // 생성된 전체 텍스트의 마지막 부분 확인 (UTF-8 버퍼 처리 후)
+            // 줄바꿈 후 문장 완성 여부도 확인하여 미완성 문장으로 종료되는 것을 방지
+            if (!generated.empty() && !sentence_complete) {
+                // 열거형 패턴 감지: 목록 번호(1., 2., 3.) 또는 불릿(-, •) 패턴 확인
+                // 변수는 while 루프 밖에서 선언되었으므로 매번 초기화
+                isEnumerationPattern = false;
+                incompleteEnumeration = false;
+                
+                // 전체 텍스트에서 열거형 패턴이 있는지 확인 (목록이 시작되었는지)
+                // "1.", "2.", "- ", "* " 등의 패턴이 텍스트에 있는지 확인
+                bool hasEnumerationInText = false;
+                if (generated.find("1.") != std::string::npos ||
+                    generated.find("2.") != std::string::npos ||
+                    generated.find("3.") != std::string::npos ||
+                    generated.find("- ") != std::string::npos ||
+                    generated.find("* ") != std::string::npos) {
+                    hasEnumerationInText = true;
+                    isEnumerationPattern = true;
+                }
+                
+                // 목록 시작 신호 감지: "다음과 같은", "다음과 같이", "다음은", "예를 들어" 등
+                // 이런 표현이 있고 줄바꿈으로 끝나거나 ":" 뒤에 목록이 시작될 것으로 예상
+                bool hasListStartSignal = false;
+                // 줄바꿈으로 끝나는 경우와 ":" 뒤에 목록이 시작되는 경우 모두 확인
                 if (!generated.empty()) {
-                    char last_gen_char = generated.back();
-                    if (last_gen_char == '.' || last_gen_char == '!' || last_gen_char == '?') {
-                        sentence_complete = true;
-                        ALOGD("completionStart(): Sentence completion detected in generated text (last_char='%c')", last_gen_char);
+                    // 마지막 부분 확인 (줄바꿈 또는 ":" 뒤)
+                    size_t checkLength = std::min(generated.length(), size_t(100));
+                    if (checkLength > 0) {
+                        std::string lastPart = generated.substr(generated.length() - checkLength);
+                        // 한국어 목록 시작 신호 패턴 (UTF-8 바이트로 확인)
+                        // "다음과 같은" = 15바이트, "다음과 같이" = 15바이트, "다음은" = 9바이트, "예를 들어" = 12바이트
+                        size_t pos = lastPart.find("다음과 같은");
+                        if (pos == std::string::npos) {
+                            pos = lastPart.find("다음과 같이");
+                        }
+                        if (pos == std::string::npos) {
+                            pos = lastPart.find("다음은");
+                        }
+                        if (pos == std::string::npos) {
+                            pos = lastPart.find("아래는");
+                        }
+                        if (pos == std::string::npos) {
+                            pos = lastPart.find("예를 들어");
+                        }
+                        if (pos == std::string::npos) {
+                            pos = lastPart.find("예를 들면");
+                        }
+                        if (pos == std::string::npos) {
+                            pos = lastPart.find("예시로는");
+                        }
+                        if (pos == std::string::npos) {
+                            pos = lastPart.find("예시로");
+                        }
+                        // 패턴이 발견되고, 그 뒤에 ":" 또는 ":" + 짧은 텍스트가 있으면 목록 시작 신호로 간주
+                        if (pos != std::string::npos) {
+                            // 패턴 뒤의 텍스트 확인
+                            std::string afterPattern = lastPart.substr(pos);
+                            // ":" 문자가 있는지 확인 (목록 시작 신호)
+                            size_t colonPos = afterPattern.find(':');
+                            if (colonPos != std::string::npos) {
+                                // ":" 뒤의 텍스트 길이 확인
+                                size_t textAfterColon = afterPattern.length() - colonPos - 1;
+                                // ":" 뒤에 줄바꿈이 오는 경우 (textAfterColon이 0 또는 매우 짧음) 목록 시작 신호로 간주
+                                // 또는 ":" 뒤의 텍스트가 짧으면 (최대 50바이트) 목록 시작 신호로 간주
+                                if (textAfterColon <= 50) {
+                                    hasListStartSignal = true;
+                                    isEnumerationPattern = true;
+                                    ALOGD("completionStart(): List start signal detected (pattern at pos %zu, colon at %zu, text after colon: %zu bytes)", pos, colonPos, textAfterColon);
+                                }
+                            } else {
+                                // ":"가 없어도 패턴 뒤의 텍스트가 짧으면 (최대 20바이트) 목록 시작 신호로 간주
+                                size_t textAfterPattern = afterPattern.length();
+                                if (textAfterPattern <= 20) {
+                                    hasListStartSignal = true;
+                                    isEnumerationPattern = true;
+                                    ALOGD("completionStart(): List start signal detected (pattern at pos %zu, text after: %zu bytes)", pos, textAfterPattern);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // 마지막 줄이 열거형 패턴으로 시작하는지 확인
+                size_t lastNewlinePos = generated.rfind('\n');
+                if (lastNewlinePos != std::string::npos && lastNewlinePos + 1 < generated.length()) {
+                    std::string lastLine = generated.substr(lastNewlinePos + 1);
+                    // 목록 번호 패턴 확인: \n\d+\. 또는 \n- 또는 \n• 또는 \n*
+                    if (!lastLine.empty()) {
+                        // 숫자로 시작하고 마침표가 있는 패턴 (예: "1.", "2.", "10.")
+                        if (lastLine.length() >= 2 && 
+                            lastLine[0] >= '0' && lastLine[0] <= '9' && 
+                            lastLine[1] == '.') {
+                            isEnumerationPattern = true;
+                            // 마지막 항목이 완성되지 않았는지 확인 (마침표/느낌표/물음표로 끝나지 않음)
+                            if (lastLine.length() > 2) {
+                                char lastChar = lastLine.back();
+                                if (lastChar != '.' && lastChar != '!' && lastChar != '?' && lastChar != '\n') {
+                                    incompleteEnumeration = true;
+                                }
+                            } else {
+                                // 항목 번호만 있고 내용이 없음
+                                incompleteEnumeration = true;
+                            }
+                        }
+                        // 불릿 패턴 확인: "- " 또는 "* " (•는 UTF-8 멀티바이트이므로 문자열 비교로 처리)
+                        else if (lastLine.length() >= 2 && 
+                                 (lastLine[0] == '-' || lastLine[0] == '*') &&
+                                 lastLine[1] == ' ') {
+                            isEnumerationPattern = true;
+                            // 마지막 항목이 완성되지 않았는지 확인
+                            if (lastLine.length() > 2) {
+                                char lastChar = lastLine.back();
+                                if (lastChar != '.' && lastChar != '!' && lastChar != '?' && lastChar != '\n') {
+                                    incompleteEnumeration = true;
+                                }
+                            } else {
+                                // 불릿만 있고 내용이 없음
+                                incompleteEnumeration = true;
+                            }
+                        }
+                        // UTF-8 불릿 문자(•) 패턴 확인: "• " (4바이트: 0xE2 0x80 0xA2 0x20)
+                        else if (lastLine.length() >= 4) {
+                            // "• "는 UTF-8로 0xE2 0x80 0xA2 0x20 (4바이트)
+                            if (static_cast<unsigned char>(lastLine[0]) == 0xE2 &&
+                                static_cast<unsigned char>(lastLine[1]) == 0x80 &&
+                                static_cast<unsigned char>(lastLine[2]) == 0xA2 &&
+                                lastLine[3] == ' ') {
+                                isEnumerationPattern = true;
+                                // 마지막 항목이 완성되지 않았는지 확인
+                                if (lastLine.length() > 4) {
+                                    char lastChar = lastLine.back();
+                                    if (lastChar != '.' && lastChar != '!' && lastChar != '?' && lastChar != '\n') {
+                                        incompleteEnumeration = true;
+                                    }
+                                } else {
+                                    // 불릿만 있고 내용이 없음
+                                    incompleteEnumeration = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // 줄바꿈 후 문장이 완성되지 않았는지 확인
+                // 마지막 문자가 줄바꿈이고, 그 앞에 문장 종료 패턴이 없으면 미완성으로 간주
+                if (generated.back() == '\n') {
+                    // 줄바꿈 앞의 텍스트 확인 (최대 20바이트)
+                    size_t checkBeforeNewline = std::min(generated.length() - 1, size_t(20));
+                    if (checkBeforeNewline > 0) {
+                        std::string beforeNewline = generated.substr(generated.length() - 1 - checkBeforeNewline, checkBeforeNewline);
+                        // 줄바꿈 앞에 문장 종료 패턴이 있는지 확인
+                        bool hasEndingBeforeNewline = false;
+                        // 마침표, 느낌표, 물음표 확인
+                        if (!beforeNewline.empty()) {
+                            char lastBeforeNewline = beforeNewline.back();
+                            if (lastBeforeNewline == '.' || lastBeforeNewline == '!' || lastBeforeNewline == '?') {
+                                hasEndingBeforeNewline = true;
+                            }
+                        }
+                        // 한국어 종료 패턴 확인
+                        if (!hasEndingBeforeNewline && beforeNewline.length() >= 3) {
+                            std::string lastThree = beforeNewline.substr(beforeNewline.length() - 3);
+                            const std::vector<std::string> koreanEndChars = {
+                                "\xEB\x8B\xA4",  // "다"
+                                "\xEC\x9A\x94",  // "요"
+                                "\xEB\x84\xA4",  // "네"
+                                "\xEC\x96\xB4"   // "어"
+                            };
+                            for (const auto& endChar : koreanEndChars) {
+                                if (lastThree == endChar) {
+                                    hasEndingBeforeNewline = true;
+                                    break;
+                                }
+                            }
+                        }
+                        // 줄바꿈 앞에 문장 종료 패턴이 없으면 미완성으로 간주하여 추가 토큰 생성 계속
+                        if (!hasEndingBeforeNewline) {
+                            ALOGD("completionStart(): Newline detected but no sentence ending before it, continuing generation");
+                            // sentence_complete는 false로 유지하여 추가 토큰 생성 계속
+                        }
+                    }
+                }
+                
+                // 열거형 패턴이 텍스트에 있거나 목록 시작 신호가 있고, 마지막이 줄바꿈으로 끝나면 미완성으로 간주
+                // (목록이 시작되었거나 곧 시작될 것으로 예상되지만 마지막 항목이 완성되지 않았을 가능성)
+                if ((hasEnumerationInText || hasListStartSignal) && !generated.empty() && generated.back() == '\n') {
+                    // 줄바꿈 앞에 문장 종료 패턴이 있는지 확인
+                    size_t checkBeforeNewline = std::min(generated.length() - 1, size_t(20));
+                    if (checkBeforeNewline > 0) {
+                        std::string beforeNewline = generated.substr(generated.length() - 1 - checkBeforeNewline, checkBeforeNewline);
+                        bool hasEnding = false;
+                        if (!beforeNewline.empty()) {
+                            char lastBeforeNewline = beforeNewline.back();
+                            if (lastBeforeNewline == '.' || lastBeforeNewline == '!' || lastBeforeNewline == '?') {
+                                hasEnding = true;
+                            }
+                        }
+                        // 한국어 종료 패턴 확인
+                        if (!hasEnding && beforeNewline.length() >= 3) {
+                            std::string lastThree = beforeNewline.substr(beforeNewline.length() - 3);
+                            const std::vector<std::string> koreanEndChars = {
+                                "\xEB\x8B\xA4", "\xEC\x9A\x94", "\xEB\x84\xA4", "\xEC\x96\xB4"
+                            };
+                            for (const auto& endChar : koreanEndChars) {
+                                if (lastThree == endChar) {
+                                    hasEnding = true;
+                                    break;
+                                }
+                            }
+                        }
+                        // 열거형 패턴이 있고 줄바꿈 앞에 종료 패턴이 없으면 미완성으로 간주
+                        if (!hasEnding) {
+                            incompleteEnumeration = true;
+                            ALOGD("completionStart(): Enumeration pattern detected with newline but no ending, marking as incomplete");
+                        }
+                    }
+                }
+                
+                // 열거형 패턴이 미완성인 경우 로그 기록
+                if (isEnumerationPattern && incompleteEnumeration) {
+                    ALOGD("completionStart(): Incomplete enumeration pattern detected, continuing generation");
+                }
+                // 1. 마지막 문자가 문장 종료 문자인지 확인
+                char last_gen_char = generated.back();
+                if (last_gen_char == '.' || last_gen_char == '!' || last_gen_char == '?') {
+                    sentence_complete = true;
+                    ALOGD("completionStart(): Sentence completion detected in generated text (last_char='%c')", last_gen_char);
+                } else {
+                    // 2. 한국어 문장 종료 패턴 확인 (마지막 몇 글자 확인)
+                    // 레벨 1: 가장 안전하고 필수적인 종료 패턴 (마침표/느낌표/물음표 포함)
+                    // 레벨 2: 신뢰도 높은 일반 종료 패턴
+                    // 더 긴 패턴부터 확인 (예: "습니다." -> "습니다" -> "다")
+                    const std::vector<std::string> koreanEndings = {
+                        // 레벨 1: 필수 종료 패턴 (문장 종료 기호 포함)
+                        "습니다.", "니다.", "요?", "죠?", "가요?", "까요?", "네요!", "군요!",
+                        // 레벨 2: 일반 종료 패턴 (문장 종료 기호 포함)
+                        "요.", "죠.", "예요.", "에요.",
+                        // 레벨 3: 맥락 의존적 종료 패턴
+                        "다.",
+                        // 기본 종료 패턴 (문장 종료 기호 없이)
+                        "습니다", "입니다", "합니다", "네요", "어요", "세요", "까요", "나요", "니요",
+                        "요", "다", "네", "어", "지", "게", "까", "나", "니"
+                    };
+                    
+                    // 마지막 12바이트까지 확인 (한국어 문장 종료 패턴은 보통 1~3글자 + 문장 종료 기호, 한 글자는 3바이트)
+                    // 예: "습니다." = 9바이트 (3글자) + 1바이트 (마침표) = 10바이트
+                    size_t checkLength = std::min(generated.length(), size_t(12));
+                    if (checkLength > 0) {
+                        std::string lastPart = generated.substr(generated.length() - checkLength);
+                        
+                        for (const auto& ending : koreanEndings) {
+                            // ending의 UTF-8 바이트 길이 계산
+                            size_t endingBytes = ending.length();
+                            
+                            if (lastPart.length() >= endingBytes) {
+                                // 마지막 부분이 한국어 종료 패턴으로 끝나는지 확인
+                                std::string suffix = lastPart.substr(lastPart.length() - endingBytes);
+                                if (suffix == ending) {
+                                    // 종료 패턴이 텍스트의 끝이거나, 종료 패턴 뒤에 문장 종료 문자가 오는 경우
+                                    // 또는 종료 패턴 앞에 공백이나 줄바꿈이 있는 경우 (완성된 문장)
+                                    bool isComplete = false;
+                                    
+                                    // 1. 종료 패턴이 텍스트의 끝인 경우 (예: "좋습니다")
+                                    if (generated.length() == endingBytes) {
+                                        isComplete = true;
+                                    }
+                                    // 2. 종료 패턴 뒤에 문장 종료 문자가 오는 경우 (예: "입니다.", "합니다!")
+                                    else if (generated.length() > endingBytes) {
+                                        // 종료 패턴 바로 뒤의 문자 확인
+                                        size_t posAfterEnding = generated.length() - endingBytes;
+                                        if (posAfterEnding < generated.length()) {
+                                            char charAfter = generated[posAfterEnding];
+                                            if (charAfter == '.' || charAfter == '!' || charAfter == '?') {
+                                                isComplete = true;
+                                                // 문장 종료 문자 뒤에 "\n\n"이 오는 경우도 확인 (레벨 4 패턴)
+                                                if (generated.length() >= endingBytes + 3) {
+                                                    std::string afterEnding = generated.substr(posAfterEnding, 3);
+                                                    if (afterEnding == ".\n\n" || afterEnding == "!\n\n" || afterEnding == "?\n\n") {
+                                                        isComplete = true;
+                                                        ALOGD("completionStart(): Paragraph end pattern detected after Korean ending");
+                                                    }
+                                                }
+                                            }
+                                            // 3. 종료 패턴 뒤에 공백이나 줄바꿈이 오는 경우도 완성된 문장으로 간주
+                                            else if (charAfter == ' ' || charAfter == '\n') {
+                                                isComplete = true;
+                                            }
+                                        }
+                                    }
+                                    
+                                    if (isComplete) {
+                                        sentence_complete = true;
+                                        ALOGD("completionStart(): Korean sentence completion detected (ending='%s')", ending.c_str());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    // 3. 마지막 문자가 한국어 종료 패턴으로 끝나는 경우 완성된 문장으로 간주
+                    // (예: "좋습니다" -> 완성된 문장)
+                    // 한국어는 UTF-8로 인코딩되므로 문자열 비교를 사용
+                    if (!sentence_complete && generated.length() >= 3) {
+                        // 마지막 3바이트 확인 (한국어 한 글자는 보통 3바이트)
+                        std::string lastThreeBytes = generated.substr(generated.length() - 3);
+                        // 한국어 종료 문자 패턴 확인 (UTF-8 인코딩)
+                        // "다" (0xEB, 0x8B, 0xA4), "요" (0xEC, 0x9A, 0x94), "네" (0xEB, 0x84, 0xA4), "어" (0xEC, 0x96, 0xB4)
+                        const std::vector<std::string> koreanEndChars = {
+                            "\xEB\x8B\xA4",  // "다"
+                            "\xEC\x9A\x94",  // "요"
+                            "\xEB\x84\xA4",  // "네"
+                            "\xEC\x96\xB4"   // "어"
+                        };
+                        
+                        for (const auto& endChar : koreanEndChars) {
+                            if (lastThreeBytes == endChar) {
+                                // 종료 문자로 끝나는 경우, 이전 문자가 공백이나 줄바꿈이 아니면 완성된 문장으로 간주
+                                // 또는 종료 문자가 텍스트의 끝이면 완성된 문장
+                                bool isComplete = false;
+                                if (generated.length() == 3) {
+                                    // 텍스트가 종료 문자로만 구성된 경우는 제외
+                                    isComplete = false;
+                                } else {
+                                    // 종료 문자 앞의 문자가 공백이나 줄바꿈이 아니면 완성된 문장
+                                    char charBefore = generated[generated.length() - 4];
+                                    if (charBefore != ' ' && charBefore != '\n' && charBefore != '\t') {
+                                        isComplete = true;
+                                    }
+                                }
+                                
+                                if (isComplete) {
+                                    sentence_complete = true;
+                                    ALOGD("completionStart(): Korean sentence completion detected (ends with Korean character)");
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        // 마지막 6바이트 확인 (2글자 패턴, 예: "습니다")
+                        if (!sentence_complete && generated.length() >= 6) {
+                            std::string lastSixBytes = generated.substr(generated.length() - 6);
+                            // "습니다" (0xEC, 0x8A, 0xB5, 0xEB, 0x8B, 0xA4)
+                            if (lastSixBytes == "\xEC\x8A\xB5\xEB\x8B\xA4") {
+                                // "습니다"로 끝나는 경우, 이전 문자가 공백이나 줄바꿈이 아니면 완성된 문장
+                                bool isComplete = false;
+                                if (generated.length() == 6) {
+                                    isComplete = false;
+                                } else {
+                                    char charBefore = generated[generated.length() - 7];
+                                    if (charBefore != ' ' && charBefore != '\n' && charBefore != '\t') {
+                                        isComplete = true;
+                                    }
+                                }
+                                
+                                if (isComplete) {
+                                    sentence_complete = true;
+                                    ALOGD("completionStart(): Korean sentence completion detected (ends with '습니다')");
+                                }
+                            }
+                        }
                     }
                 }
             }
             
             // Check if we've reached the token limit after incrementing
             // 문장이 완성되었거나 최대 추가 토큰 수에 도달했으면 종료
+            // 단, 줄바꿈 후 문장이 완성되지 않은 경우 또는 열거형 패턴이 미완성인 경우 추가 토큰 생성 계속
             if (n_gen >= n_predict) {
-                if (sentence_complete || extra_tokens_after_limit >= MAX_EXTRA_TOKENS) {
+                // 줄바꿈 후 문장이 완성되지 않은 경우 추가 토큰 생성 계속
+                bool incompleteAfterNewline = false;
+                if (!generated.empty() && generated.back() == '\n') {
+                    // 줄바꿈 앞에 문장 종료 패턴이 있는지 확인
+                    size_t checkBeforeNewline = std::min(generated.length() - 1, size_t(20));
+                    if (checkBeforeNewline > 0) {
+                        std::string beforeNewline = generated.substr(generated.length() - 1 - checkBeforeNewline, checkBeforeNewline);
+                        bool hasEnding = false;
+                        if (!beforeNewline.empty()) {
+                            char lastBeforeNewline = beforeNewline.back();
+                            if (lastBeforeNewline == '.' || lastBeforeNewline == '!' || lastBeforeNewline == '?') {
+                                hasEnding = true;
+                            }
+                        }
+                        if (!hasEnding && beforeNewline.length() >= 3) {
+                            std::string lastThree = beforeNewline.substr(beforeNewline.length() - 3);
+                            const std::vector<std::string> koreanEndChars = {
+                                "\xEB\x8B\xA4", "\xEC\x9A\x94", "\xEB\x84\xA4", "\xEC\x96\xB4"
+                            };
+                            for (const auto& endChar : koreanEndChars) {
+                                if (lastThree == endChar) {
+                                    hasEnding = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!hasEnding) {
+                            incompleteAfterNewline = true;
+                        }
+                    }
+                }
+                
+                // 열거형 패턴이 미완성인 경우 추가 토큰 생성 허용
+                // 열거형 패턴의 경우 더 많은 추가 토큰을 허용 (MAX_EXTRA_TOKENS * 2)
+                const int ENUMERATION_EXTRA_TOKENS = MAX_EXTRA_TOKENS * 2;
+                bool allowExtraForEnumeration = (isEnumerationPattern && incompleteEnumeration && 
+                                                 extra_tokens_after_limit < ENUMERATION_EXTRA_TOKENS);
+                
+                if (sentence_complete || 
+                    (extra_tokens_after_limit >= MAX_EXTRA_TOKENS && !incompleteAfterNewline && !allowExtraForEnumeration)) {
                     ALOGD("completionStart(): Reached token limit (n_gen=%d >= n_predict=%d) and (sentence_complete=%d or extra_tokens=%d >= %d), breaking before decode", 
                           n_gen, n_predict, sentence_complete ? 1 : 0, extra_tokens_after_limit, MAX_EXTRA_TOKENS);
                     break;
                 }
                 // 문장이 완성되지 않았고 추가 토큰을 더 생성할 수 있으면 계속 진행
                 extra_tokens_after_limit++;
-                ALOGD("completionStart(): Reached token limit but sentence incomplete, continuing with extra token %d/%d", 
-                      extra_tokens_after_limit, MAX_EXTRA_TOKENS);
+                if (allowExtraForEnumeration) {
+                    ALOGD("completionStart(): Reached token limit but incomplete enumeration pattern, continuing with extra token %d/%d", 
+                          extra_tokens_after_limit, ENUMERATION_EXTRA_TOKENS);
+                } else if (incompleteAfterNewline) {
+                    ALOGD("completionStart(): Reached token limit but incomplete after newline, continuing with extra token %d/%d", 
+                          extra_tokens_after_limit, MAX_EXTRA_TOKENS);
+                } else {
+                    ALOGD("completionStart(): Reached token limit but sentence incomplete, continuing with extra token %d/%d", 
+                          extra_tokens_after_limit, MAX_EXTRA_TOKENS);
+                }
             }
 
             // Prepare and run next decode with a single token
@@ -1666,7 +2196,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             free(gen_batch.pos);
             gen_batch.pos = nullptr;  // Let llama_batch_allocr calculate position from memory
             if (gen_batch.seq_id[0]) {
-                gen_batch.seq_id  [0][0] = 0;
+            gen_batch.seq_id  [0][0] = 0;
             } else {
                 ALOGE("completionStart(): gen_batch.seq_id[0] is null!");
                 llama_batch_free(gen_batch);
@@ -1683,7 +2213,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 ALOGE("completionStart(): llama_decode() failed on token, result=%d", decode_result);
                 jstring err = threadEnv->NewStringUTF("Failed to decode token");
                 if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
-                    threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
                     if (threadEnv->ExceptionCheck()) {
                         ALOGE("completionStart(): Exception in error callback - clearing");
                         threadEnv->ExceptionClear();
