@@ -508,11 +508,11 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 						// 검색 결과가 있는 경우: 검색 결과를 바탕으로 답변 생성
 						Log.d("BanyaChat", "RAG: Search completed, found ${searchResults.size} results")
 						
-						// 검색 결과를 하나의 문자열로 가공 (내용을 300자로 제한하여 프롬프트 길이 단축, 컨텍스트 크기 512 제한 고려)
-						val searchContext = searchResults.joinToString("\n\n") { result ->
+						// 검색 결과를 하나의 문자열로 가공 (프롬프트 평가 속도 향상을 위해 150자로 제한)
+						val searchContext = searchResults.joinToString("\n") { result ->
 							val content = result.content ?: "N/A"
-							val truncatedContent = if (content.length > 300) content.substring(0, 300) + "..." else content
-							"제목: ${result.title ?: "N/A"}\n내용: $truncatedContent"
+							val truncatedContent = if (content.length > 150) content.substring(0, 150) + "..." else content
+							truncatedContent
 						}
 
 						// 검색 결과 기반 답변 생성
@@ -580,14 +580,11 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 	 * 검색 결과가 없을 경우를 위한 가이드 포함
 	 */
 	private fun createSynthesisPrompt(question: String, searchContext: String?, hasSearchResults: Boolean = false): String {
+		// 시스템 프롬프트 최대한 간소화
 		val systemPrompt = if (hasSearchResults && searchContext != null && searchContext.isNotEmpty()) {
-			// 검색 결과가 있는 경우 (간결한 버전)
-			"""검색 결과를 바탕으로 질문에 답변하세요. 자연스러운 문장으로 설명하세요.
-절대 질문을 반복하거나 인용하지 마세요. 질문 내용을 그대로 출력하지 마세요. 오직 답변만 제공하세요."""
+			"검색 결과를 바탕으로 답변하세요. 질문을 반복하지 마세요."
 		} else {
-			// 검색 결과가 없는 경우 (간결한 버전)
-			"""질문에 답변하세요. 자연스러운 문장으로 설명하세요.
-절대 질문을 반복하거나 인용하지 마세요. 질문 내용을 그대로 출력하지 마세요. 오직 답변만 제공하세요."""
+			"질문에 답변하세요. 질문을 반복하지 마세요."
 		}
 
 		val sb = StringBuilder()
@@ -598,10 +595,10 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 		sb.append("<|start_header_id|>user<|end_header_id|>\n\n")
 		
 		if (hasSearchResults && searchContext != null && searchContext.isNotEmpty()) {
-			// 프롬프트 길이 단축: 간결한 형식 사용
-			sb.append("[검색 결과]\n$searchContext\n\n[질문]\n$question\n\n[답변]")
+			// 프롬프트 길이 최소화: 마크다운 형식 제거, 간결한 형식
+			sb.append("$searchContext\n\n$question")
 		} else {
-			sb.append("[질문]\n$question\n\n[답변]")
+			sb.append(question)
 		}
 		
 		sb.append("<|eot_id|>")
