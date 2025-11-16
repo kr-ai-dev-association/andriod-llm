@@ -351,6 +351,16 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 
 		// 5. 위의 조건에 해당하지 않는 모든 입력은 RAG 시스템으로 전달.
 		Log.d("BanyaChat", "ChatViewModel.send(): Not a greeting, starting RAG process")
+		
+		// 세션 관리: 메시지 리스트가 너무 길어지면 제한
+		val currentMessages = _uiState.value.messages
+		val limitedMessages = limitMessagesForSession(currentMessages)
+		if (limitedMessages.size < currentMessages.size) {
+			// 메시지가 제한되었으면 UI 상태 업데이트
+			_uiState.value = _uiState.value.copy(messages = limitedMessages)
+			Log.d("BanyaChat", "Session management: Limited messages from ${currentMessages.size} to ${limitedMessages.size}")
+		}
+		
 		// Add user message
 		_uiState.value = _uiState.value.addMessage(ChatMessage(text = userText, isUser = true))
 		Log.d("BanyaChat", "ChatViewModel.send(): User message added to UI state")
@@ -469,13 +479,90 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 	}
 
 	/**
-	 * RAG 시스템: 사용자 입력을 처리하여 항상 웹 검색을 시도하고, 검색 결과가 없을 경우만 LLM이 직접 답변
+	 * 카테고리 감지: 사용자 입력이 웹 검색이 필요한 카테고리인지 확인
+	 * @return true면 웹 검색 필요, false면 LLM 자체 지식으로 답변
+	 */
+	private fun shouldUseWebSearch(userInput: String): Boolean {
+		val normalizedInput = userInput.lowercase().trim()
+		
+		// 날씨 카테고리
+		val weatherPattern = Regex("(날씨|기온|온도|비|눈|맑음|흐림|강수|폭염|한파|기후|예보|날씨.*알려|날씨.*어때|날씨.*어떤)")
+		if (weatherPattern.containsMatchIn(normalizedInput)) {
+			Log.d("BanyaChat", "Category detected: 날씨")
+			return true
+		}
+		
+		// 주식 카테고리
+		val stockPattern = Regex("(주식|주가|증권|코스피|코스닥|삼성전자|애플|테슬라|비트코인|암호화폐|투자|시세|종목|증시)")
+		if (stockPattern.containsMatchIn(normalizedInput)) {
+			Log.d("BanyaChat", "Category detected: 주식")
+			return true
+		}
+		
+		// 대통령 카테고리
+		val presidentPattern = Regex("(대통령|대통령은|대통령이|대통령의|대통령.*누구|현재.*대통령|한국.*대통령|미국.*대통령)")
+		if (presidentPattern.containsMatchIn(normalizedInput)) {
+			Log.d("BanyaChat", "Category detected: 대통령")
+			return true
+		}
+		
+		// 뉴스 카테고리
+		val newsPattern = Regex("(뉴스|최신.*뉴스|오늘.*뉴스|뉴스.*알려|뉴스.*보여|뉴스.*있어)")
+		if (newsPattern.containsMatchIn(normalizedInput)) {
+			Log.d("BanyaChat", "Category detected: 뉴스")
+			return true
+		}
+		
+		// 기사 카테고리
+		val articlePattern = Regex("(기사|최신.*기사|오늘.*기사|기사.*알려|기사.*보여|기사.*있어)")
+		if (articlePattern.containsMatchIn(normalizedInput)) {
+			Log.d("BanyaChat", "Category detected: 기사")
+			return true
+		}
+		
+		// 쇼핑 카테고리
+		val shoppingPattern = Regex("(쇼핑|구매|가격|판매|할인|구매.*알려|가격.*알려|어디서.*사|어디.*팔|비교|리뷰)")
+		if (shoppingPattern.containsMatchIn(normalizedInput)) {
+			Log.d("BanyaChat", "Category detected: 쇼핑")
+			return true
+		}
+		
+		// 식당/맛집 카테고리
+		val restaurantPattern = Regex("(식당|맛집|음식점|레스토랑|카페|식당.*추천|맛집.*추천|맛있는.*곳|먹을.*곳|식사.*곳|점심.*곳|저녁.*곳|근처.*식당|근처.*맛집|주변.*식당|주변.*맛집)")
+		if (restaurantPattern.containsMatchIn(normalizedInput)) {
+			Log.d("BanyaChat", "Category detected: 식당/맛집")
+			return true
+		}
+		
+		// 기타 명시적인 웹 검색 지시
+		val explicitSearchPattern = Regex("(검색|찾아|알아봐|검색해|찾아줘|알아봐줘|검색.*해줘|인터넷.*검색|웹.*검색|최신.*정보|최근.*정보)")
+		if (explicitSearchPattern.containsMatchIn(normalizedInput)) {
+			Log.d("BanyaChat", "Category detected: 명시적인 웹 검색 지시")
+			return true
+		}
+		
+		Log.d("BanyaChat", "Category: 일반 질문 (LLM 자체 지식으로 답변)")
+		return false
+	}
+
+	/**
+	 * RAG 시스템: 카테고리에 해당하는 경우에만 웹 검색을 시도하고, 그 외에는 LLM 자체 지식으로 답변
 	 */
 	private fun processUserInputWithRAG(userInput: String) {
 		if (_uiState.value.isGenerating) return
 		// Block generation until model load has reached 100
 		if (_uiState.value.loadProgress in 0..99) {
 			_uiState.value = _uiState.value.addMessage(ChatMessage(text = "모델 로딩 중입니다. 잠시만 기다려 주세요.", isUser = false))
+			return
+		}
+
+		// 카테고리 확인: 웹 검색이 필요한지 확인
+		val needsWebSearch = shouldUseWebSearch(userInput)
+		
+		if (!needsWebSearch) {
+			// 웹 검색이 필요하지 않은 경우: LLM 자체 지식으로 바로 답변
+			Log.d("BanyaChat", "RAG: Category does not require web search, using LLM knowledge directly")
+			generate()
 			return
 		}
 
@@ -487,7 +574,7 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 			try {
 				Log.d("BanyaChat", "RAG: Starting web search for question: $userInput")
 
-				// --- 1단계: 항상 Tavily API 호출 시도 ---
+				// --- 1단계: Tavily API 호출 (웹 검색이 필요한 카테고리일 때만) ---
 				val searchRequest = TavilySearchRequest(
 					api_key = tavilyApiKey,
 					query = userInput, // 사용자 질문을 그대로 검색 쿼리로 사용
@@ -522,7 +609,8 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 							_uiState.value = _uiState.value.copy(isGenerating = true)
 						}
 
-						val finalPrompt = createSynthesisPrompt(userInput, searchContext, hasSearchResults = true)
+						// 웹 검색일 때만 장소/시간 context 포함 (hasSearchResults = true)
+						val finalPrompt = createSynthesisPrompt(userInput, searchContext, hasSearchResults = true, includeLocationTime = true)
 						
 						// RAG를 사용할 때는 createSynthesisPrompt로 만든 프롬프트가 이미 완전한 프롬프트이므로
 						// generateStreamWithPrompt를 직접 호출하여 중복을 방지
@@ -552,14 +640,14 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 							}
 						)
 					} else {
-						// 검색 결과가 없는 경우: LLM이 직접 답변
+						// 검색 결과가 없는 경우: LLM이 직접 답변 (장소/시간 context 없이)
 						Log.d("BanyaChat", "RAG: No search results found, generating answer directly")
 						withContext(Dispatchers.Main) {
 							generate()
 						}
 					}
 				} else {
-					// 검색 실패 또는 응답이 없는 경우: LLM이 직접 답변
+					// 검색 실패 또는 응답이 없는 경우: LLM이 직접 답변 (장소/시간 context 없이)
 					Log.w("BanyaChat", "RAG: Search failed or no response, generating answer directly")
 					withContext(Dispatchers.Main) {
 						generate()
@@ -577,18 +665,20 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 	/**
 	 * 프롬프트: 검색 결과를 바탕으로 최종 답변을 생성하도록 하는 프롬프트
 	 * 검색 결과가 없을 경우를 위한 가이드 포함
+	 * @param includeLocationTime 웹 검색일 때만 true로 설정하여 장소/시간 정보 포함
 	 */
-	private fun createSynthesisPrompt(question: String, searchContext: String?, hasSearchResults: Boolean = false): String {
-		// 현재 날짜/시간 가져오기
+	private fun createSynthesisPrompt(question: String, searchContext: String?, hasSearchResults: Boolean = false, includeLocationTime: Boolean = false): String {
+		// 현재 날짜/시간 가져오기 (웹 검색일 때만 사용)
 		val dateFormat = java.text.SimpleDateFormat("yyyy년 MM월 dd일 EEEE HH시 mm분", java.util.Locale.KOREAN)
-		val currentDateTime = dateFormat.format(java.util.Date())
+		val currentDateTime = if (includeLocationTime) dateFormat.format(java.util.Date()) else ""
 		
-		// 현재 장소 설정
-		val currentLocation = "서울 강남구"
+		// 현재 장소 설정 (웹 검색일 때만 사용)
+		val currentLocation = if (includeLocationTime) "서울 강남구" else ""
 		
 		// 시스템 프롬프트 개선
 		val systemPrompt = if (hasSearchResults && searchContext != null && searchContext.isNotEmpty()) {
-			"""너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다.
+			if (includeLocationTime) {
+				"""너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다.
 
 현재 정보:
 - 현재 위치: $currentLocation
@@ -599,18 +689,21 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 2. 절대 번호 나열식(1. 2. 3. 또는 ① ② ③ 등)으로 대답하지 말고, 항상 자연스러운 문장으로 설명하세요.
 3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요.
 4. 현재 위치와 날짜/시간 정보를 활용하여 정확하고 관련성 있는 답변을 제공하세요."""
+			} else {
+				"""너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다.
+
+답변 규칙:
+1. 검색 결과를 바탕으로 답변하세요. 질문을 반복하지 마세요.
+2. 절대 번호 나열식(1. 2. 3. 또는 ① ② ③ 등)으로 대답하지 말고, 항상 자연스러운 문장으로 설명하세요.
+3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요."""
+			}
 		} else {
 			"""너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다.
-
-현재 정보:
-- 현재 위치: $currentLocation
-- 현재 날짜/시간: $currentDateTime
 
 답변 규칙:
 1. 질문에 답변하세요. 질문을 반복하지 마세요.
 2. 절대 번호 나열식(1. 2. 3. 또는 ① ② ③ 등)으로 대답하지 말고, 항상 자연스러운 문장으로 설명하세요.
-3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요.
-4. 현재 위치와 날짜/시간 정보를 활용하여 정확하고 관련성 있는 답변을 제공하세요."""
+3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요."""
 		}
 
 		val sb = StringBuilder()
@@ -620,8 +713,10 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 		sb.append("<|eot_id|>")
 		sb.append("<|start_header_id|>user<|end_header_id|>\n\n")
 		
-		// 사용자 질문에 현재 위치와 날짜/시간을 context로 추가
-		sb.append("[현재 위치: $currentLocation, 현재 날짜/시간: $currentDateTime]\n\n")
+		// 웹 검색일 때만 사용자 질문에 현재 위치와 날짜/시간을 context로 추가
+		if (includeLocationTime && currentLocation.isNotEmpty() && currentDateTime.isNotEmpty()) {
+			sb.append("[현재 위치: $currentLocation, 현재 날짜/시간: $currentDateTime]\n\n")
+		}
 		
 		if (hasSearchResults && searchContext != null && searchContext.isNotEmpty()) {
 			// 프롬프트 길이 최소화: 마크다운 형식 제거, 간결한 형식
@@ -638,12 +733,13 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 
 	/**
 	 * 세션 관리: 프롬프트 길이를 추정하고 일정 임계값을 초과하면 메시지 리스트를 제한
-	 * nCtx=1536이므로 안전하게 70%인 약 1075 토큰을 임계값으로 설정
+	 * nCtx=1536이므로 안전하게 60%인 약 920 토큰을 임계값으로 설정
+	 * (시스템 프롬프트가 길어졌으므로 더 보수적으로 설정)
 	 */
 	private fun estimatePromptTokens(messages: List<ChatMessage>): Int {
 		// 간단한 추정: 한국어는 대략 1 문자 = 1 토큰, 영어는 4 문자 = 1 토큰
-		// 시스템 프롬프트 오버헤드 포함 (약 50 토큰)
-		var totalChars = 50
+		// 시스템 프롬프트 오버헤드 포함 (날짜/시간, 위치 정보 추가로 약 100 토큰으로 증가)
+		var totalChars = 100
 		messages.forEach { message ->
 			// 메시지 포맷 오버헤드 (role header 등, 약 20 토큰)
 			totalChars += 20
@@ -654,6 +750,7 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 			// 한국어는 1:1, 영어는 4:1 비율로 추정
 			totalChars += koreanChars + (englishChars / 4)
 		}
+		Log.d("BanyaChat", "Session management: Estimated ${totalChars} tokens for ${messages.size} messages")
 		return totalChars
 	}
 
@@ -662,7 +759,7 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 	 * 새 세션을 시작하여 메모리 사용량을 제한
 	 */
 	private fun limitMessagesForSession(messages: List<ChatMessage>): List<ChatMessage> {
-		val maxTokens = 1075 // nCtx=1536의 70% (안전 마진 포함)
+		val maxTokens = 920 // nCtx=1536의 60% (시스템 프롬프트가 길어져서 더 보수적으로 설정)
 		
 		// 프롬프트 길이 추정
 		val estimatedTokens = estimatePromptTokens(messages)
@@ -672,11 +769,10 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 			return messages
 		}
 		
-		// 임계값 초과: 새 세션 시작 (최근 2개 메시지만 유지: 사용자 1개 + 어시스턴트 1개)
-		// 또는 최근 4개 메시지 유지 (사용자 2개 + 어시스턴트 2개)
+		// 임계값 초과: 새 세션 시작 (최근 4개 메시지 유지: 사용자 2개 + 어시스턴트 2개)
 		val recentMessages = messages.takeLast(4)
 		
-		Log.d("BanyaChat", "Session management: Prompt too long ($estimatedTokens tokens), limiting to recent ${recentMessages.size} messages")
+		Log.w("BanyaChat", "Session management: Prompt too long ($estimatedTokens tokens > $maxTokens max), limiting to recent ${recentMessages.size} messages")
 		
 		return recentMessages
 	}
