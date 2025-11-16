@@ -95,7 +95,7 @@ class ChatRepository(private val app: Application) {
 		// - Increased context size to 512 to accommodate longer prompts (289 tokens)
 		handle = LlamaBridge.init(
 			modelPath = modelPath,
-			nCtx = 512, // Increased from 256 to accommodate longer prompts
+			nCtx = 1536, // Increased to accommodate longer prompts with RAG (balanced between 1024 and 2048)
 			nThreads = 8,
 			nBatch = 128, // Increased for better GPU utilization (KV cache now on GPU)
 			nGpuLayers = 32, // Maximum GPU layers for optimal performance
@@ -114,7 +114,14 @@ class ChatRepository(private val app: Application) {
 		callback: TokenCallback
 	) = withContext(Dispatchers.Default) {
 		val prompt = formatPrompt(messages)
-		Log.d("BanyaChat", "generateStream(): called with promptLen=${prompt.length}")
+		generateStreamWithPrompt(prompt, callback)
+	}
+
+	suspend fun generateStreamWithPrompt(
+		prompt: String,
+		callback: TokenCallback
+	) = withContext(Dispatchers.Default) {
+		Log.d("BanyaChat", "generateStreamWithPrompt(): called with promptLen=${prompt.length}")
 		// Ensure model is initialized, but don't pass callback if already initialized
 		// to avoid JNI callback conflicts between preload and generateStream
 		if (handle == 0L) {
@@ -131,7 +138,7 @@ class ChatRepository(private val app: Application) {
 			})
 		}
 		if (handle == 0L) {
-			Log.w("BanyaChat", "generateStream(): handle=0 -> using STUB fallback")
+			Log.w("BanyaChat", "generateStreamWithPrompt(): handle=0 -> using STUB fallback")
 			// Stub fallback for first run without native init success
 			runStubStream(prompt, callback)
 			return@withContext
@@ -161,9 +168,9 @@ class ChatRepository(private val app: Application) {
 			),
 			callback = callback
 		)
-			Log.d("BanyaChat", "generateStream(): completionStart dispatched")
+			Log.d("BanyaChat", "generateStreamWithPrompt(): completionStart dispatched")
 		} catch (t: Throwable) {
-			Log.e("BanyaChat", "generateStream(): completionStart error -> stub fallback: ${t.message}", t)
+			Log.e("BanyaChat", "generateStreamWithPrompt(): completionStart error -> stub fallback: ${t.message}", t)
 			runStubStream(prompt, callback)
 		}
 	}

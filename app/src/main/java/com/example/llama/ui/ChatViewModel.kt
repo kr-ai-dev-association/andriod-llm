@@ -257,7 +257,7 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 				// Only send test question if no messages exist yet (first load)
 				mainHandler.post {
 					Log.d("BanyaChat", "Model load complete, automatically sending test question")
-					send("대한민국 대통령은 누구야?")
+					send("내일 대한민국 서울 날씨 알려줘")
 				}
 			}
 		}
@@ -375,10 +375,13 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 		val builderIndex = _uiState.value.messages.size
 
 		val messages = _uiState.value.messages
+		
+		// 세션 관리: 프롬프트 길이가 임계값을 초과하면 최근 메시지만 유지
+		val limitedMessages = limitMessagesForSession(messages.dropLast(1))
 
 		viewModelScope.launch {
 			repo.generateStream(
-				messages = messages.dropLast(1), // Don't include the empty assistant message placeholder
+				messages = limitedMessages, // Don't include the empty assistant message placeholder
 				callback = object : TokenCallback {
 					override fun onLoadProgress(progress: Int) {
 						// Dispatch to main thread for UI updates
@@ -519,15 +522,13 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 						}
 
 						val finalPrompt = createSynthesisPrompt(userInput, searchContext, hasSearchResults = true)
-						// UI 상태의 마지막 메시지(빈 어시스턴트 메시지)를 제거하고 프롬프트를 추가
-						// generateStream에 전달할 메시지 리스트 구성
-						val messagesForLLM = _uiState.value.messages.dropLast(1) + ChatMessage(
-							text = finalPrompt,
-							isUser = true
-						)
-
-						repo.generateStream(
-							messages = messagesForLLM,
+						
+						// RAG를 사용할 때는 createSynthesisPrompt로 만든 프롬프트가 이미 완전한 프롬프트이므로
+						// generateStreamWithPrompt를 직접 호출하여 중복을 방지
+						// 세션 관리는 프롬프트 자체의 길이로 판단 (이전 대화 기록은 포함하지 않음)
+						
+						repo.generateStreamWithPrompt(
+							prompt = finalPrompt,
 							callback = object : TokenCallback {
 								override fun onLoadProgress(progress: Int) {}
 								override fun onModelMetadata(json: String) {}
@@ -602,6 +603,51 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 		sb.append("<|start_header_id|>assistant<|end_header_id|>\n\n")
 
 		return sb.toString()
+	}
+
+	/**
+	 * 세션 관리: 프롬프트 길이를 추정하고 일정 임계값을 초과하면 메시지 리스트를 제한
+	 * nCtx=1536이므로 안전하게 70%인 약 1075 토큰을 임계값으로 설정
+	 */
+	private fun estimatePromptTokens(messages: List<ChatMessage>): Int {
+		// 간단한 추정: 한국어는 대략 1 문자 = 1 토큰, 영어는 4 문자 = 1 토큰
+		// 시스템 프롬프트 오버헤드 포함 (약 50 토큰)
+		var totalChars = 50
+		messages.forEach { message ->
+			// 메시지 포맷 오버헤드 (role header 등, 약 20 토큰)
+			totalChars += 20
+			// 메시지 내용
+			val text = message.text
+			val koreanChars = text.count { it.code in 0xAC00..0xD7A3 || it.code in 0x3131..0x318E }
+			val englishChars = text.length - koreanChars
+			// 한국어는 1:1, 영어는 4:1 비율로 추정
+			totalChars += koreanChars + (englishChars / 4)
+		}
+		return totalChars
+	}
+
+	/**
+	 * 세션 관리: 프롬프트 길이가 임계값을 초과하면 최근 메시지만 유지
+	 * 새 세션을 시작하여 메모리 사용량을 제한
+	 */
+	private fun limitMessagesForSession(messages: List<ChatMessage>): List<ChatMessage> {
+		val maxTokens = 1075 // nCtx=1536의 70% (안전 마진 포함)
+		
+		// 프롬프트 길이 추정
+		val estimatedTokens = estimatePromptTokens(messages)
+		
+		if (estimatedTokens <= maxTokens) {
+			// 임계값 이하이면 모든 메시지 유지
+			return messages
+		}
+		
+		// 임계값 초과: 새 세션 시작 (최근 2개 메시지만 유지: 사용자 1개 + 어시스턴트 1개)
+		// 또는 최근 4개 메시지 유지 (사용자 2개 + 어시스턴트 2개)
+		val recentMessages = messages.takeLast(4)
+		
+		Log.d("BanyaChat", "Session management: Prompt too long ($estimatedTokens tokens), limiting to recent ${recentMessages.size} messages")
+		
+		return recentMessages
 	}
 }
 
