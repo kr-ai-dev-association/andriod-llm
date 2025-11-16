@@ -147,27 +147,33 @@ class ChatRepository(private val app: Application) {
 			return@withContext
 		}
 		try {
+		// 각 질의마다 새로운 세션을 시작하기 위해 KV 캐시 클리어
+		Log.d("BanyaChat", "generateStreamWithPrompt(): Clearing KV cache for new session")
+		LlamaBridge.clearKvCache(handle)
+		
 		LlamaBridge.completionStart(
 			handle = handle,
 			prompt = prompt,
-			numPredict = 100,  // 최대 생성 토큰 수를 100으로 설정
+			numPredict = 1024,  // EOT 토큰이 생성되지 않는 경우를 대비한 안전망 (넉넉하게 설정)
 			temperature = 0.7f,  // 반복 감소를 위해 다양성 증가 (0.6 → 0.7)
 			topP = 0.9f,         // Llama 3.1 권장값: 0.9 (Top-P + Min-P 조합)
 			topK = 0,            // Llama 3.1 권장: Top-K 비활성화 (Top-P + Min-P 사용)
 			repeatPenalty = 1.2f,  // 반복 방지 (1.2로 설정하여 반복 감소와 대화 품질의 균형 유지)
 			repeatLastN = 128,   // 더 긴 범위에서 반복 체크 (64 → 128)
 			stopSequences = arrayOf(
-				// 신뢰도 높은 종료 패턴만 유지 (문장 중간에 나올 수 있는 "요.", "죠." 등 제거)
-				// 레벨 1: 가장 안전하고 필수적인 종료 패턴
-				"습니다.", "니다.",
-				// 질문형 패턴 (문장 끝에만 나타남)
-				"까요?", "가요?", "나요?",
-				// 감탄형 패턴 (문장 끝에만 나타남)
-				"네요!", "군요!",
-				// 레벨 4: 공격적이지만 목록을 보호하는 패턴
+				// 신뢰도가 매우 높은 패턴 위주로만 구성
+				// EOT 토큰(128009)이 최우선 정지 신호이므로, 문자열 패턴은 보조 역할에 집중
+				// 역할 변경 방지 (모델이 사용자 역할을 흉내 내는 것 방지)
+				"<|start_header_id|>user<|end_header_id|>",
+				"사용자:",
+				"User:",
+				"\n\n## ", // 마크다운 제목 형식
+				// 매우 확실한 문단 종료 패턴
 				".\n\n",
+				"?\n\n",
+				"!\n\n",
 				// 기타 정지 시퀀스
-				"사용자:", "질문:", "<|eot_id|>", "eotend_header", "<eotend_header>"
+				"<|eot_id|>", "eotend_header", "<eotend_header>"
 			),
 			callback = callback
 		)
@@ -179,43 +185,38 @@ class ChatRepository(private val app: Application) {
 	}
 
 	private fun formatPrompt(messages: List<ChatMessage>): String {
-		// 현재 날짜/시간 가져오기
-		val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일 EEEE HH시 mm분", Locale.KOREAN)
-		val currentDateTime = dateFormat.format(Date())
+		// Llama 3.1 표준 템플릿 형식 적용
+		// 일반 질문은 웹 검색이 필요하지 않으므로 장소/시간 정보 제외
 		
-		// 현재 장소 설정
-		val currentLocation = "서울 강남구"
+		// Llama 3.1 표준 날짜 형식 (예: "26 Jul 2024")
+		val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
+		val todayDate = dateFormat.format(Date())
 		
-		// 시스템 프롬프트 개선
-		val systemPrompt = """너는 한국어로 대화하는 친절한 어시스턴트입니다.
-
-현재 정보:
-- 현재 위치: $currentLocation
-- 현재 날짜/시간: $currentDateTime
+		// 시스템 프롬프트 (Llama 3.1 표준 형식)
+		val sb = StringBuilder()
+		sb.append("<|begin_of_text|>")
+		sb.append("<|start_header_id|>system<|end_header_id|>\n\n")
+		
+		// Llama 3.1 표준: Cutting Knowledge Date와 Today Date 포함
+		sb.append("Cutting Knowledge Date: December 2023\n")
+		sb.append("Today Date: $todayDate\n\n")
+		
+		// 시스템 프롬프트 내용
+		sb.append("""너는 한국어로 대화하는 친절한 어시스턴트입니다.
 
 답변 규칙:
 1. 사용자의 질문에 자연스럽고 의미 있는 한국어로 답변하세요.
 2. 절대 번호 나열식(1. 2. 3. 또는 ① ② ③ 등)으로 대답하지 말고, 항상 자연스러운 문장으로 설명하세요.
-3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요.
-4. 현재 위치와 날짜/시간 정보를 활용하여 정확하고 관련성 있는 답변을 제공하세요."""
+3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요.""")
 		
-		val sb = StringBuilder()
-		sb.append("<|begin_of_text|>")
-		sb.append("<|start_header_id|>system<|end_header_id|>\n\n")
-		sb.append(systemPrompt)
 		sb.append("<|eot_id|>")
 
+		// 메시지 추가 (Llama 3.1 표준 형식)
 		messages.forEach {
 			val role = if (it.isUser) "user" else "assistant"
 			sb.append("<|start_header_id|>")
 			sb.append(role)
 			sb.append("<|end_header_id|>\n\n")
-			
-			// 사용자 메시지인 경우 현재 위치와 날짜/시간을 context로 추가
-			if (it.isUser) {
-				sb.append("[현재 위치: $currentLocation, 현재 날짜/시간: $currentDateTime]\n\n")
-			}
-			
 			sb.append(it.text)
 			sb.append("<|eot_id|>")
 		}

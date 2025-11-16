@@ -672,21 +672,28 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 	 * @param includeLocationTime 웹 검색일 때만 true로 설정하여 장소/시간 정보 포함
 	 */
 	private fun createSynthesisPrompt(question: String, searchContext: String?, hasSearchResults: Boolean = false, includeLocationTime: Boolean = false): String {
-		// 현재 날짜/시간 가져오기 (웹 검색일 때만 사용)
-		val dateFormat = java.text.SimpleDateFormat("yyyy년 MM월 dd일 EEEE HH시 mm분", java.util.Locale.KOREAN)
-		val currentDateTime = if (includeLocationTime) dateFormat.format(java.util.Date()) else ""
+		// Llama 3.1 표준 날짜 형식 (예: "26 Jul 2024")
+		val dateFormat = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.ENGLISH)
+		val todayDate = dateFormat.format(java.util.Date())
 		
-		// 현재 장소 설정 (웹 검색일 때만 사용)
+		// 웹 검색일 때만 사용할 상세 날짜/시간 및 위치 정보
+		val detailedDateFormat = java.text.SimpleDateFormat("yyyy년 MM월 dd일 EEEE HH시 mm분", java.util.Locale.KOREAN)
+		val currentDateTime = if (includeLocationTime) detailedDateFormat.format(java.util.Date()) else ""
 		val currentLocation = if (includeLocationTime) "서울 강남구" else ""
 		
-		// 시스템 프롬프트 개선
-		val systemPrompt = if (hasSearchResults && searchContext != null && searchContext.isNotEmpty()) {
+		// 시스템 프롬프트 (Llama 3.1 표준 형식)
+		val sb = StringBuilder()
+		sb.append("<|begin_of_text|>")
+		sb.append("<|start_header_id|>system<|end_header_id|>\n\n")
+		
+		// Llama 3.1 표준: Cutting Knowledge Date와 Today Date 포함
+		sb.append("Cutting Knowledge Date: December 2023\n")
+		sb.append("Today Date: $todayDate\n\n")
+		
+		// 시스템 프롬프트 내용
+		val systemPromptContent = if (hasSearchResults && searchContext != null && searchContext.isNotEmpty()) {
 			if (includeLocationTime) {
-				"""너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다.
-
-현재 정보:
-- 현재 위치: $currentLocation
-- 현재 날짜/시간: $currentDateTime
+				"""너는 한국어로 대화하는 친절한 어시스턴트입니다.
 
 답변 규칙:
 1. 검색 결과를 바탕으로 답변하세요. 질문을 반복하지 마세요.
@@ -694,7 +701,7 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요.
 4. 현재 위치와 날짜/시간 정보를 활용하여 정확하고 관련성 있는 답변을 제공하세요."""
 			} else {
-				"""너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다.
+				"""너는 한국어로 대화하는 친절한 어시스턴트입니다.
 
 답변 규칙:
 1. 검색 결과를 바탕으로 답변하세요. 질문을 반복하지 마세요.
@@ -702,18 +709,15 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
 3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요."""
 			}
 		} else {
-			"""너는 한국어로 대화하는 도움이 되는 AI 어시스턴트입니다.
+			"""너는 한국어로 대화하는 친절한 어시스턴트입니다.
 
 답변 규칙:
 1. 질문에 답변하세요. 질문을 반복하지 마세요.
 2. 절대 번호 나열식(1. 2. 3. 또는 ① ② ③ 등)으로 대답하지 말고, 항상 자연스러운 문장으로 설명하세요.
 3. 리스트나 항목 나열이 필요한 경우에도 번호를 사용하지 말고, 자연스러운 문장으로 연결하여 설명하세요."""
 		}
-
-		val sb = StringBuilder()
-		sb.append("<|begin_of_text|>")
-		sb.append("<|start_header_id|>system<|end_header_id|>\n\n")
-		sb.append(systemPrompt)
+		
+		sb.append(systemPromptContent)
 		sb.append("<|eot_id|>")
 		sb.append("<|start_header_id|>user<|end_header_id|>\n\n")
 		

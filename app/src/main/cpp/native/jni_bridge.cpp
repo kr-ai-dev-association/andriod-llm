@@ -900,6 +900,29 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStop(
     handle->stopRequested = true;
 }
 
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_llama_nativebridge_LlamaBridge_clearKvCache(
+        JNIEnv* /*env*/, jobject /*thiz*/, jlong h) {
+    auto* handle = reinterpret_cast<LlamaCtx*>(h);
+    if (!handle || !handle->ctx) {
+        ALOGE("clearKvCache(): handle or ctx is null");
+        return;
+    }
+#if LLAMA_STUB_MODE
+    ALOGD("clearKvCache(): STUB build active. No-op.");
+#else
+    std::lock_guard<std::mutex> lock(handle->ctx_mutex);
+    ALOGD("clearKvCache(): Clearing KV cache for new session");
+    llama_memory_t mem = llama_get_memory(handle->ctx);
+    if (mem) {
+        llama_memory_clear(mem, true);  // Clear KV cache data
+        ALOGD("clearKvCache(): KV cache cleared successfully");
+    } else {
+        ALOGE("clearKvCache(): Failed to get memory from context");
+    }
+#endif
+}
+
 static void ensureCallbackRefs(JNIEnv* env, jobject callback) {
     if (!g_CallbackClass) {
         jclass local = env->GetObjectClass(callback);
@@ -948,9 +971,10 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
     env->ReleaseStringUTFChars(jPrompt, prompt);
 
     // Defaults if invalid values are passed
-    // n_predict를 512로 설정하여 대부분의 답변을 커버하면서도 무한 생성을 방지
-    // EOT 토큰이 생성되면 즉시 중단되므로, n_predict는 안전망 역할만 수행
-    int n_predict = (numPredict > 0) ? numPredict : 512;
+    // n_predict를 1024로 넉넉하게 설정하여 EOT 토큰이 생성되지 않는 경우를 대비한 안전망
+    // EOT 토큰(128009)이 최우선 정지 신호이므로, n_predict는 최종 안전장치 역할만 수행
+    // EOT 토큰이 제대로 작동한다면 모델은 n_predict에 도달하기 훨씬 전에 스스로 멈춤
+    int n_predict = (numPredict > 0) ? numPredict : 1024;
     float temp = (temperature > 0.0f) ? temperature : 0.7f;  // Llama 3.1 기본값에 가까운 값
     float top_p = (topP > 0.0f) ? topP : 0.9f;  // Llama 3.1 권장값
     int top_k = (topK > 0) ? topK : 40;  // Llama 3.1 기본값
@@ -1423,7 +1447,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
         bool sentence_complete = false;
         int extra_tokens_after_limit = 0;
         const int MAX_EXTRA_TOKENS = 50;  // 최대 추가 토큰 수 (문장 완성을 위해, 한국어 문장 완성을 위해 증가)
-        const int MIN_GENERATION_LENGTH = 30;  // 최소 생성 길이: 최소 30개 토큰 생성 보장 (약 15~20자)
+        const int MIN_GENERATION_LENGTH = 20;  // 최소 생성 길이: 최소 20개 토큰 생성 보장 (약 10~15자)
         // 열거형 패턴 감지 변수 (while 루프 전체에서 사용)
         bool isEnumerationPattern = false;
         bool incompleteEnumeration = false;
@@ -1505,14 +1529,18 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             llama_sampler_accept(smpl, id);
             ALOGD("completionStart(): llama_sampler_accept() completed");
 
-            // Check for End of Turn (EOT) token to stop generation gracefully
-            // Llama 3.1's official EOT token ID is 128009 (<|eot_id|>)
+            // [PRIMARY STOP CONDITION - 최우선 정지 신호]
+            // EOT 토큰(End-of-Turn, ID: 128009)을 최우선으로 체크
+            // Llama 3.1은 대화의 한 턴이 끝났음을 알리기 위해 <|eot_id|>를 생성하도록 훈련됨
+            // 이것이 가장 자연스럽고 신뢰할 수 있는 정지 신호이므로 다른 어떤 조건보다 우선하여 실행
             // EOT 토큰이 생성되면 모델이 "내 답변은 여기까지입니다"라고 판단한 것이므로 즉시 생성 중단
             if (id == 128009) {
                 ALOGD("completionStart(): EOT token (128009) detected, breaking generation loop gracefully");
                 break;  // 루프를 즉시 탈출합니다
             }
-            // Also check for the generic End of Sequence (EOS) token, just in case
+            // [FALLBACK STOP CONDITION]
+            // EOT 토큰이 생성되지 않은 경우를 대비한 보조 정지 신호
+            // 일반적인 End of Sequence (EOS) 토큰도 체크
             if (id == llama_vocab_eos(vocab) || id == 128001 || id == 128008) {
                 ALOGD("completionStart(): EOS token detected (id=%d), breaking generation loop", (int)id);
                 break;

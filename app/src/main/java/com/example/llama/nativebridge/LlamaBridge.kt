@@ -57,6 +57,11 @@ object LlamaBridge {
 	external fun saveSession(handle: Long, path: String): Int
 	external fun loadSession(handle: Long, path: String): Boolean
 	external fun tokenize(handle: Long, text: String): IntArray
+	
+	/**
+	 * KV 캐시 클리어: 각 질의마다 새로운 세션을 시작하기 위해 KV 캐시를 초기화
+	 */
+	external fun clearKvCache(handle: Long)
 }
 
 
