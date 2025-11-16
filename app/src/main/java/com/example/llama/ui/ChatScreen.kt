@@ -300,8 +300,12 @@ private fun ChatHeader(
 
 @Composable
 private fun ChatBubble(message: ChatMessage, isThinking: Boolean = false) {
-	val timestamp = remember {
-		SimpleDateFormat("HH.mm", Locale.getDefault()).format(Date())
+	// 메시지 타임스탬프를 날짜/시간 형식으로 변환
+	val dateFormat = remember {
+		SimpleDateFormat("yyyy년 MM월 dd일 HH시 mm분", Locale.KOREAN)
+	}
+	val timestamp = remember(message.timestamp) {
+		dateFormat.format(Date(message.timestamp))
 	}
 	
 	// "생각중 ..." 애니메이션
@@ -352,6 +356,7 @@ private fun ChatBubble(message: ChatMessage, isThinking: Boolean = false) {
 					)
 				}
 			}
+			// 타임스탬프 표시 (생각중 상태가 아닐 때만)
 			if (!isThinking) {
 				Spacer(modifier = Modifier.height(4.dp))
 				Text(
