@@ -32,6 +32,14 @@ if (USE_LLAMA)
     add_subdirectory(${LLAMA_CPP_DIR} ${CMAKE_BINARY_DIR}/llama_build)
 endif()
 
+# OpenCL Shim library: Uses android_dlopen_ext to bypass Android namespace restrictions
+add_library(opencl_shim STATIC
+    opencl_shim.cpp
+)
+target_link_libraries(opencl_shim PRIVATE dl log android)
+# Make opencl_shim globally available to all subdirectories
+set(OPENCL_SHIM_TARGET opencl_shim CACHE INTERNAL "OpenCL shim library target")
+
 add_library(llama_jni SHARED
     native/jni_bridge.cpp
 )
@@ -41,14 +49,34 @@ target_include_directories(llama_jni PRIVATE
 )
 
 if (USE_LLAMA)
+    # OpenCL 헤더 경로 추가
+    set(OPENCL_HEADERS_DIR "${CMAKE_SOURCE_DIR}/../../../../third_party/OpenCL-Headers")
+    if (EXISTS "${OPENCL_HEADERS_DIR}/CL/cl.h")
+        target_include_directories(llama_jni PRIVATE
+            ${OPENCL_HEADERS_DIR}
+        )
+        message(STATUS "OpenCL headers found at: ${OPENCL_HEADERS_DIR}")
+    endif()
+    
     target_include_directories(llama_jni PRIVATE
         ${CMAKE_SOURCE_DIR}/../../../../third_party/llama.cpp
         ${CMAKE_SOURCE_DIR}/../../../../third_party/llama.cpp/vendor
-        ${CMAKE_SOURCE_DIR}/../../../../third_party/Vulkan-Headers/include
     )
+    
+    # OpenCL 라이브러리 찾기 및 연결 (NDK가 제공하는 스텁 라이브러리)
+    find_library(OPENCL_LIBRARY OpenCL)
+    if (OPENCL_LIBRARY)
+        message(STATUS "Found OpenCL library: ${OPENCL_LIBRARY}")
+        target_link_libraries(llama_jni PRIVATE ${OPENCL_LIBRARY})
+    else()
+        message(WARNING "OpenCL library not found! OpenCL backend may not work.")
+    endif()
+    
+    # Link llama.cpp libraries and OpenCL shim
     target_link_libraries(llama_jni
         PRIVATE
         llama
+        opencl_shim  # OpenCL shim provides runtime-loaded OpenCL functions via android_dlopen_ext
         log
         android
     )

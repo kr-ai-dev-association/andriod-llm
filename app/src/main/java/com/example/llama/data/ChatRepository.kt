@@ -97,8 +97,8 @@ class ChatRepository(private val app: Application) {
 			modelPath = modelPath,
 			nCtx = 512, // Increased from 256 to accommodate longer prompts
 			nThreads = 8,
-			nBatch = 512, // Increased for faster prompt evaluation (n_batch=512 allows larger chunks)
-			nGpuLayers = 31, // Stable at 31 layers (V-Cache F16 allows stable operation)
+			nBatch = 64, // Optimized: 64 provides best performance (128 was slower)
+			nGpuLayers = 31, // Re-enabled for detailed crash analysis
 			useMmap = false, // Disable mmap to avoid conflicts with Vulkan GPU offloading
 			useMlock = false,
 			seed = 0,

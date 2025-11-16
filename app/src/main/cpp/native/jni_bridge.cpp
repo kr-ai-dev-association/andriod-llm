@@ -721,7 +721,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
     // Optimized Vulkan settings for Adreno 830
     // Reduced GPU layers to 29 to test if 30th layer causes crashes
     if (nGpuLayers == -1) {
-        // Default to 29 layers - testing to find maximum stable layers
+        // Keep at 29 layers - 30+ causes Vulkan errors on this device
         mparams.n_gpu_layers = 29;
     } else {
     mparams.n_gpu_layers = nGpuLayers;
@@ -771,13 +771,13 @@ Java_com_example_llama_nativebridge_LlamaBridge_init(
     // Use the same number of threads for batched prompt processing to speed up prefill
     cparams.n_threads_batch = nThreads;
     cparams.n_batch = nBatch;
-    // Reduced micro-batch size to minimize memory pressure and Vulkan operations
-    // Lower n_ubatch reduces concurrent GPU operations, improving stability on Adreno 830
-    cparams.n_ubatch = 2;  // Restored to stable value (was 1, but may cause issues)
+    // Optimized: n_ubatch=8 for n_batch=64 (64/8=8, no remainder)
+    // 64 provides best performance (128 was slower)
+    cparams.n_ubatch = 8;  // Optimized for n_batch=64
     // STABLE: V-Cache를 F16으로 유지 (Q4_0 패딩 로직에 문제가 있어 Logit NaN 발생)
     // K-Cache는 Q4_0으로 유지하여 VRAM 절약
     // V-Cache F16 + K-Cache Q4_0 조합으로 안정성과 성능을 모두 확보
-    // n_batch=512와 chunk=512 최적화는 유지하여 프롬프트 평가 속도 향상
+    // n_batch=256과 chunk 크기를 일치시켜 GPU 메모리 효율성 극대화
     cparams.flash_attn_type = LLAMA_FLASH_ATTN_TYPE_AUTO;
     cparams.type_k = GGML_TYPE_Q4_0;  // K-Cache: Q4_0 (VRAM 절약)
     cparams.type_v = GGML_TYPE_F16;   // V-Cache: F16 (안정성 확보, Logit NaN 방지)
@@ -1187,14 +1187,53 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
 
         // Decode prompt in chunks - use n_batch size for maximum performance
         ALOGD("completionStart(): evaluating prompt...");
-        // Use n_batch as chunk size to maximize GPU utilization
-        // With V-Cache Q4_0 and 33/33 layers offload, larger chunks are stable
-        const uint32_t chunk = chunk_size; // Use n_batch for optimal performance
-        ALOGD("completionStart(): Using chunk size=%u (n_batch=%u) for prompt evaluation", chunk, chunk_size);
+        // Performance measurement: Record start time
+        auto prompt_eval_start = std::chrono::high_resolution_clock::now();
+        ALOGD("completionStart(): Prompt evaluation started, n_tokens=%d", n_tokens);
+        
+        // Performance optimization: Dynamic chunk size based on prompt length
+        // Optimized: Chunk size matches n_batch for maximum GPU memory efficiency
+        // This ensures llama_decode uses the allocated VRAM (n_batch) most efficiently
+        auto calculate_optimal_chunk_size = [](uint32_t n_tokens, uint32_t n_batch) -> uint32_t {
+            if (n_tokens <= n_batch) {
+                return n_tokens;  // Process all tokens at once if within n_batch limit
+            } else {
+                return n_batch;  // Use full n_batch size for optimal GPU utilization
+            }
+        };
+        
+        // Use dynamic chunk size for optimal performance
+        const uint32_t chunk = calculate_optimal_chunk_size(n_tokens, chunk_size);
+        ALOGD("completionStart(): Using dynamic chunk size=%u (n_batch=%u, n_tokens=%d) for prompt evaluation", chunk, chunk_size, n_tokens);
         uint32_t context_size = llama_n_ctx(ctx);
         
         // Evaluate prompt tokens and generate tokens in streaming mode
         // Optimize chunking for speed - use full n_batch size
+        // Performance optimization: Reuse batch instead of initializing/freeing for each chunk
+        llama_batch batch = llama_batch_init(chunk, 0, 1);
+        if (!batch.token || !batch.seq_id || !batch.n_seq_id || !batch.logits) {
+            ALOGE("completionStart(): llama_batch_init() returned invalid batch");
+            jstring err = threadEnv->NewStringUTF("Failed to initialize batch");
+            if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
+                threadEnv->CallVoidMethod(gCallback, g_OnError, err);
+                if (threadEnv->ExceptionCheck()) {
+                    ALOGE("completionStart(): Exception in error callback - clearing");
+                    threadEnv->ExceptionClear();
+                }
+            } else {
+                ALOGE("completionStart(): Callback validation failed - skipping error callback");
+            }
+            threadEnv->DeleteLocalRef(err);
+            llama_sampler_free(smpl);
+            if (guard.env && guard.ref) {
+                guard.env->DeleteGlobalRef(guard.ref);
+                guard.ref = nullptr;
+            }
+            guard.shouldDelete = false;
+            detachThread();
+            return;
+        }
+        
         for (int cur = 0; cur < n_tokens; ) {
             int remaining = n_tokens - cur;
             int n_cur = std::min(static_cast<int>(chunk), remaining);
@@ -1217,40 +1256,14 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             
             ALOGD("completionStart(): llama_decode chunk start cur=%d n_cur=%d (remaining after=%d)", cur, n_cur, n_tokens - cur - n_cur);
             
-            // Initialize batch with proper sequence ID support
-            llama_batch batch = llama_batch_init(n_cur, 0, 1);
-            if (!batch.token || !batch.seq_id || !batch.n_seq_id || !batch.logits) {
-                ALOGE("completionStart(): llama_batch_init() returned invalid batch");
-                jstring err = threadEnv->NewStringUTF("Failed to initialize batch");
-                if (g_CallbackClass && g_OnError && threadEnv->IsInstanceOf(gCallback, g_CallbackClass)) {
-                    threadEnv->CallVoidMethod(gCallback, g_OnError, err);
-                    if (threadEnv->ExceptionCheck()) {
-                        ALOGE("completionStart(): Exception in error callback - clearing");
-                        threadEnv->ExceptionClear();
-                    }
-                } else {
-                    ALOGE("completionStart(): Callback validation failed - skipping error callback");
-                }
-                threadEnv->DeleteLocalRef(err);
-                llama_batch_free(batch);
-                llama_sampler_free(smpl);
-                // Prevent CallbackGuard from trying to delete gCallback after detachThread()
-                if (guard.env && guard.ref) {
-                    guard.env->DeleteGlobalRef(guard.ref);
-                    guard.ref = nullptr;
-                }
-                guard.shouldDelete = false;
-                detachThread();
-                return;
-            }
-            
+            // Reuse batch: only adjust size instead of reinitializing
             batch.n_tokens = n_cur;
             // Set pos to nullptr to let llama_batch_allocr::init() calculate positions from memory
             // This ensures positions are consistent with the KV cache state
             free(batch.pos);
             batch.pos = nullptr;
             
-            ALOGD("completionStart(): Batch initialized, filling tokens (n_past=%d)", n_past);
+            ALOGD("completionStart(): Batch reused, filling tokens (n_past=%d)", n_past);
             for (int j = 0; j < n_cur; ++j) {
                 batch.token   [j] = prompt_tokens[cur + j];
                 if (batch.seq_id[j]) {
@@ -1330,7 +1343,7 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
                 detachThread();
                 return;
             }
-            llama_batch_free(batch);
+            // Don't free batch here - reuse it for next chunk
             n_past += n_cur;
             ALOGD("completionStart(): llama_decode chunk ok cur=%d n_cur=%d, n_past=%d (total tokens=%d, remaining=%d)", 
                   cur, n_cur, n_past, n_tokens, n_tokens - (cur + n_cur));
@@ -1339,7 +1352,18 @@ Java_com_example_llama_nativebridge_LlamaBridge_completionStart(
             cur += n_cur;
         }
         
+        // Free batch after all chunks are processed
+        llama_batch_free(batch);
+        
         ALOGD("completionStart(): Exited prompt evaluation loop. n_past=%d, n_tokens=%d", n_past, n_tokens);
+        
+        // Performance measurement: Calculate elapsed time
+        auto prompt_eval_end = std::chrono::high_resolution_clock::now();
+        auto prompt_eval_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(prompt_eval_end - prompt_eval_start);
+        long long elapsed_ms = prompt_eval_elapsed.count();
+        double avg_time_per_token = (n_tokens > 0) ? (static_cast<double>(elapsed_ms) / n_tokens) : 0.0;
+        ALOGD("completionStart(): Prompt evaluation took %lld ms for %d tokens", elapsed_ms, n_tokens);
+        ALOGD("completionStart(): Average time per token: %.2f ms", avg_time_per_token);
         
         // After prompt evaluation, decode the last token separately to get logits
         // This avoids the Vulkan backend hang when enabling logits in the last chunk
